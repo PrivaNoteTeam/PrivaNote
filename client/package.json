@@ -1,0 +1,9 @@
+{
+  "name": "privanote-client",
+  "version": "1.0.0",
+  "description": "The client for PrivaNote.",
+  "main": "index.js",
+  "scripts": {},
+  "author": "PrivaNote Team",
+  "license": "ISC"
+}
