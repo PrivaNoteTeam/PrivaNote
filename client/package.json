@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "The client for PrivaNote.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "electron src/electron.js"
+  },
   "author": "PrivaNote Team",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^14.0.1"
+  }
 }
