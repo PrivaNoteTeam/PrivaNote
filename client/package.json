@@ -4,12 +4,16 @@
   "description": "The client for PrivaNote.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc src/electron.ts"
+    "build": "webpack --config ./webpack.config.js",
+    "start": "npm run build && electron ./src/electron.js"
   },
   "author": "PrivaNote Team",
   "license": "ISC",
   "devDependencies": {
     "electron": "^14.0.1",
-    "typescript": "^4.4.3"
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.3",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
   }
 }
