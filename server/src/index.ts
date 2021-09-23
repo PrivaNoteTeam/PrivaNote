@@ -8,10 +8,6 @@ const main = async () => {
 
     app.use(cors);
 
-    app.get('/', (_, __) => {
-        console.log("Root thing");
-    })
-
     app.listen(HTTP_PORT, () => {
         console.log("Listening on port " + HTTP_PORT);
     });
