@@ -3,3 +3,5 @@
 
 cd client
 npm run prettier-write
+cd ..
+git add .

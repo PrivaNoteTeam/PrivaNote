@@ -1,15 +1,15 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow } from 'electron';
 
 function createWindow() {
   let window = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-        nodeIntegration: true
+      nodeIntegration: true
     }
   });
 
-  window.loadFile("index.html");
+  window.loadFile('index.html');
 }
 
-app.on("ready", createWindow);
+app.on('ready', createWindow);
