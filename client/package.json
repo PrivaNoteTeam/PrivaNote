@@ -5,12 +5,15 @@
     "main": "index.js",
     "scripts": {
         "build": "webpack --config ./webpack.config.js",
-        "start": "npm run build && electron ./src/electron.js"
+        "start": "npm run build && electron ./src/electron.js",
+        "prepare": "cd .. && husky install",
+        "test": "echo \"Husky pre-comit works\""
     },
     "author": "PrivaNote Team",
     "license": "ISC",
     "devDependencies": {
         "electron": "^14.0.1",
+        "husky": "^7.0.2",
         "ts-loader": "^9.2.5",
         "typescript": "^4.4.3",
         "webpack": "^5.53.0",
