@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Attachment {
+  attachmentID    Int               @id @default(autoincrement())
+  createdAt       DateTime          @db.Timestamp(0)
+  fileName        String            @unique(map: "fileName") @db.VarChar(255)
+  mimeType        String            @db.VarChar(255)
+  blobValue       String            @db.Text
+  NotebookbookID  Int
+  Notebook        Notebook          @relation(fields: [NotebookbookID], references: [bookID], onDelete: Cascade, onUpdate: NoAction, map: "attached")
+  Attachment_Page Attachment_Page[]
+
+  @@index([NotebookbookID], map: "attached")
+}
+
+model Attachment_Page {
+  AttachmentattachmentID Int
+  PagepageID             Int
+  Attachment             Attachment @relation(fields: [AttachmentattachmentID], references: [attachmentID], onDelete: Cascade, onUpdate: NoAction, map: "related to page")
+  Page                   Page       @relation(fields: [PagepageID], references: [pageID], onDelete: Cascade, onUpdate: NoAction, map: "may involve")
+
+  @@id([AttachmentattachmentID, PagepageID])
+  @@index([PagepageID], map: "may involve")
+}
+
+model CloudSettings {
+  cloudID                 Int          @id @default(autoincrement())
+  SettingssettingsID      Int
+  CloudStoragestorageIDID Int
+  CloudStorage            CloudStorage @relation(fields: [CloudStoragestorageIDID], references: [storageID], onDelete: Cascade, onUpdate: NoAction, map: "takes in")
+  Settings                Settings     @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction, map: "covers 2")
+
+  @@index([SettingssettingsID], map: "covers 2")
+  @@index([CloudStoragestorageIDID], map: "takes in")
+}
+
+model CloudStorage {
+  storageID     Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  description   String          @db.Text
+  CloudSettings CloudSettings[]
+}
+
+model EditorSettings {
+  editorID           Int      @id @default(autoincrement())
+  spellCheck         Boolean  @db.Boolean
+  dictionaryLanguage String   @db.VarChar(255)
+  tabWidth           Int
+  columns            Int
+  fontSize           Int
+  fontFamily         String   @db.VarChar(255)
+  SettingssettingsID Int
+  Settings           Settings @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction, map: "covers 1")
+
+  @@index([SettingssettingsID], map: "covers 1")
+}
+
+model Folder {
+  folderID       Int      @id @default(autoincrement())
+  name           String   @db.VarChar(255)
+  createdAt      DateTime @db.Timestamp(0)
+  updatedAt      DateTime @db.Timestamp(0)
+  NotebookbookID Int
+  ParentfolderID Int?
+  Notebook       Notebook @relation(fields: [NotebookbookID], references: [bookID], onDelete: Cascade, onUpdate: NoAction, map: "contains")
+  Folder         Folder?  @relation("FolderToFolder_ParentfolderID", fields: [ParentfolderID], references: [folderID], onDelete: Cascade, onUpdate: NoAction, map: "includes")
+  other_Folder   Folder[] @relation("FolderToFolder_ParentfolderID")
+  Page           Page[]
+
+  @@index([NotebookbookID], map: "contains")
+  @@index([ParentfolderID], map: "includes")
+}
+
+model Notebook {
+  bookID     Int          @id @default(autoincrement())
+  createdAt  DateTime     @db.Timestamp(0)
+  updatedAt  DateTime     @db.Timestamp(0)
+  name       String       @unique(map: "name") @db.VarChar(255)
+  UseruserID Int
+  User       User         @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "writes in")
+  Attachment Attachment[]
+  Folder     Folder[]
+
+  @@index([UseruserID], map: "writes in")
+}
+
+model OneTimeVerificationCode {
+  codeID     Int      @id @default(autoincrement())
+  code       String   @db.Char(6)
+  expiresAt  DateTime @db.Timestamp(0)
+  UseruserID Int
+  User       User     @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "completes")
+
+  @@index([UseruserID], map: "completes")
+}
+
+model Page {
+  pageID          Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  createdAt       DateTime          @db.Timestamp(0)
+  updatedAt       DateTime          @db.Timestamp(0)
+  content         String            @db.Text
+  FolderfolderID  Int
+  Folder          Folder            @relation(fields: [FolderfolderID], references: [folderID], onDelete: Cascade, onUpdate: NoAction, map: "consists of")
+  Attachment_Page Attachment_Page[]
+
+  @@index([FolderfolderID], map: "consists of")
+}
+
+model Settings {
+  settingsID     Int              @id @default(autoincrement())
+  UseruserID     Int
+  User           User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "changes")
+  CloudSettings  CloudSettings[]
+  EditorSettings EditorSettings[]
+
+  @@index([UseruserID], map: "changes")
+}
+
+model SubscriptionPlan {
+  planID            Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  description       String              @db.Text
+  price             Decimal             @db.Decimal(19, 2)
+  duration          Int
+  VaultSubscription VaultSubscription[]
+}
+
+model User {
+  userID                  Int                       @id @default(autoincrement())
+  firstName               String?                   @db.VarChar(255)
+  lastName                String?                   @db.VarChar(255)
+  email                   String                    @unique(map: "email") @db.VarChar(255)
+  password                String                    @db.VarChar(255)
+  verified                Boolean                   @db.Boolean
+  Notebook                Notebook[]
+  OneTimeVerificationCode OneTimeVerificationCode[]
+  Settings                Settings[]
+  VaultSubscription       VaultSubscription[]
+}
+
+model VaultSubscription {
+  subID                  Int              @id @default(autoincrement())
+  purchasedAt            DateTime         @db.Timestamp(0)
+  recurring              Boolean          @db.Boolean
+  SubscriptionPlanplanID Int
+  UseruserID             Int
+  SubscriptionPlan       SubscriptionPlan @relation(fields: [SubscriptionPlanplanID], references: [planID], onDelete: NoAction, onUpdate: NoAction, map: "accommodates")
+  User                   User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "has")
+
+  @@index([SubscriptionPlanplanID], map: "accommodates")
+  @@index([UseruserID], map: "has")
+}
