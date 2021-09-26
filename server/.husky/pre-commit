@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd server
+npm run prettier-write
+cd ..
+git add .
