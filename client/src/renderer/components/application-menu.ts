@@ -1,8 +1,3 @@
-// CURRENTLY NOT USED.
-// NEED TO IMPORT TO ELECTRON.TS
-
-// import { Menu } from 'electron';
-
 export const template = [
 	{
 		label: 'File',

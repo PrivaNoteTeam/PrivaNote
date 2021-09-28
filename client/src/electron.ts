@@ -1,6 +1,5 @@
 import { app, BrowserWindow, Menu } from 'electron';
-// import { template as applicationMenu } from './renderer/components';
-import { template as applicationMenu } from './application-menu';
+import { template as applicationMenu } from './renderer/components/application-menu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -15,49 +14,6 @@ app.on('ready', () => {
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenu));
 });
-
-// const applicationMenu = [
-// 	{
-// 		label: 'File',
-// 		submenu: [
-// 			{
-// 				label: 'Create File'
-// 			},
-// 			{
-// 				label: 'Create Notebook'
-// 			},
-// 			{
-// 				label: 'Open Notebook'
-// 			},
-// 			{
-// 				label: 'Save'
-// 			},
-// 			{
-// 				label: 'Save As'
-// 			},
-// 			{
-// 				label: 'Export'
-// 			},
-// 			{
-// 				label: 'Exit'
-// 			}
-// 		]
-// 	},
-// 	{
-// 		label: 'Edit',
-// 		submenu: [
-// 			{
-// 				label: 'Copy'
-// 			},
-// 			{
-// 				label: 'Pase'
-// 			},
-// 			{
-// 				label: 'Cut'
-// 			}
-// 		]
-// 	}
-// ];
 
 if (process.platform === 'darwin') {
 	applicationMenu.unshift({ label: 'PrivaNote', submenu: [] });
