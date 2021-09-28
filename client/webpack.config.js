@@ -6,6 +6,12 @@ module.exports = [
 		mode: 'development',
 		entry: './src/electron.ts',
 		target: 'electron-main',
+		resolve: {
+			alias: {
+				components: './src/components'
+			},
+			extensions: ['.ts', '.tsx', '.js', '.jsx']
+		},
 		module: {
 			rules: [
 				{
