@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 
 module.exports = [
 	{
@@ -30,6 +31,13 @@ module.exports = [
 		mode: 'development',
 		entry: './src/index.tsx',
 		target: 'electron-renderer',
+		resolve: {
+			alias: {
+				components: './src/components',
+				assets: './src/assets'
+			},
+			extensions: ['.ts', '.tsx', '.js', '.jsx']
+		},
 		devtool: 'source-map',
 		module: {
 			rules: [
@@ -45,6 +53,19 @@ module.exports = [
 						'css-loader',
 						'postcss-loader'
 					]
+				},
+				{
+					test: /\.(png|jp(e*)g)$/,
+					include: /src\/assets/,
+					use: [
+						{
+							loader: 'url-loader'
+						}
+					]
+				},
+				{
+					test: /\.svg/,
+					use: ['@svgr/webpack']
 				}
 			]
 		},
@@ -59,6 +80,9 @@ module.exports = [
 			}),
 			new HtmlWebpackPlugin({
 				template: './src/index.html'
+			}),
+			new HtmlWebpackInlineSVGPlugin({
+				runPreEmit: true
 			})
 		]
 	}

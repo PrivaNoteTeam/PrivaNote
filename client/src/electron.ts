@@ -1,10 +1,10 @@
 import { app, BrowserWindow, Menu } from 'electron';
-import { template as applicationMenu } from './renderer/components/application-menu';
+import { template as applicationMenu } from './electron/applicationMenu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
-		width: 800,
-		height: 600,
+		width: 1200,
+		height: 900,
 		webPreferences: {
 			nodeIntegration: true
 		}

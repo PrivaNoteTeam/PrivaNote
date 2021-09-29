@@ -1,4 +1,5 @@
-export const template = [
+import { MenuItemConstructorOptions } from 'electron';
+export const template: MenuItemConstructorOptions[] = [
 	{
 		label: 'File',
 		submenu: [
@@ -12,6 +13,9 @@ export const template = [
 				label: 'Open Notebook'
 			},
 			{
+				type: 'separator'
+			},
+			{
 				label: 'Save'
 			},
 			{
@@ -19,6 +23,9 @@ export const template = [
 			},
 			{
 				label: 'Export'
+			},
+			{
+				type: 'separator'
 			},
 			{
 				label: 'Exit'
