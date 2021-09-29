@@ -1,12 +1,18 @@
 import React, { PropsWithChildren } from 'react';
 import CloseIcon from '../assets/icons/close.svg';
 
-export function ModalLayout({ children }: PropsWithChildren<{}>) {
+interface Props {
+	close: () => void;
+}
+
+export function ModalLayout({ close, children }: PropsWithChildren<Props>) {
+	const handleClick = () => close();
+
 	return (
 		<div className='absolute w-full h-full bg-black bg-opacity-50 flex justify-center'>
 			<div className='relative p-8 rounded-md bg-gray-800 flex flex-col m-auto'>
 				<div className='flex justify-end'>
-					<div className='cursor-pointer'>
+					<div onClick={handleClick} className='cursor-pointer'>
 						<CloseIcon fill='#9CA3AF' />
 					</div>
 				</div>

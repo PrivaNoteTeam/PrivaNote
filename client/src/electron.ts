@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
-import { template as applicationMenu } from './electron/applicationMenu';
+import { buildMenu } from './electron/applicationMenu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -14,19 +14,15 @@ app.on('ready', () => {
 
 	window.loadFile('index.html');
 
-	Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenu));
+	Menu.setApplicationMenu(buildMenu(window));
 
-	ipcMain.on('selectDirectory', () => {
+	ipcMain.on('selectDirectory', async (event, _) => {
 		dialog
 			.showOpenDialog(window, {
 				properties: ['openDirectory']
 			})
 			.then((value) => {
-				console.log(value);
+				event.returnValue = value.filePaths[0];
 			});
 	});
 });
-
-if (process.platform === 'darwin') {
-	applicationMenu.unshift({ label: 'PrivaNote', submenu: [] });
-}
