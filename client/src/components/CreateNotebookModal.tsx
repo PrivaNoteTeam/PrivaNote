@@ -1,35 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ModalLayout } from './Modal';
 import { BrowseInputField } from './BrowseInputField';
 import { TextField } from './TextField';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 
 interface Props {
 	close: () => void;
 }
 
+interface FormValues {
+	name: string;
+	location: string;
+}
+
+const validationSchema = yup.object({
+	name: yup.string().required(),
+	location: yup.string().required()
+});
+
 export function CreateNotebookModal({ close }: Props) {
-	const [name, setName] = useState('');
-	const getName = (value: string) => {
-		setName(value);
-	};
+	const {
+		register,
+		formState: { errors },
+		setError,
+		setValue,
+		handleSubmit
+	} = useForm<FormValues>({
+		resolver: yupResolver(validationSchema)
+	});
 
-	const [selectedDirectory, setSelectedDirectory] = useState('');
-	const getSelectedDirectory = (value: string) => {
-		setSelectedDirectory(value);
-	};
-
-	const handleClick = () => {
-		if (selectedDirectory == '' || name == '') return;
-
-		if (!fs.existsSync(selectedDirectory)) {
-			console.error(`${selectedDirectory} not found.`);
+	const onSubmit = ({ name, location }: FormValues) => {
+		if (!fs.existsSync(location)) {
+			setError('location', { message: 'directory not found' });
 			return;
 		}
 
-		fs.mkdirSync(`${selectedDirectory}/${name}`);
-		console.log(`Notebook created at ${selectedDirectory}`);
-
+		fs.mkdirSync(`${location}/${name}`);
 		close();
 	};
 
@@ -39,22 +48,29 @@ export function CreateNotebookModal({ close }: Props) {
 				<h1 className='text-white text-3xl text-center'>
 					Create Notebook
 				</h1>
-				<div className='w-80 space-y-10'>
-					<TextField name='name' liftState={getName} />
+				<form
+					className='w-80 space-y-10'
+					onSubmit={handleSubmit(onSubmit)}
+				>
+					<TextField
+						name='name'
+						error={errors.name}
+						register={register}
+					/>
 					<BrowseInputField
 						name='location'
-						currentPath={selectedDirectory}
-						liftState={getSelectedDirectory}
+						error={errors.location}
+						setValue={setValue}
+						register={register}
 					/>
 					<div className='flex justify-end'>
-						<p
-							onClick={handleClick}
+						<input
+							type='submit'
+							value='Create'
 							className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
-						>
-							Create
-						</p>
+						/>
 					</div>
-				</div>
+				</form>
 			</div>
 		</ModalLayout>
 	);

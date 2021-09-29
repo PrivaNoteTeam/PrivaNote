@@ -1,20 +1,33 @@
 import React from 'react';
+import { FieldError } from 'react-hook-form';
 
 interface Props {
 	name: string;
-	liftState: (value: string) => void;
+	error?: FieldError;
+	register: any;
 }
 
-export function TextField({ name, liftState }: Props) {
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		liftState(event.target.value);
-	};
-
+export function TextField({
+	name,
+	register,
+	error
+}: Props & React.HTMLProps<HTMLInputElement>) {
 	return (
 		<div className='flex flex-col'>
-			<label className='pn-label'>{name}</label>
+			<div className='flex justify-between'>
+				<label htmlFor={name} className='pn-label'>
+					{name}
+				</label>
+				<p className='text-red-400 text-xs uppercase'>
+					{error && error.message}
+				</p>
+			</div>
 			<div className='flex space-x-2'>
-				<input onChange={handleChange} className='pn-input w-full' />
+				<input
+					{...register(name)}
+					name={name}
+					className='pn-input w-full'
+				/>
 			</div>
 		</div>
 	);

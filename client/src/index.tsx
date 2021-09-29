@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 
 function App() {
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
-		useState(true);
+		useState(false);
 
 	ipcRenderer.on('createNotebook', () => {
 		setCreateNotebookModalVisible(true);
