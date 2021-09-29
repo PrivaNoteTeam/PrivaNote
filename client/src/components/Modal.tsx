@@ -9,7 +9,7 @@ export function ModalLayout({ close, children }: PropsWithChildren<Props>) {
 	const handleClick = () => close();
 
 	return (
-		<div className='absolute w-full h-full bg-black bg-opacity-50 flex justify-center'>
+		<div className='fixed left-0 top-0 w-full h-full bg-black bg-opacity-30 flex justify-center'>
 			<div className='relative p-8 rounded-md bg-gray-800 flex flex-col m-auto'>
 				<div className='flex justify-end'>
 					<div onClick={handleClick} className='cursor-pointer'>
