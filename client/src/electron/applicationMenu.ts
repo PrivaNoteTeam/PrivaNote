@@ -1,4 +1,4 @@
-import { MenuItemConstructorOptions, Menu } from 'electron';
+import { MenuItemConstructorOptions, Menu, dialog } from 'electron';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -14,7 +14,21 @@ const template: MenuItemConstructorOptions[] = [
 				}
 			},
 			{
-				label: 'Open Notebook'
+				label: 'Open Notebook',
+				click: (_, window) => {
+					if (!window) return;
+
+					dialog
+						.showOpenDialog(window, {
+							properties: ['openDirectory']
+						})
+						.then((value) => {
+							window.webContents.send(
+								'openNotebook',
+								value.filePaths[0]
+							);
+						});
+				}
 			},
 			{
 				type: 'separator'

@@ -1,5 +1,6 @@
-import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain } from 'electron';
 import { menu } from './electron/applicationMenu';
+import { selectDirectory } from './electron/handlers/selectDirectory';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -16,13 +17,5 @@ app.on('ready', () => {
 
 	Menu.setApplicationMenu(menu);
 
-	ipcMain.on('selectDirectory', async (event, _) => {
-		dialog
-			.showOpenDialog(window, {
-				properties: ['openDirectory']
-			})
-			.then((value) => {
-				event.returnValue = value.filePaths[0];
-			});
-	});
+	ipcMain.on('selectDirectory', (event) => selectDirectory(window, event));
 });

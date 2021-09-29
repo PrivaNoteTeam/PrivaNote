@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import './styles.css';
 
@@ -13,9 +13,15 @@ function App() {
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
 
-	ipcRenderer.on('createNotebook', () => {
-		setCreateNotebookModalVisible(true);
-	});
+	useEffect(() => {
+		ipcRenderer.on('createNotebook', () => {
+			setCreateNotebookModalVisible(true);
+		});
+
+		ipcRenderer.on('openNotebook', (_, location: string | undefined) => {
+			if (location) setCurrentNotebook(location);
+		});
+	}, []);
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen'>
