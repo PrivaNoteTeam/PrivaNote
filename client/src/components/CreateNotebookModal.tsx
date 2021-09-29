@@ -42,7 +42,7 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 		}
 
 		fs.mkdirSync(`${location}/${name}`);
-		setCurrentNotebook(location);
+		setCurrentNotebook(`${location}/${name}`);
 		close();
 	};
 
