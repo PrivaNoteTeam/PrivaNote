@@ -47,3 +47,18 @@ export const template: MenuItemConstructorOptions[] = [
 		]
 	}
 ];
+
+if (process.env.NODE_ENV !== 'production') {
+	template.push({
+		label: 'Develop',
+		submenu: [
+			{
+				label: 'Toggle Developer Tools',
+				click: (_, focusedWindow) => {
+					if (!focusedWindow) return;
+					(focusedWindow as unknown as any).toggleDevTools();
+				}
+			}
+		]
+	});
+}
