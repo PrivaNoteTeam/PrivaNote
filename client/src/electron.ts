@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
-import { buildMenu } from './electron/applicationMenu';
+import { menu } from './electron/applicationMenu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -14,7 +14,7 @@ app.on('ready', () => {
 
 	window.loadFile('index.html');
 
-	Menu.setApplicationMenu(buildMenu(window));
+	Menu.setApplicationMenu(menu);
 
 	ipcMain.on('selectDirectory', async (event, _) => {
 		dialog
