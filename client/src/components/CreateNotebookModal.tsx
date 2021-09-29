@@ -8,6 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 
 interface Props {
+	setCurrentNotebook: React.Dispatch<
+		React.SetStateAction<string | undefined>
+	>;
 	close: () => void;
 }
 
@@ -21,7 +24,7 @@ const validationSchema = yup.object({
 	location: yup.string().required()
 });
 
-export function CreateNotebookModal({ close }: Props) {
+export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 	const {
 		register,
 		formState: { errors },
@@ -39,6 +42,7 @@ export function CreateNotebookModal({ close }: Props) {
 		}
 
 		fs.mkdirSync(`${location}/${name}`);
+		setCurrentNotebook(location);
 		close();
 	};
 

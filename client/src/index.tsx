@@ -6,7 +6,9 @@ import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 
 function App() {
-	const [currentNotebook, _] = useState<string | undefined>();
+	const [currentNotebook, setCurrentNotebook] = useState<
+		string | undefined
+	>();
 
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
@@ -22,6 +24,7 @@ function App() {
 			</p>
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
+					setCurrentNotebook={setCurrentNotebook}
 					close={() => setCreateNotebookModalVisible(false)}
 				/>
 			)}
