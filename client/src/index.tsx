@@ -4,6 +4,7 @@ import './styles.css';
 
 import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
+import { EditorPanel } from './components/EditorPanel';
 
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
@@ -24,10 +25,11 @@ function App() {
 	}, []);
 
 	return (
-		<div className='bg-gray-800 w-screen h-screen'>
-			<p className='text-white'>
-				Current Notebook: {currentNotebook || 'None'}
-			</p>
+		<div className='bg-gray-800 w-screen h-screen flex'>
+			<div className='bg-gray-700 py-1 px-4'>
+				<p>Menu</p>
+			</div>
+			<EditorPanel currentNotebook={currentNotebook} />
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
 					setCurrentNotebook={setCurrentNotebook}
