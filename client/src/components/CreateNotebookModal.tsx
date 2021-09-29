@@ -29,6 +29,8 @@ export function CreateNotebookModal({ close }: Props) {
 
 		fs.mkdirSync(`${selectedDirectory}/${name}`);
 		console.log(`Notebook created at ${selectedDirectory}`);
+
+		close();
 	};
 
 	return (
