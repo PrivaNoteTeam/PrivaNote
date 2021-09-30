@@ -4,9 +4,10 @@ import FileIcon from '../../../assets/icons/file.svg';
 
 interface Props {
 	item: FileSystemItem;
+	depth?: number;
 }
 
-export function Note({ item }: Props) {
+export function Note({ item, depth = 0 }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
 	const handleClick = () => {
@@ -16,7 +17,8 @@ export function Note({ item }: Props) {
 	return (
 		<div
 			onClick={handleClick}
-			className={`flex select-none cursor-pointer py-0.5 pl-8 hover:bg-gray-700 ${
+			style={{ paddingLeft: `${depth + 2}rem` }}
+			className={`flex select-none cursor-pointer py-0.5 hover:bg-gray-700 ${
 				isOpened && 'bg-gray-700'
 			}`}
 		>

@@ -26,7 +26,7 @@ export function Directory({ item, depth = 0 }: Props) {
 		<div>
 			<div
 				onClick={handleClick}
-				className='flex items-center py-0.5 pl-8 select-none cursor-pointer hover:bg-gray-700'
+				className='flex items-center py-0.5 select-none cursor-pointer hover:bg-gray-700'
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
 				{isOpened ? (
@@ -48,7 +48,7 @@ export function Directory({ item, depth = 0 }: Props) {
 					return item.type === 'directory' ? (
 						<Directory item={item} depth={depth + 1} />
 					) : (
-						<Note item={item} />
+						<Note item={item} depth={depth + 1} />
 					);
 				})}
 			</div>
