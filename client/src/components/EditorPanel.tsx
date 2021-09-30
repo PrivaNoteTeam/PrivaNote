@@ -5,6 +5,7 @@ import { Placeholder } from './editorPanel/Placeholder';
 import fs from 'fs';
 import { ipcRenderer } from 'electron';
 import { useRelativePath } from '../utils/useRelativePath';
+import { createFile } from '../utils/createFile';
 
 interface Props {
 	currentNotebook?: string;
@@ -35,21 +36,13 @@ export function EditorPanel({ currentNotebook }: Props) {
 		ipcRenderer.on('createNote', () => {
 			if (!currentNotebook) return;
 
-			let count = 0;
-			let filename = 'Untitled.md';
+			console.log('b');
 
-			while (fs.existsSync(`${currentNotebook}/${filename}`)) {
-				filename = `Untitled (${++count}).md`;
-			}
+			const newFilePath = createFile(`${currentNotebook}`);
 
-			fs.writeFileSync(`${currentNotebook}/${filename}`, '');
+			console.log('a');
 
-			setCurrentFile(
-				useRelativePath(
-					currentNotebook,
-					`${currentNotebook}/${filename}`
-				)
-			);
+			setCurrentFile(useRelativePath(currentNotebook, newFilePath));
 		});
 	}, [currentNotebook]);
 
