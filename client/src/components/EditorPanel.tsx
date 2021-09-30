@@ -16,8 +16,11 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 	if (currentNotebook) {
 		fileStructure = fs.readdirSync(currentNotebook);
-		if (!currentFile && fileStructure.length != 0)
-			setCurrentFile(fileStructure[0]);
+		if (!currentFile) {
+			const defaultFile = fileStructure.find((n) => n.endsWith('.md'));
+
+			defaultFile && setCurrentFile(`${currentNotebook}/${defaultFile}`);
+		}
 	}
 
 	useEffect(() => {
@@ -41,7 +44,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 		<>
 			<FileExplorer />
 			{currentFile ? (
-				<Editor currentFile={`${currentNotebook}/${currentFile}`} />
+				<Editor currentFile={currentFile} />
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}
