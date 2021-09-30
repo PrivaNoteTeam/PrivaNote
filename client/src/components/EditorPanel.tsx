@@ -22,8 +22,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 	useEffect(() => {
 		ipcRenderer.on('createNote', () => {
-			console.log(currentNotebook + 'index.md');
-			if (!currentNotebook) return; // temporary solution. Try to disable menu item until currentNotebook
+			if (!currentNotebook) return;
 
 			let count = 0;
 			let filename = 'Untitled.md';
@@ -42,7 +41,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 		<>
 			<FileExplorer />
 			{currentFile ? (
-				<Editor currentFile={currentFile} />
+				<Editor currentFile={`${currentNotebook}/${currentFile}`} />
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}
