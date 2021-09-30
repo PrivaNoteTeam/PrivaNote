@@ -33,6 +33,8 @@ export function EditorPanel({ currentNotebook }: Props) {
 			}
 
 			fs.writeFileSync(`${currentNotebook}/${filename}`, '');
+
+			setCurrentFile(`${currentNotebook}/${filename}`);
 		});
 	}, [currentNotebook]);
 
