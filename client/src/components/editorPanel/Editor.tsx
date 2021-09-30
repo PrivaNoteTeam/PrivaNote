@@ -4,9 +4,10 @@ import { Breadcrumb } from './editor/Breadcrumb';
 
 interface Props {
 	currentFile: string;
+	currentNotebook: string;
 }
 
-export function Editor({ currentFile }: Props) {
+export function Editor({ currentNotebook, currentFile }: Props) {
 	const [text, setText] = useState<string>('');
 
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -14,7 +15,7 @@ export function Editor({ currentFile }: Props) {
 	};
 
 	useEffect(() => {
-		let buffer = fs.readFileSync(currentFile);
+		let buffer = fs.readFileSync(`${currentNotebook}/${currentFile}`);
 		setText(buffer.toString());
 	}, [currentFile]);
 

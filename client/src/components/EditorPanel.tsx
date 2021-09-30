@@ -4,6 +4,7 @@ import { Editor } from './editorPanel/Editor';
 import { Placeholder } from './editorPanel/Placeholder';
 import fs from 'fs';
 import { ipcRenderer } from 'electron';
+import { useRelativePath } from '../utils/useRelativePath';
 
 interface Props {
 	currentNotebook?: string;
@@ -12,6 +13,7 @@ interface Props {
 export function EditorPanel({ currentNotebook }: Props) {
 	const [currentFile, setCurrentFile] = useState<string | undefined>();
 
+	// Remove default file code when file hierarchy is done.
 	let fileStructure: string[] = [];
 
 	if (currentNotebook) {
@@ -19,7 +21,13 @@ export function EditorPanel({ currentNotebook }: Props) {
 		if (!currentFile) {
 			const defaultFile = fileStructure.find((n) => n.endsWith('.md'));
 
-			defaultFile && setCurrentFile(`${currentNotebook}/${defaultFile}`);
+			defaultFile &&
+				setCurrentFile(
+					useRelativePath(
+						currentNotebook,
+						`${currentNotebook}/${defaultFile}`
+					)
+				);
 		}
 	}
 
@@ -36,7 +44,12 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 			fs.writeFileSync(`${currentNotebook}/${filename}`, '');
 
-			setCurrentFile(`${currentNotebook}/${filename}`);
+			setCurrentFile(
+				useRelativePath(
+					currentNotebook,
+					`${currentNotebook}/${filename}`
+				)
+			);
 		});
 	}, [currentNotebook]);
 
@@ -44,7 +57,10 @@ export function EditorPanel({ currentNotebook }: Props) {
 		<>
 			<FileExplorer />
 			{currentFile ? (
-				<Editor currentFile={currentFile} />
+				<Editor
+					currentNotebook={currentNotebook}
+					currentFile={currentFile}
+				/>
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}
