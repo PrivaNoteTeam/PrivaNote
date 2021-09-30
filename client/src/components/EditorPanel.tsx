@@ -6,6 +6,7 @@ import fs from 'fs';
 import { ipcRenderer } from 'electron';
 import { useRelativePath } from '../utils/useRelativePath';
 import { createFile } from '../utils/createFile';
+import { getFileSystemItems } from '../utils/getFileSystemItems';
 
 interface Props {
 	currentNotebook?: string;
@@ -48,7 +49,10 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 	return currentNotebook ? (
 		<>
-			<FileExplorer />
+			<FileExplorer
+				currentNotebook={currentNotebook}
+				items={getFileSystemItems(currentNotebook)}
+			/>
 			{currentFile ? (
 				<Editor
 					currentNotebook={currentNotebook}
