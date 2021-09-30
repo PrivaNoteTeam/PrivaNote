@@ -28,15 +28,9 @@ export function Directory({ item }: Props) {
 				className='flex items-center py-0.5 pl-8 select-none cursor-pointer hover:bg-gray-700'
 			>
 				{isOpened ? (
-					<ChevronDownIcon
-						fill='#9CA3AF'
-						className='absolute -ml-6'
-					/>
+					<ChevronDownIcon fill='#9CA3AF' className='-ml-6' />
 				) : (
-					<ChevronRightIcon
-						fill='#9CA3AF'
-						className='absolute -ml-6'
-					/>
+					<ChevronRightIcon fill='#9CA3AF' className='-ml-6' />
 				)}
 				<FolderIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
 				<p
