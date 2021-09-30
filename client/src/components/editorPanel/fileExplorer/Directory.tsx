@@ -8,9 +8,10 @@ import { Note } from './Note';
 
 interface Props {
 	item: FileSystemItem;
+	depth?: number;
 }
 
-export function Directory({ item }: Props) {
+export function Directory({ item, depth = 0 }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
 	let childItems: FileSystemItem[] = isOpened
@@ -26,6 +27,7 @@ export function Directory({ item }: Props) {
 			<div
 				onClick={handleClick}
 				className='flex items-center py-0.5 pl-8 select-none cursor-pointer hover:bg-gray-700'
+				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
 				{isOpened ? (
 					<ChevronDownIcon fill='#9CA3AF' className='-ml-6' />
@@ -41,10 +43,10 @@ export function Directory({ item }: Props) {
 					{item.name}
 				</p>
 			</div>
-			<div className='pl-2'>
+			<div>
 				{childItems.map((item) => {
 					return item.type === 'directory' ? (
-						<Directory item={item} />
+						<Directory item={item} depth={depth + 1} />
 					) : (
 						<Note item={item} />
 					);

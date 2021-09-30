@@ -10,11 +10,11 @@ interface Props {
 
 export function FileExplorer({ items, currentNotebook }: Props) {
 	return (
-		<div className='bg-gray-800 overflow-y-auto overflow-x-hidden pt-2'>
+		<div className='bg-gray-800 pt-2 flex flex-col'>
 			<p className='text-gray-500 text-sm font-bold px-3 py-1'>
 				{currentNotebook}
 			</p>
-			<div>
+			<div className='flex-grow overflow-y-scroll'>
 				{items.map((item) => {
 					return item.type === 'directory' ? (
 						<Directory item={item} />
