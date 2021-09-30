@@ -5,7 +5,10 @@ const template: MenuItemConstructorOptions[] = [
 		label: 'File',
 		submenu: [
 			{
-				label: 'Create File'
+				label: 'Create Note',
+				click: (_, window) => {
+					if (window) window.webContents.send('createNote');
+				}
 			},
 			{
 				label: 'Create Notebook',

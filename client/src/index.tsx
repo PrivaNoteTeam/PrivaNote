@@ -24,6 +24,8 @@ function App() {
 		});
 	}, []);
 
+	console.log(currentNotebook + ' in index.tsx');
+
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
 			<div className='bg-gray-700 py-1 px-4'>
