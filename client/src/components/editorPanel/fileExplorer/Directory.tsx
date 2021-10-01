@@ -43,7 +43,11 @@ export function Directory({ item, depth = 0 }: Props) {
 					{item.name}
 				</p>
 			</div>
-			<div>
+			<div className='relative'>
+				<div
+					className='absolute h-full bg-gray-600'
+					style={{ marginLeft: `${depth + 1.25}rem`, width: '1px' }}
+				></div>
 				{childItems.map((item) => {
 					return item.type === 'directory' ? (
 						<Directory item={item} depth={depth + 1} />
