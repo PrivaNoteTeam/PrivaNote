@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { FileSystemItem } from '../../../types';
+import { FileSystemItem, FileItem } from '../../../types';
 import FileIcon from '../../../assets/icons/file.svg';
 
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
+	setCurrentFile: React.Dispatch<FileItem>;
 }
 
-export function Note({ item, depth = 0 }: Props) {
+export function Note({ item, depth = 0, setCurrentFile }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
 	const handleClick = () => {
 		setIsOpened(true);
+		setCurrentFile({
+			name: item.name,
+			path: item.path
+		});
 	};
 
 	return (

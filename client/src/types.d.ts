@@ -3,3 +3,5 @@ export interface FileSystemItem {
 	path: string;
 	type: 'note' | 'directory';
 }
+
+export type FileItem = Omit<FileSystemItem, 'type'>;

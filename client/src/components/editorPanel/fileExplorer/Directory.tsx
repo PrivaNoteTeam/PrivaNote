@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSystemItem } from '../../../types';
+import { FileSystemItem, FileItem } from '../../../types';
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
 import ChevronDownIcon from '../../../assets/icons/chevron-down.svg';
 import FolderIcon from '../../../assets/icons/folder-f.svg';
@@ -9,9 +9,10 @@ import { Note } from './Note';
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
+	setCurrentFile: React.Dispatch<FileItem>;
 }
 
-export function Directory({ item, depth = 0 }: Props) {
+export function Directory({ item, depth = 0, setCurrentFile }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
 	let childItems: FileSystemItem[] = isOpened
@@ -50,9 +51,17 @@ export function Directory({ item, depth = 0 }: Props) {
 				></div>
 				{childItems.map((item) => {
 					return item.type === 'directory' ? (
-						<Directory item={item} depth={depth + 1} />
+						<Directory
+							item={item}
+							depth={depth + 1}
+							setCurrentFile={setCurrentFile}
+						/>
 					) : (
-						<Note item={item} depth={depth + 1} />
+						<Note
+							item={item}
+							depth={depth + 1}
+							setCurrentFile={setCurrentFile}
+						/>
 					);
 				})}
 			</div>

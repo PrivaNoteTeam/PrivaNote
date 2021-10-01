@@ -2,48 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { FileExplorer } from './editorPanel/FileExplorer';
 import { Editor } from './editorPanel/Editor';
 import { Placeholder } from './editorPanel/Placeholder';
-import fs from 'fs';
 import { ipcRenderer } from 'electron';
-import { useRelativePath } from '../utils/useRelativePath';
+import { getFileName } from '../utils/getFileName';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
+import { FileItem } from '../types';
 
 interface Props {
 	currentNotebook?: string;
 }
 
 export function EditorPanel({ currentNotebook }: Props) {
-	const [currentFile, setCurrentFile] = useState<string | undefined>();
-
-	// Remove default file code when file hierarchy is done.
-	let fileStructure: string[] = [];
-
-	if (currentNotebook) {
-		fileStructure = fs.readdirSync(currentNotebook);
-		if (!currentFile) {
-			const defaultFile = fileStructure.find((n) => n.endsWith('.md'));
-
-			defaultFile &&
-				setCurrentFile(
-					useRelativePath(
-						currentNotebook,
-						`${currentNotebook}/${defaultFile}`
-					)
-				);
-		}
-	}
+	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
 
 	useEffect(() => {
 		ipcRenderer.on('createNote', () => {
 			if (!currentNotebook) return;
 
-			console.log('b');
-
 			const newFilePath = createFile(`${currentNotebook}`);
 
-			console.log('a');
-
-			setCurrentFile(useRelativePath(currentNotebook, newFilePath));
+			setCurrentFile({
+				name: getFileName(newFilePath),
+				path: newFilePath
+			});
 		});
 	}, [currentNotebook]);
 
@@ -51,6 +32,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 		<>
 			<FileExplorer
 				currentNotebook={currentNotebook}
+				setCurrentFile={setCurrentFile}
 				items={getFileSystemItems(currentNotebook)}
 			/>
 			{currentFile ? (
