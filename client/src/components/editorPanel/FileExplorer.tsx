@@ -6,6 +6,7 @@ import PlusIcon from '../../assets/icons/plus.svg';
 import FolderOpenIcon from '../../assets/icons/folder-open.svg';
 import { getFileName } from '../../utils/getFileName';
 import { createFile } from '../../utils/createFile';
+import { createDirectory } from '../../utils/createDirectory';
 
 interface Props {
 	items: FileSystemItem[];
@@ -26,6 +27,10 @@ export function FileExplorer({
 		setCurrentFile(newFile);
 	};
 
+	const handleAddDirectoryClick = () => {
+		createDirectory(currentNotebook);
+	};
+
 	return (
 		<div className='bg-gray-800 pt-2 flex flex-col resize-x'>
 			<div className='flex justify-between'>
@@ -39,6 +44,7 @@ export function FileExplorer({
 						className='p-0.5 hover:bg-gray-700 rounded-md cursor-pointer'
 					/>
 					<FolderOpenIcon
+						onClick={handleAddDirectoryClick}
 						fill='#9CA3AF'
 						className='p-0.5 hover:bg-gray-700 rounded-md cursor-pointer'
 					/>
