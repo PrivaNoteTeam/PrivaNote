@@ -32,6 +32,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 		<>
 			<FileExplorer
 				currentNotebook={currentNotebook}
+				currentFile={currentFile}
 				setCurrentFile={setCurrentFile}
 				items={getFileSystemItems(currentNotebook)}
 			/>

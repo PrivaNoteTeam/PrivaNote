@@ -9,10 +9,16 @@ import { Note } from './Note';
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
+	currentFile?: FileItem;
 	setCurrentFile: React.Dispatch<FileItem>;
 }
 
-export function Directory({ item, depth = 0, setCurrentFile }: Props) {
+export function Directory({
+	item,
+	depth = 0,
+	currentFile,
+	setCurrentFile
+}: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
 	let childItems: FileSystemItem[] = isOpened
@@ -54,12 +60,14 @@ export function Directory({ item, depth = 0, setCurrentFile }: Props) {
 						<Directory
 							item={item}
 							depth={depth + 1}
+							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
 						/>
 					) : (
 						<Note
 							item={item}
 							depth={depth + 1}
+							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
 						/>
 					);

@@ -6,12 +6,14 @@ import { Note } from './fileExplorer/Note';
 interface Props {
 	items: FileSystemItem[];
 	currentNotebook: string;
+	currentFile?: FileItem;
 	setCurrentFile: React.Dispatch<FileItem>;
 }
 
 export function FileExplorer({
 	items,
 	currentNotebook,
+	currentFile,
 	setCurrentFile
 }: Props) {
 	return (
@@ -24,10 +26,15 @@ export function FileExplorer({
 					return item.type === 'directory' ? (
 						<Directory
 							item={item}
+							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
 						/>
 					) : (
-						<Note item={item} setCurrentFile={setCurrentFile} />
+						<Note
+							item={item}
+							currentFile={currentFile}
+							setCurrentFile={setCurrentFile}
+						/>
 					);
 				})}
 			</div>
