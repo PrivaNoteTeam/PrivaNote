@@ -3,7 +3,6 @@ import { FileExplorer } from './editorPanel/FileExplorer';
 import { Editor } from './editorPanel/Editor';
 import { Placeholder } from './editorPanel/Placeholder';
 import { ipcRenderer } from 'electron';
-import { getFileName } from '../utils/getFileName';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
 import { FileItem } from '../types';
@@ -19,12 +18,9 @@ export function EditorPanel({ currentNotebook }: Props) {
 		ipcRenderer.on('createNote', () => {
 			if (!currentNotebook) return;
 
-			const newFilePath = createFile(`${currentNotebook}`);
+			const file = createFile(`${currentNotebook}`);
 
-			setCurrentFile({
-				name: getFileName(newFilePath),
-				path: newFilePath
-			});
+			setCurrentFile(file);
 		});
 	}, [currentNotebook]);
 
