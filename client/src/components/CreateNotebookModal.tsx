@@ -36,13 +36,20 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 	});
 
 	const onSubmit = ({ name, location }: FormValues) => {
+		const path = `${location}/${name}`;
+
 		if (!fs.existsSync(location)) {
 			setError('location', { message: 'directory not found' });
 			return;
 		}
 
-		fs.mkdirSync(`${location}/${name}`);
-		setCurrentNotebook(`${location}/${name}`);
+		if (fs.existsSync(path)) {
+			setError('name', { message: 'name already used' });
+			return;
+		}
+
+		fs.mkdirSync(path);
+		setCurrentNotebook(path);
 		close();
 	};
 
