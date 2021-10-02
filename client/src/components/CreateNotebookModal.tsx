@@ -27,7 +27,7 @@ const validationSchema = yup.object({
 export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 	const {
 		register,
-		formState: { errors },
+		formState: { errors, isValid },
 		setError,
 		setValue,
 		handleSubmit
@@ -78,7 +78,11 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 						<input
 							type='submit'
 							value='Create'
-							className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
+							className={`pn-button bg-opacity-50 bg-blue-500 border-blue-500 ${
+								isValid
+									? 'hover:border-blue-400'
+									: 'cursor-not-allowed opacity-20'
+							}`}
 						/>
 					</div>
 				</form>
