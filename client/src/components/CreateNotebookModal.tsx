@@ -56,7 +56,7 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 	return (
 		<ModalLayout close={close}>
 			<div className='flex flex-col space-y-10'>
-				<h1 className='text-white text-3xl text-center'>
+				<h1 className='text-white text-3xl text-center select-none'>
 					Create Notebook
 				</h1>
 				<form
