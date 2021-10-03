@@ -14,6 +14,7 @@ export function Editor({ currentFile }: Props) {
 
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
+		saveFile(currentFile, event.target.value);
 	};
 
 	useEffect(() => {
