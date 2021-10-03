@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { FileItem } from '../types';
 
 export function createFile(path: string) {
 	let count = 0;
@@ -8,9 +9,12 @@ export function createFile(path: string) {
 		filename = `Untitled (${++count}).md`;
 	}
 
-	const absolutePath = `${path}/${filename}`;
+	const file: FileItem = {
+		path: `${path}/${filename}`,
+		name: filename
+	};
 
-	fs.writeFileSync(absolutePath, '');
+	fs.writeFileSync(file.path, '');
 
-	return absolutePath;
+	return file;
 }

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import fs from 'fs';
+import { FileItem } from '../../types';
 import { Breadcrumb } from './editor/Breadcrumb';
 
 interface Props {
-	currentFile: string;
+	currentFile: FileItem;
 	currentNotebook: string;
 }
 
-export function Editor({ currentNotebook, currentFile }: Props) {
+export function Editor({ currentFile }: Props) {
 	const [text, setText] = useState<string>('');
 
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -15,7 +16,7 @@ export function Editor({ currentNotebook, currentFile }: Props) {
 	};
 
 	useEffect(() => {
-		let buffer = fs.readFileSync(`${currentNotebook}/${currentFile}`);
+		let buffer = fs.readFileSync(currentFile.path);
 		setText(buffer.toString());
 	}, [currentFile]);
 
