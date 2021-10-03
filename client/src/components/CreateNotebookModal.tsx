@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
+import { createNotebook } from '../utils/createNotebook';
 
 interface Props {
 	setCurrentNotebook: React.Dispatch<
@@ -35,13 +36,20 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 		resolver: yupResolver(validationSchema)
 	});
 
-	const onSubmit = ({ name, location }: FormValues) => {
+	const onSubmit = async ({ name, location }: FormValues) => {
 		if (!fs.existsSync(location)) {
 			setError('location', { message: 'directory not found' });
 			return;
 		}
 
-		fs.mkdirSync(`${location}/${name}`);
+		const isCreated = await createNotebook(`${location}/${name}`);
+
+		if (!isCreated) {
+			setError('name', { message: 'an error occurred' });
+
+			return;
+		}
+
 		setCurrentNotebook(`${location}/${name}`);
 		close();
 	};
