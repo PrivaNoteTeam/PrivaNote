@@ -22,7 +22,7 @@ PrivaNote’s primary focus is on ensuring that its user’s data are secure and
 ## Team
 * [Olivier Goulet](https://github.com/oliviergoulet5)
 * [Jason Xie](https://github.com/thejasonxie)
-* [Parsa Parichereh](https://github.com/parsa111)
+* [Parsa Parichehreh](https://github.com/parsa111)
 * [Ehsan Hazari](https://github.com/EHSANHAZARI)
 * Paul Triet Nham
 
