@@ -11,10 +11,14 @@ interface Props {
 
 export function Editor({ currentFile }: Props) {
 	const [text, setText] = useState<string>('');
+	const [unSaved, setUnsaved] = useState(false);
+
+	const autoSave = false; // ADD TO SETTINGS
 
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
-		saveFile(currentFile, event.target.value);
+		if (autoSave) saveFile(currentFile, event.target.value);
+		else setUnsaved(true);
 	};
 
 	useEffect(() => {
@@ -24,7 +28,7 @@ export function Editor({ currentFile }: Props) {
 
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
-			<Breadcrumb currentFile={currentFile} />
+			<Breadcrumb currentFile={currentFile} unSaved={unSaved} />
 			<div className='overflow-auto flex-grow w-full'>
 				<textarea
 					onChange={handleChange}
