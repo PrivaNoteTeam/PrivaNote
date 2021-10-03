@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import fs from 'fs';
 import { FileItem } from '../../types';
 import { Breadcrumb } from './editor/Breadcrumb';
+import { saveFile } from '../../utils/saveFile';
 
 interface Props {
 	currentFile: FileItem;
