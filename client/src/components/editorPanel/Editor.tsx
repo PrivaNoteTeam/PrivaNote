@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import fs from 'fs';
+import { ipcRenderer } from 'electron';
 import { FileItem } from '../../types';
 import { Breadcrumb } from './editor/Breadcrumb';
 import { saveFile } from '../../utils/saveFile';
@@ -12,8 +13,9 @@ interface Props {
 export function Editor({ currentFile }: Props) {
 	const [text, setText] = useState<string>('');
 	const [unSaved, setUnsaved] = useState(false);
+	const [manualSave, setManualSave] = useState(false);
 
-	const autoSave = false; // ADD TO SETTINGS
+	const autoSave = true; // ADD TO SETTINGS
 
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
@@ -21,9 +23,19 @@ export function Editor({ currentFile }: Props) {
 		else setUnsaved(true);
 	};
 
+	if (manualSave) {
+		saveFile(currentFile, text);
+		setUnsaved(false);
+		setManualSave(false);
+	}
+
 	useEffect(() => {
 		let buffer = fs.readFileSync(currentFile.path);
 		setText(buffer.toString());
+
+		ipcRenderer.on('saveNote', () => {
+			setManualSave(true);
+		});
 	}, [currentFile]);
 
 	return (

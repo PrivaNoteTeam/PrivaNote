@@ -37,7 +37,10 @@ const template: MenuItemConstructorOptions[] = [
 				type: 'separator'
 			},
 			{
-				label: 'Save'
+				label: 'Save',
+				click: (_, window) => {
+					if (window) window.webContents.send('saveNote');
+				}
 			},
 			{
 				label: 'Save As'
