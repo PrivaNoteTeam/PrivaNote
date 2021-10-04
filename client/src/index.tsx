@@ -5,6 +5,7 @@ import './styles.css';
 import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
+import { getFileName } from './utils/getFileName';
 
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
@@ -19,16 +20,20 @@ function App() {
 			setCreateNotebookModalVisible(true);
 		});
 
-		ipcRenderer.on('openNotebook', (_, location: string | undefined) => {
-			if (!location) {
-				console.warn(
-					'You did not open a valid notebook. This message should pop out to the user in the future'
-				);
-				return;
-			}
+		ipcRenderer.on(
+			'openNotebook',
+			(_, location: string, valid: boolean) => {
+				if (!valid) {
+					alert(
+						`"${getFileName(location)}" is not a valid notebook.`
+					);
 
-			setCurrentNotebook(location);
-		});
+					return;
+				}
+
+				setCurrentNotebook(location);
+			}
+		);
 	}, []);
 
 	return (

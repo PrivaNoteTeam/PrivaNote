@@ -30,11 +30,15 @@ const template: MenuItemConstructorOptions[] = [
 							const path = value.filePaths[0];
 
 							if (!getConfig(path)) {
-								window.webContents.send('openNotebook');
+								window.webContents.send(
+									'openNotebook',
+									path,
+									false
+								);
 								return;
 							}
 
-							window.webContents.send('openNotebook', path);
+							window.webContents.send('openNotebook', path, true);
 						});
 				}
 			},
