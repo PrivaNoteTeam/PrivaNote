@@ -1,15 +1,21 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain } from 'electron';
+import { menu } from './electron/applicationMenu';
+import { selectDirectory } from './electron/handlers/selectDirectory';
 
-function createWindow() {
-    let window = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
+app.on('ready', () => {
+	let window = new BrowserWindow({
+		width: 1200,
+		height: 900,
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			devTools: true
+		}
+	});
 
-    window.loadFile('index.html');
-}
+	window.loadFile('index.html');
 
-app.on('ready', createWindow);
+	Menu.setApplicationMenu(menu);
+
+	ipcMain.on('selectDirectory', (event) => selectDirectory(window, event));
+});
