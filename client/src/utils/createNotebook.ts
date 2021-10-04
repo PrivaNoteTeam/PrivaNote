@@ -1,15 +1,5 @@
 import fs from 'fs';
-import { PrivaNoteConfig } from '../types';
-
-const defaultConfig: PrivaNoteConfig = {
-	autoSave: true,
-	spellCheck: true,
-	dictionaryLanguage: 'en-ca',
-	fontFamily: 'ui-sans-serif',
-	fontSize: 14,
-	tabWidth: 4,
-	columns: 72
-};
+import { defaultConfig } from './defaultConfig';
 
 export const createNotebook = async (path: string) => {
 	console.log('Path: ' + path);

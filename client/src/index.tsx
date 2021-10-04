@@ -20,11 +20,16 @@ function App() {
 		});
 
 		ipcRenderer.on('openNotebook', (_, location: string | undefined) => {
-			if (location) setCurrentNotebook(location);
+			if (!location) {
+				console.warn(
+					'You did not open a valid notebook. This message should pop out to the user in the future'
+				);
+				return;
+			}
+
+			setCurrentNotebook(location);
 		});
 	}, []);
-
-	console.log(currentNotebook + ' in index.tsx');
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
