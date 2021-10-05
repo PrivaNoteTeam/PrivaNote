@@ -6,20 +6,24 @@ import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils/getFileName';
+import { FileItem } from './types';
 
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
 		string | undefined
 	>();
+	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
 
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
 
 	useEffect(() => {
+		ipcRenderer.removeAllListeners('createNotebook');
 		ipcRenderer.on('createNotebook', () => {
 			setCreateNotebookModalVisible(true);
 		});
 
+		ipcRenderer.removeAllListeners('openNotebook');
 		ipcRenderer.on(
 			'openNotebook',
 			(_, location: string, valid: boolean) => {
@@ -31,6 +35,7 @@ function App() {
 					return;
 				}
 
+				setCurrentFile(undefined);
 				setCurrentNotebook(location);
 			}
 		);
@@ -41,7 +46,11 @@ function App() {
 			<div className='bg-gray-700 py-1 px-4'>
 				<p>Menu</p>
 			</div>
-			<EditorPanel currentNotebook={currentNotebook} />
+			<EditorPanel
+				currentNotebook={currentNotebook}
+				currentFile={currentFile}
+				setCurrentFile={setCurrentFile}
+			/>
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
 					setCurrentNotebook={setCurrentNotebook}
