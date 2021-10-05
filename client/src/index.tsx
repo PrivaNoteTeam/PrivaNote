@@ -54,6 +54,7 @@ function App() {
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
 					setCurrentNotebook={setCurrentNotebook}
+					setCurrentFile={setCurrentFile}
 					close={() => setCreateNotebookModalVisible(false)}
 				/>
 			)}
