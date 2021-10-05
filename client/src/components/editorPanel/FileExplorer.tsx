@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileSystemItem, FileItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
@@ -7,6 +7,7 @@ import FolderOpenIcon from '../../assets/icons/folder-open.svg';
 import { getFileName } from '../../utils/getFileName';
 import { createFile } from '../../utils/createFile';
 import { createDirectory } from '../../utils/createDirectory';
+import { getParentDirectory } from '../../utils/getParentDirectory';
 
 interface Props {
 	items: FileSystemItem[];
@@ -21,14 +22,28 @@ export function FileExplorer({
 	currentFile,
 	setCurrentFile
 }: Props) {
+	const [selection, setSelection] = useState<FileSystemItem | undefined>();
+
 	const handleAddFileClick = () => {
-		// hard coded to create file at root
-		const newFile = createFile(currentNotebook);
+		const newFilePath = selection
+			? getParentDirectory(selection.path, { onlyFiles: true })
+			: currentNotebook;
+		const newFile = createFile(newFilePath);
 		setCurrentFile(newFile);
 	};
 
 	const handleAddDirectoryClick = () => {
-		createDirectory(currentNotebook);
+		const newDirectoryPath = selection
+			? getParentDirectory(selection.path, { onlyFiles: true })
+			: currentNotebook;
+		const newDirectory = createDirectory(newDirectoryPath);
+		setSelection(newDirectory);
+	};
+
+	const handleOuterClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (event.target !== event.currentTarget) return;
+
+		setSelection(undefined);
 	};
 
 	return (
@@ -50,19 +65,26 @@ export function FileExplorer({
 					/>
 				</div>
 			</div>
-			<div className='flex-grow overflow-y-scroll'>
+			<div
+				onClick={handleOuterClick}
+				className='flex-grow overflow-y-scroll pb-6'
+			>
 				{items.map((item) => {
 					return item.type === 'directory' ? (
 						<Directory
 							item={item}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							setSelection={setSelection}
+							selection={selection}
 						/>
 					) : (
 						<Note
 							item={item}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							setSelection={setSelection}
+							selection={selection}
 						/>
 					);
 				})}

@@ -11,13 +11,17 @@ interface Props {
 	depth?: number;
 	currentFile?: FileItem;
 	setCurrentFile: React.Dispatch<FileItem>;
+	selection?: FileSystemItem;
+	setSelection: React.Dispatch<FileSystemItem>;
 }
 
 export function Directory({
 	item,
 	depth = 0,
 	currentFile,
-	setCurrentFile
+	setCurrentFile,
+	selection,
+	setSelection
 }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
@@ -26,14 +30,24 @@ export function Directory({
 		: [];
 
 	const handleClick = () => {
+		setSelection(item);
 		setIsOpened(!isOpened);
 	};
+
+	let style = '';
+
+	if (selection?.path === item.path) {
+		style =
+			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
+	} else {
+		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
+	}
 
 	return (
 		<div>
 			<div
 				onClick={handleClick}
-				className='flex items-center py-0.5 select-none cursor-pointer hover:bg-gray-700'
+				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom border ${style}`}
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
 				{isOpened ? (
@@ -41,14 +55,11 @@ export function Directory({
 				) : (
 					<ChevronRightIcon fill='#9CA3AF' className='-ml-6' />
 				)}
-				<FolderIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
-				<p
-					className={`${
-						isOpened ? 'text-white' : 'text-gray-300'
-					} text-sm`}
-				>
-					{item.name}
-				</p>
+				<FolderIcon
+					fill='#9CA3AF'
+					className='self-end w-5 mr-1 align-bottom'
+				/>
+				<p className='text-gray-300 text-sm'>{item.name}</p>
 			</div>
 			<div className='relative'>
 				<div
@@ -62,6 +73,8 @@ export function Directory({
 							depth={depth + 1}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							selection={selection}
+							setSelection={setSelection}
 						/>
 					) : (
 						<Note
@@ -69,6 +82,8 @@ export function Directory({
 							depth={depth + 1}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							selection={selection}
+							setSelection={setSelection}
 						/>
 					);
 				})}
