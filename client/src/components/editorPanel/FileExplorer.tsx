@@ -7,6 +7,7 @@ import FolderOpenIcon from '../../assets/icons/folder-open.svg';
 import { getFileName } from '../../utils/getFileName';
 import { createFile } from '../../utils/createFile';
 import { createDirectory } from '../../utils/createDirectory';
+import { getParentDirectory } from '../../utils/getParentDirectory';
 
 interface Props {
 	items: FileSystemItem[];
@@ -24,8 +25,10 @@ export function FileExplorer({
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 
 	const handleAddFileClick = () => {
-		// hard coded to create file at root
-		const newFile = createFile(currentNotebook);
+		const newFilePath = selection
+			? getParentDirectory(selection.path, { onlyFiles: true })
+			: currentNotebook;
+		const newFile = createFile(newFilePath);
 		setCurrentFile(newFile);
 	};
 
