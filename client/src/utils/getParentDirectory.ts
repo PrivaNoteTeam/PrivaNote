@@ -15,7 +15,9 @@ export const getParentDirectory = (
 	path: string,
 	{ onlyFiles }: Options = defaultOptions
 ) => {
-	if (onlyFiles && (!path.endsWith('.md') || path.endsWith('/'))) return path;
+	if (onlyFiles && !path.endsWith('.md')) return path;
+
+	if (onlyFiles && path.endsWith('/')) return path.slice(0, -1);
 
 	let newPath = path;
 

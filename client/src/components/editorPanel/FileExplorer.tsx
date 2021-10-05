@@ -33,7 +33,17 @@ export function FileExplorer({
 	};
 
 	const handleAddDirectoryClick = () => {
-		createDirectory(currentNotebook);
+		const newDirectoryPath = selection
+			? getParentDirectory(selection.path, { onlyFiles: true })
+			: currentNotebook;
+		const newDirectory = createDirectory(newDirectoryPath);
+		setSelection(newDirectory);
+	};
+
+	const handleOuterClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (event.target !== event.currentTarget) return;
+
+		setSelection(undefined);
 	};
 
 	return (
@@ -55,7 +65,10 @@ export function FileExplorer({
 					/>
 				</div>
 			</div>
-			<div className='flex-grow overflow-y-scroll'>
+			<div
+				onClick={handleOuterClick}
+				className='flex-grow overflow-y-scroll pb-6'
+			>
 				{items.map((item) => {
 					return item.type === 'directory' ? (
 						<Directory
