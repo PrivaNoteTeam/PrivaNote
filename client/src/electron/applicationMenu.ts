@@ -66,6 +66,18 @@ const template: MenuItemConstructorOptions[] = [
 				label: 'Cut'
 			}
 		]
+	},
+	{
+		label: 'View',
+		submenu: [
+			{
+				label: 'Toggle File Explorer',
+				click: (_, window) => {
+					if (!window) return;
+					window.webContents.send('toggleFileExplorer');
+				}
+			}
+		]
 	}
 ];
 
