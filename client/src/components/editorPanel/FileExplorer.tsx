@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileSystemItem, FileItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
@@ -21,6 +21,8 @@ export function FileExplorer({
 	currentFile,
 	setCurrentFile
 }: Props) {
+	const [selection, setSelection] = useState<FileSystemItem | undefined>();
+
 	const handleAddFileClick = () => {
 		// hard coded to create file at root
 		const newFile = createFile(currentNotebook);
@@ -57,12 +59,16 @@ export function FileExplorer({
 							item={item}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							setSelection={setSelection}
+							selection={selection}
 						/>
 					) : (
 						<Note
 							item={item}
 							currentFile={currentFile}
 							setCurrentFile={setCurrentFile}
+							setSelection={setSelection}
+							selection={selection}
 						/>
 					);
 				})}
