@@ -1,5 +1,6 @@
 import { MenuItemConstructorOptions, Menu, dialog, ipcMain } from 'electron';
 import { getConfig } from '../utils/getConfig';
+import { exportNote } from './handlers/exportNote';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -63,10 +64,7 @@ const template: MenuItemConstructorOptions[] = [
 
 					ipcMain.removeAllListeners('currentFileToExport');
 					ipcMain.on('currentFileToExport', (_, currentFile) => {
-						console.log(
-							'From applicationMenu.ts ipcmain receive currentFileToExport:\n',
-							currentFile
-						);
+						exportNote(window, currentFile);
 					});
 				}
 			},
