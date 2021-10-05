@@ -64,7 +64,13 @@ const template: MenuItemConstructorOptions[] = [
 
 					ipcMain.removeAllListeners('currentFileToExport');
 					ipcMain.on('currentFileToExport', (_, currentFile) => {
-						exportNote(window, currentFile);
+						if (currentFile) {
+							exportNote(window, currentFile);
+						} else {
+							dialog.showMessageBox(window, {
+								message: 'Please select a note to export.'
+							});
+						}
 					});
 				}
 			},
