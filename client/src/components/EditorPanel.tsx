@@ -10,10 +10,15 @@ import { getParentDirectory } from '../utils/getParentDirectory';
 
 interface Props {
 	currentNotebook?: string;
+	currentFile: FileItem | undefined;
+	setCurrentFile: React.Dispatch<FileItem | undefined>;
 }
 
-export function EditorPanel({ currentNotebook }: Props) {
-	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
+export function EditorPanel({
+	currentNotebook,
+	currentFile,
+	setCurrentFile
+}: Props) {
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 
