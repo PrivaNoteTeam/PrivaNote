@@ -10,7 +10,7 @@ interface Props {
 	currentNotebook: string;
 }
 
-export function Editor({ currentFile }: Props) {
+export function Editor({ currentFile, currentNotebook }: Props) {
 	const [text, setText] = useState<string>('');
 	const [unSaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
@@ -40,7 +40,11 @@ export function Editor({ currentFile }: Props) {
 
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
-			<Breadcrumb currentFile={currentFile} unSaved={unSaved} />
+			<Breadcrumb
+				currentNotebook={currentNotebook}
+				currentFile={currentFile}
+				unSaved={unSaved}
+			/>
 			<div className='overflow-auto flex-grow w-full'>
 				<textarea
 					onChange={handleChange}
