@@ -5,3 +5,13 @@ export interface FileSystemItem {
 }
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
+
+export interface PrivaNoteConfig {
+	autoSave: boolean;
+	spellCheck: boolean;
+	dictionaryLanguage: string;
+	fontFamily: string;
+	fontSize: number;
+	tabWidth: number;
+	columns: number;
+}

@@ -5,6 +5,7 @@ import './styles.css';
 import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
+import { getFileName } from './utils/getFileName';
 
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
@@ -19,12 +20,21 @@ function App() {
 			setCreateNotebookModalVisible(true);
 		});
 
-		ipcRenderer.on('openNotebook', (_, location: string | undefined) => {
-			if (location) setCurrentNotebook(location);
-		});
-	}, []);
+		ipcRenderer.on(
+			'openNotebook',
+			(_, location: string, valid: boolean) => {
+				if (!valid) {
+					alert(
+						`"${getFileName(location)}" is not a valid notebook.`
+					);
 
-	console.log(currentNotebook + ' in index.tsx');
+					return;
+				}
+
+				setCurrentNotebook(location);
+			}
+		);
+	}, []);
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>

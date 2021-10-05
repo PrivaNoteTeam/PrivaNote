@@ -1,4 +1,5 @@
 import { MenuItemConstructorOptions, Menu, dialog } from 'electron';
+import { getConfig } from '../utils/getConfig';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -26,10 +27,18 @@ const template: MenuItemConstructorOptions[] = [
 							properties: ['openDirectory']
 						})
 						.then((value) => {
-							window.webContents.send(
-								'openNotebook',
-								value.filePaths[0]
-							);
+							const path = value.filePaths[0];
+
+							if (!getConfig(path)) {
+								window.webContents.send(
+									'openNotebook',
+									path,
+									false
+								);
+								return;
+							}
+
+							window.webContents.send('openNotebook', path, true);
 						});
 				}
 			},

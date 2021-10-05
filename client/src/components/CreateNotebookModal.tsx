@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
+import { createNotebook } from '../utils/createNotebook';
 
 interface Props {
 	setCurrentNotebook: React.Dispatch<
@@ -35,7 +36,7 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 		resolver: yupResolver(validationSchema)
 	});
 
-	const onSubmit = ({ name, location }: FormValues) => {
+	const onSubmit = async ({ name, location }: FormValues) => {
 		const path = `${location}/${name}`;
 
 		if (!fs.existsSync(location)) {
@@ -47,8 +48,14 @@ export function CreateNotebookModal({ setCurrentNotebook, close }: Props) {
 			setError('name', { message: 'name already used' });
 			return;
 		}
+		const isCreated = await createNotebook(`${location}/${name}`);
 
-		fs.mkdirSync(path);
+		if (!isCreated) {
+			setError('name', { message: 'an error occurred' });
+
+			return;
+		}
+
 		setCurrentNotebook(path);
 		close();
 	};
