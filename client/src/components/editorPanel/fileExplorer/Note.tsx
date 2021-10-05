@@ -33,17 +33,15 @@ export function Note({
 	if (selection?.path === item.path) {
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
-	} else if (currentFile?.path === item.path) {
-		style = 'bg-gray-700';
 	} else {
-		style = 'hover:bg-gray-700';
+		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
 	}
 
 	return (
 		<div
 			onClick={handleClick}
 			style={{ paddingLeft: `${depth + 2}rem` }}
-			className={`flex select-none cursor-pointer py-0.5 ${style} `}
+			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
 		>
 			<FileIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
 			<p

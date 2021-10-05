@@ -40,14 +40,14 @@ export function Directory({
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
 	} else {
-		style = 'hover:bg-gray-700';
+		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
 	}
 
 	return (
 		<div>
 			<div
 				onClick={handleClick}
-				className={`flex items-center py-0.5 select-none cursor-pointer ${style}`}
+				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom border ${style}`}
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
 				{isOpened ? (
@@ -55,14 +55,11 @@ export function Directory({
 				) : (
 					<ChevronRightIcon fill='#9CA3AF' className='-ml-6' />
 				)}
-				<FolderIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
-				<p
-					className={`${
-						isOpened ? 'text-white' : 'text-gray-300'
-					} text-sm`}
-				>
-					{item.name}
-				</p>
+				<FolderIcon
+					fill='#9CA3AF'
+					className='self-end w-5 mr-1 align-bottom'
+				/>
+				<p className='text-gray-300 text-sm'>{item.name}</p>
 			</div>
 			<div className='relative'>
 				<div
