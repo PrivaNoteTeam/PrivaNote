@@ -1,5 +1,6 @@
-import { MenuItemConstructorOptions, Menu, dialog } from 'electron';
+import { MenuItemConstructorOptions, Menu, dialog, ipcMain } from 'electron';
 import { getConfig } from '../utils/getConfig';
+import { exportNote } from './handlers/exportNote';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -55,7 +56,23 @@ const template: MenuItemConstructorOptions[] = [
 				label: 'Save As'
 			},
 			{
-				label: 'Export'
+				label: 'Export',
+				click: (_, window) => {
+					if (!window) return;
+
+					window.webContents.send('exportNote');
+
+					ipcMain.removeAllListeners('currentFileToExport');
+					ipcMain.on('currentFileToExport', (_, currentFile) => {
+						if (currentFile) {
+							exportNote(window, currentFile);
+						} else {
+							dialog.showMessageBox(window, {
+								message: 'Please select a note to export.'
+							});
+						}
+					});
+				}
 			},
 			{
 				type: 'separator'

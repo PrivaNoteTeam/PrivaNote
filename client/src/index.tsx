@@ -39,7 +39,12 @@ function App() {
 				setCurrentNotebook(location);
 			}
 		);
-	}, []);
+
+		ipcRenderer.removeAllListeners('exportNote');
+		ipcRenderer.on('exportNote', () => {
+			ipcRenderer.send('currentFileToExport', currentFile);
+		});
+	}, [currentFile]);
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
