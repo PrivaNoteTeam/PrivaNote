@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FileSystemItem, FileItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
@@ -14,16 +14,18 @@ interface Props {
 	currentNotebook: string;
 	currentFile?: FileItem;
 	setCurrentFile: React.Dispatch<FileItem>;
+	selection?: FileSystemItem;
+	setSelection: React.Dispatch<FileSystemItem | undefined>;
 }
 
 export function FileExplorer({
 	items,
 	currentNotebook,
 	currentFile,
-	setCurrentFile
+	setCurrentFile,
+	selection,
+	setSelection
 }: Props) {
-	const [selection, setSelection] = useState<FileSystemItem | undefined>();
-
 	const handleAddFileClick = () => {
 		const newFilePath = selection
 			? getParentDirectory(selection.path, { onlyFiles: true })

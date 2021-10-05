@@ -5,7 +5,7 @@ import { Placeholder } from './editorPanel/Placeholder';
 import { ipcRenderer } from 'electron';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
-import { FileItem } from '../types';
+import { FileItem, FileSystemItem } from '../types';
 
 interface Props {
 	currentNotebook?: string;
@@ -13,6 +13,7 @@ interface Props {
 
 export function EditorPanel({ currentNotebook }: Props) {
 	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
+	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 
 	useEffect(() => {
@@ -40,6 +41,8 @@ export function EditorPanel({ currentNotebook }: Props) {
 					currentNotebook={currentNotebook}
 					currentFile={currentFile}
 					setCurrentFile={setCurrentFile}
+					selection={selection}
+					setSelection={setSelection}
 					items={getFileSystemItems(currentNotebook)}
 				/>
 			)}
@@ -48,6 +51,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 				<Editor
 					currentNotebook={currentNotebook}
 					currentFile={currentFile}
+					setSelection={setSelection}
 				/>
 			) : (
 				<Placeholder text='Create or open a note to continue' />
