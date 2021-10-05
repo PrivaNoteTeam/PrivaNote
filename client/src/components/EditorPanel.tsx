@@ -6,6 +6,7 @@ import { ipcRenderer } from 'electron';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
 import { FileItem, FileSystemItem } from '../types';
+import { getParentDirectory } from '../utils/getParentDirectory';
 
 interface Props {
 	currentNotebook?: string;
@@ -21,9 +22,11 @@ export function EditorPanel({ currentNotebook }: Props) {
 		ipcRenderer.on('createNote', () => {
 			if (!currentNotebook) return;
 
-			const file = createFile(`${currentNotebook}`);
-
-			setCurrentFile(file);
+			const newFilePath = selection
+				? getParentDirectory(selection.path, { onlyFiles: true })
+				: currentNotebook;
+			const newFile = createFile(newFilePath);
+			setCurrentFile(newFile);
 		});
 
 		ipcRenderer.removeAllListeners('toggleFileExplorer');
@@ -32,7 +35,7 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 			setFileExplorerVisible(!fileExplorerVisible);
 		});
-	}, [currentNotebook, fileExplorerVisible]);
+	}, [currentNotebook, selection, fileExplorerVisible]);
 
 	return currentNotebook ? (
 		<>
