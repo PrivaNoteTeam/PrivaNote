@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import fs from 'fs';
 import { ipcRenderer } from 'electron';
-import { FileItem } from '../../types';
+import { FileItem, FileSystemItem } from '../../types';
 import { Breadcrumb } from './editor/Breadcrumb';
 import { saveFile } from '../../utils/saveFile';
 
 interface Props {
 	currentFile: FileItem;
 	currentNotebook: string;
+	setSelection: React.Dispatch<FileSystemItem | undefined>;
 }
 
-export function Editor({ currentFile, currentNotebook }: Props) {
+export function Editor({ currentFile, currentNotebook, setSelection }: Props) {
 	const [text, setText] = useState<string>('');
 	const [unSaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
@@ -44,6 +45,7 @@ export function Editor({ currentFile, currentNotebook }: Props) {
 				currentNotebook={currentNotebook}
 				currentFile={currentFile}
 				unSaved={unSaved}
+				setSelection={setSelection}
 			/>
 			<div className='overflow-auto flex-grow w-full'>
 				<textarea
