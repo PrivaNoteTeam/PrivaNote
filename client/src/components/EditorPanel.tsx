@@ -13,8 +13,10 @@ interface Props {
 
 export function EditorPanel({ currentNotebook }: Props) {
 	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
+	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 
 	useEffect(() => {
+		ipcRenderer.removeAllListeners('createNote');
 		ipcRenderer.on('createNote', () => {
 			if (!currentNotebook) return;
 
@@ -22,16 +24,26 @@ export function EditorPanel({ currentNotebook }: Props) {
 
 			setCurrentFile(file);
 		});
-	}, [currentNotebook]);
+
+		ipcRenderer.removeAllListeners('toggleFileExplorer');
+		ipcRenderer.on('toggleFileExplorer', () => {
+			if (!currentNotebook) return;
+
+			setFileExplorerVisible(!fileExplorerVisible);
+		});
+	}, [currentNotebook, fileExplorerVisible]);
 
 	return currentNotebook ? (
 		<>
-			<FileExplorer
-				currentNotebook={currentNotebook}
-				currentFile={currentFile}
-				setCurrentFile={setCurrentFile}
-				items={getFileSystemItems(currentNotebook)}
-			/>
+			{fileExplorerVisible && (
+				<FileExplorer
+					currentNotebook={currentNotebook}
+					currentFile={currentFile}
+					setCurrentFile={setCurrentFile}
+					items={getFileSystemItems(currentNotebook)}
+				/>
+			)}
+
 			{currentFile ? (
 				<Editor
 					currentNotebook={currentNotebook}
