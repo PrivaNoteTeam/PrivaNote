@@ -8,11 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import { createNotebook } from '../utils/createNotebook';
 import { FileItem } from '../types';
+import { useStore } from '../useStore';
 
 interface Props {
-	setCurrentNotebook: React.Dispatch<
-		React.SetStateAction<string | undefined>
-	>;
 	setCurrentFile: React.Dispatch<FileItem | undefined>;
 	close: () => void;
 }
@@ -27,11 +25,7 @@ const validationSchema = yup.object({
 	location: yup.string().required()
 });
 
-export function CreateNotebookModal({
-	setCurrentNotebook,
-	setCurrentFile,
-	close
-}: Props) {
+export function CreateNotebookModal({ setCurrentFile, close }: Props) {
 	const {
 		register,
 		formState: { errors, isValid },
@@ -41,6 +35,8 @@ export function CreateNotebookModal({
 	} = useForm<FormValues>({
 		resolver: yupResolver(validationSchema)
 	});
+
+	const [, dispatch] = useStore();
 
 	const onSubmit = async ({ name, location }: FormValues) => {
 		const path = `${location}/${name}`;
@@ -63,7 +59,10 @@ export function CreateNotebookModal({
 		}
 
 		setCurrentFile(undefined);
-		setCurrentNotebook(path);
+		dispatch({
+			type: 'openNotebook',
+			notebook: path
+		});
 		close();
 	};
 

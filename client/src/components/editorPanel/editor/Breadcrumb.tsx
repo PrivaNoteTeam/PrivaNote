@@ -3,21 +3,18 @@ import { FileItem, FileSystemItem } from '../../../types';
 import ChevronIcon from '../../../assets/icons/chevron-right.svg';
 import { useRelativePath } from '../../../utils/useRelativePath';
 import { isFile } from '../../../utils/isFile';
+import { useStore } from '../../../useStore';
 
 interface Props {
 	currentFile: FileItem;
-	currentNotebook: string;
 	unSaved: boolean;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
 }
 
-export function Breadcrumb({
-	currentFile,
-	currentNotebook,
-	unSaved,
-	setSelection
-}: Props) {
-	const parts = useRelativePath(currentNotebook, currentFile.path).split(
+export function Breadcrumb({ currentFile, unSaved, setSelection }: Props) {
+	const [{ notebook }] = useStore();
+
+	const parts = useRelativePath(notebook as string, currentFile.path).split(
 		/[\/\\]/
 	);
 
@@ -26,7 +23,7 @@ export function Breadcrumb({
 			let path = parts
 				.slice(0, i + 1)
 				.join('/')
-				.replace(/^/, currentNotebook.concat('/'));
+				.replace(/^/, (notebook as string).concat('/'));
 
 			setSelection({
 				name: part,

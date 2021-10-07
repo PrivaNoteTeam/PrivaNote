@@ -9,10 +9,10 @@ import { createFile } from '../../utils/createFile';
 import { createDirectory } from '../../utils/createDirectory';
 import { getParentDirectory } from '../../utils/getParentDirectory';
 import { renameExplorerItem } from '../../utils/renameExplorerItem';
+import { useStore } from '../../useStore';
 
 interface Props {
 	items: FileSystemItem[];
-	currentNotebook: string;
 	currentFile?: FileItem;
 	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
@@ -25,7 +25,6 @@ interface Props {
 
 export function FileExplorer({
 	items,
-	currentNotebook,
 	currentFile,
 	setCurrentFile,
 	selection,
@@ -35,21 +34,22 @@ export function FileExplorer({
 	renameItem,
 	setRenameItem
 }: Props) {
+	const [{ notebook }] = useStore();
 	const [renameText, setRenameText] = useState('');
 
 	const handleAddFileClick = () => {
 		const newFilePath = selection
 			? getParentDirectory(selection.path, { onlyFiles: true })
-			: currentNotebook;
-		const newFile = createFile(newFilePath);
+			: notebook;
+		const newFile = createFile(newFilePath as string);
 		setCurrentFile(newFile);
 	};
 
 	const handleAddDirectoryClick = () => {
 		const newDirectoryPath = selection
 			? getParentDirectory(selection.path, { onlyFiles: true })
-			: currentNotebook;
-		const newDirectory = createDirectory(newDirectoryPath);
+			: notebook;
+		const newDirectory = createDirectory(newDirectoryPath as string);
 		setSelection(newDirectory);
 	};
 
@@ -77,7 +77,7 @@ export function FileExplorer({
 		<div className='bg-gray-800 pt-2 flex flex-col resize-x'>
 			<div className='flex justify-between'>
 				<p className='text-gray-500 text-sm font-bold px-3 py-1'>
-					{getFileName(currentNotebook)}
+					{getFileName(notebook as string)}
 				</p>
 				<div className='mx-2 flex space-x-1'>
 					<PlusIcon

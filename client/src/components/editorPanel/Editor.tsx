@@ -7,11 +7,10 @@ import { saveFile } from '../../utils/saveFile';
 
 interface Props {
 	currentFile: FileItem;
-	currentNotebook: string;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
 }
 
-export function Editor({ currentFile, currentNotebook, setSelection }: Props) {
+export function Editor({ currentFile, setSelection }: Props) {
 	const [text, setText] = useState<string>('');
 	const [unSaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
@@ -42,7 +41,6 @@ export function Editor({ currentFile, currentNotebook, setSelection }: Props) {
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
 			<Breadcrumb
-				currentNotebook={currentNotebook}
 				currentFile={currentFile}
 				unSaved={unSaved}
 				setSelection={setSelection}

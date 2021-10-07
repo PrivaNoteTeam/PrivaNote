@@ -9,18 +9,15 @@ import { FileItem, FileSystemItem } from '../types';
 import { getParentDirectory } from '../utils/getParentDirectory';
 import { deleteExplorerItem } from '../utils/deleteExplorerItem';
 import { fileExist } from '../utils/fileExists';
+import { useStore } from '../useStore';
 
 interface Props {
-	currentNotebook?: string;
 	currentFile: FileItem | undefined;
 	setCurrentFile: React.Dispatch<FileItem | undefined>;
 }
 
-export function EditorPanel({
-	currentNotebook,
-	currentFile,
-	setCurrentFile
-}: Props) {
+export function EditorPanel({ currentFile, setCurrentFile }: Props) {
+	const [{ notebook }] = useStore();
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 	const [itemSelectContext, setItemSelectContext] = useState<
@@ -31,18 +28,18 @@ export function EditorPanel({
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
 		ipcRenderer.on('createNote', () => {
-			if (!currentNotebook) return;
+			if (!notebook) return;
 
 			const newFilePath = selection
 				? getParentDirectory(selection.path, { onlyFiles: true })
-				: currentNotebook;
+				: notebook;
 			const newFile = createFile(newFilePath);
 			setCurrentFile(newFile);
 		});
 
 		ipcRenderer.removeAllListeners('toggleFileExplorer');
 		ipcRenderer.on('toggleFileExplorer', () => {
-			if (!currentNotebook) return;
+			if (!notebook) return;
 
 			setFileExplorerVisible(!fileExplorerVisible);
 		});
@@ -64,18 +61,17 @@ export function EditorPanel({
 				setItemSelectContext(undefined);
 			});
 		});
-	}, [currentNotebook, selection, fileExplorerVisible, itemSelectContext]);
+	}, [notebook, selection, fileExplorerVisible, itemSelectContext]);
 
-	return currentNotebook ? (
+	return notebook ? (
 		<>
 			{fileExplorerVisible && (
 				<FileExplorer
-					currentNotebook={currentNotebook}
 					currentFile={currentFile}
 					setCurrentFile={setCurrentFile}
 					selection={selection}
 					setSelection={setSelection}
-					items={getFileSystemItems(currentNotebook)}
+					items={getFileSystemItems(notebook)}
 					itemSelectContext={itemSelectContext}
 					setItemSelectContext={setItemSelectContext}
 					renameItem={renameItem}
@@ -84,11 +80,7 @@ export function EditorPanel({
 			)}
 
 			{currentFile ? (
-				<Editor
-					currentNotebook={currentNotebook}
-					currentFile={currentFile}
-					setSelection={setSelection}
-				/>
+				<Editor currentFile={currentFile} setSelection={setSelection} />
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}

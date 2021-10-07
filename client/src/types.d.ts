@@ -1,3 +1,12 @@
+export interface AppState {
+	notebook?: string;
+	currentFile?: FileItem;
+}
+
+export interface AppAction extends AppState {
+	type: 'openNotebook';
+}
+
 export interface FileSystemItem {
 	name: string;
 	path: string;
