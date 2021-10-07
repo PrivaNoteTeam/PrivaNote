@@ -12,7 +12,7 @@ interface Props {
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem>;
 	itemSelectContext?: FileSystemItem;
-	setItemSelectContext: React.Dispatch<FileSystemItem>;
+	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
 	renameItem: boolean;
 	setRenameItem: React.Dispatch<boolean>;
 	renameText: string;
@@ -34,6 +34,13 @@ export function Note({
 	setRenameText
 }: Props) {
 	const handleClick = () => {
+		if (itemSelectContext?.path === item.path) {
+			return;
+		} else if (itemSelectContext) {
+			// clicking another note should remove current context selection
+			setItemSelectContext(undefined);
+		}
+
 		setSelection(item);
 
 		setCurrentFile({

@@ -18,7 +18,7 @@ interface Props {
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
 	itemSelectContext?: FileSystemItem;
-	setItemSelectContext: React.Dispatch<FileSystemItem>;
+	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
 	renameItem: boolean;
 	setRenameItem: React.Dispatch<boolean>;
 }
@@ -57,6 +57,7 @@ export function FileExplorer({
 		if (event.target !== event.currentTarget) return;
 
 		setSelection(undefined);
+		setItemSelectContext(undefined);
 		if (renameItem) {
 			renameExplorerItem(itemSelectContext?.path!, renameText)
 				.then((renamedItem) => {
