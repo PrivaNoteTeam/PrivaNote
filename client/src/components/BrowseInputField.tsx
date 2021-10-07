@@ -1,6 +1,7 @@
 import React from 'react';
 import { FieldError, SetFieldValue } from 'react-hook-form';
-import { ipcRenderer } from 'electron';
+import { UIBrowseInputField } from './browseInputField/UIBrowseInputField';
+import { useBrowseInputField } from './browseInputField/useBrowseInputField';
 
 interface Props {
 	name: string;
@@ -15,34 +16,14 @@ export function BrowseInputField({
 	register,
 	setValue
 }: Props & React.HTMLProps<HTMLInputElement>) {
-	const handleClick = async () => {
-		const directory = await ipcRenderer.sendSync('selectDirectory');
-		setValue(name, directory, { shouldValidate: true });
-	};
+	const { handleClick } = useBrowseInputField({ name, setValue });
 
 	return (
-		<div className='flex flex-col'>
-			<div className='flex justify-between'>
-				<label htmlFor={name} className='pn-label'>
-					{name}
-				</label>
-				<p className='text-red-400 text-xs uppercase'>
-					{error && error.message}
-				</p>
-			</div>
-			<div className='flex space-x-2'>
-				<input
-					{...register(name)}
-					name={name}
-					className='pn-input w-full'
-				/>
-				<button
-					onClick={handleClick}
-					className='pn-button pn-dark-button'
-				>
-					...
-				</button>
-			</div>
-		</div>
+		<UIBrowseInputField
+			name={name}
+			error={error}
+			register={register}
+			handleClick={handleClick}
+		/>
 	);
 }
