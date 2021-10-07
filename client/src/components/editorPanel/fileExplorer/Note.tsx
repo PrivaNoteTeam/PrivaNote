@@ -10,6 +10,10 @@ interface Props {
 	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem>;
+	itemSelectContext?: FileSystemItem;
+	setItemSelectContext: React.Dispatch<FileSystemItem>;
+	renameItem: boolean;
+	setRenameItem: React.Dispatch<boolean>;
 }
 
 export function Note({
@@ -18,7 +22,11 @@ export function Note({
 	setCurrentFile,
 	currentFile,
 	selection,
-	setSelection
+	setSelection,
+	itemSelectContext,
+	setItemSelectContext,
+	renameItem,
+	setRenameItem
 }: Props) {
 	const handleClick = () => {
 		setSelection(item);
@@ -31,7 +39,7 @@ export function Note({
 
 	const handleContextMenu = () => {
 		ipcRenderer.send('openExplorerFileContextMenu');
-		console.log('here');
+		setItemSelectContext(item);
 	};
 
 	let style = '';
@@ -43,14 +51,21 @@ export function Note({
 		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
 	}
 
-	return (
-		<div
-			onClick={handleClick}
-			onContextMenu={handleContextMenu}
-			style={{ paddingLeft: `${depth + 2}rem` }}
-			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
-		>
-			<FileIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
+	let displayItem = undefined;
+	if (renameItem && itemSelectContext?.path === item.path) {
+		console.log(setRenameItem);
+		displayItem = (
+			<input
+				type='text'
+				// value={renameText}
+				value={item.name}
+				// onChange={handleRenameOnChange}
+				// onKeyDown={handleRenameKeyDown}
+				autoFocus
+			/>
+		);
+	} else {
+		displayItem = (
 			<p
 				className={`${
 					currentFile?.path === item.path
@@ -60,6 +75,27 @@ export function Note({
 			>
 				{item.name}
 			</p>
+		);
+	}
+
+	return (
+		<div
+			onClick={handleClick}
+			onContextMenu={handleContextMenu}
+			style={{ paddingLeft: `${depth + 2}rem` }}
+			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
+		>
+			<FileIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
+			{/* <p
+				className={`${
+					currentFile?.path === item.path
+						? 'text-white'
+						: 'text-gray-300'
+				} text-sm`}
+			>
+				{item.name}
+			</p> */}
+			{displayItem}
 		</div>
 	);
 }

@@ -13,6 +13,10 @@ interface Props {
 	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem>;
+	itemSelectContext?: FileSystemItem;
+	setItemSelectContext: React.Dispatch<FileSystemItem>;
+	renameItem: boolean;
+	setRenameItem: React.Dispatch<boolean>;
 }
 
 export function Directory({
@@ -21,7 +25,11 @@ export function Directory({
 	currentFile,
 	setCurrentFile,
 	selection,
-	setSelection
+	setSelection,
+	itemSelectContext,
+	setItemSelectContext,
+	renameItem,
+	setRenameItem
 }: Props) {
 	const [isOpened, setIsOpened] = useState(false);
 
@@ -75,6 +83,10 @@ export function Directory({
 							setCurrentFile={setCurrentFile}
 							selection={selection}
 							setSelection={setSelection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
 						/>
 					) : (
 						<Note
@@ -84,6 +96,10 @@ export function Directory({
 							setCurrentFile={setCurrentFile}
 							selection={selection}
 							setSelection={setSelection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
 						/>
 					);
 				})}

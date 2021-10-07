@@ -21,6 +21,10 @@ export function EditorPanel({
 }: Props) {
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
+	const [itemSelectContext, setItemSelectContext] = useState<
+		FileSystemItem | undefined
+	>();
+	const [renameItem, setRenameItem] = useState(false);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
@@ -43,8 +47,7 @@ export function EditorPanel({
 
 		ipcRenderer.removeAllListeners('renameExplorerItem');
 		ipcRenderer.on('renameExplorerItem', () => {
-			// setRenameItem(true);
-			console.log('recievied rename click');
+			setRenameItem(true);
 		});
 	}, [currentNotebook, selection, fileExplorerVisible]);
 
@@ -58,6 +61,10 @@ export function EditorPanel({
 					selection={selection}
 					setSelection={setSelection}
 					items={getFileSystemItems(currentNotebook)}
+					itemSelectContext={itemSelectContext}
+					setItemSelectContext={setItemSelectContext}
+					renameItem={renameItem}
+					setRenameItem={setRenameItem}
 				/>
 			)}
 

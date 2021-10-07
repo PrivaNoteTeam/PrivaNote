@@ -16,6 +16,10 @@ interface Props {
 	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
+	itemSelectContext?: FileSystemItem;
+	setItemSelectContext: React.Dispatch<FileSystemItem>;
+	renameItem: boolean;
+	setRenameItem: React.Dispatch<boolean>;
 }
 
 export function FileExplorer({
@@ -24,7 +28,11 @@ export function FileExplorer({
 	currentFile,
 	setCurrentFile,
 	selection,
-	setSelection
+	setSelection,
+	itemSelectContext,
+	setItemSelectContext,
+	renameItem,
+	setRenameItem
 }: Props) {
 	const handleAddFileClick = () => {
 		const newFilePath = selection
@@ -79,6 +87,10 @@ export function FileExplorer({
 							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
 						/>
 					) : (
 						<Note
@@ -87,6 +99,10 @@ export function FileExplorer({
 							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
 						/>
 					);
 				})}
