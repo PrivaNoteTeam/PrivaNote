@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSystemItem } from '../../../types';
+import { FileSystemItem, EditorAction } from '../../../types';
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
 import ChevronDownIcon from '../../../assets/icons/chevron-down.svg';
 import FolderIcon from '../../../assets/icons/folder-f.svg';
@@ -12,12 +12,10 @@ import { useStore } from '../../../useStore';
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
-	selection?: FileSystemItem;
-	setSelection: React.Dispatch<FileSystemItem>;
-	itemSelectContext?: FileSystemItem;
-	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
-	renameItem: boolean;
-	setRenameItem: React.Dispatch<boolean>;
+	primarySelection?: FileSystemItem;
+	secondarySelection?: FileSystemItem;
+	isRenaming: boolean;
+	editorDispatch: React.Dispatch<EditorAction>;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 }
@@ -25,12 +23,10 @@ interface Props {
 export function Directory({
 	item,
 	depth = 0,
-	selection,
-	setSelection,
-	itemSelectContext,
-	setItemSelectContext,
-	renameItem,
-	setRenameItem,
+	primarySelection,
+	secondarySelection,
+	isRenaming,
+	editorDispatch,
 	renameText,
 	setRenameText
 }: Props) {
@@ -42,20 +38,34 @@ export function Directory({
 		: [];
 
 	const handleClick = () => {
-		if (itemSelectContext?.path === item.path) {
+		if (secondarySelection?.path === item.path) {
 			return;
-		} else if (itemSelectContext) {
-			// clicking another directory should remove current context selection
-			setItemSelectContext(undefined);
+		} else if (secondarySelection) {
+			editorDispatch({
+				type: 'secondarySelect',
+				secondarySelection: undefined,
+				isRenaming
+			});
 		}
 
-		setSelection(item);
+		editorDispatch({
+			type: 'primarySelect',
+			primarySelection: item,
+			isRenaming
+		});
+
 		setIsOpened(!isOpened);
 	};
 
 	const handleContextMenu = () => {
 		ipcRenderer.send('openExplorerFileContextMenu');
-		setItemSelectContext(item);
+
+		editorDispatch({
+			type: 'secondarySelect',
+			secondarySelection: item,
+			isRenaming
+		});
+
 		setRenameText(item.name);
 	};
 
@@ -69,8 +79,17 @@ export function Directory({
 		if (event.key === 'Enter' || event.code === '13') {
 			renameExplorerItem(item.path, renameText)
 				.then((renamedItem) => {
-					setRenameItem(false);
-					setItemSelectContext(undefined!);
+					editorDispatch({
+						type: 'rename',
+						isRenaming: false
+					});
+
+					editorDispatch({
+						type: 'secondarySelect',
+						secondarySelection: undefined,
+						isRenaming // might have old value
+					});
+
 					if (item.path == currentNote?.path) {
 						dispatch({
 							type: 'openNote',
@@ -83,13 +102,24 @@ export function Directory({
 				});
 		}
 		if (event.key === 'Escape' || event.code === '27') {
-			setRenameItem(false);
-			setItemSelectContext(undefined!);
+			editorDispatch({
+				type: 'rename',
+				isRenaming: false
+			});
+
+			editorDispatch({
+				type: 'secondarySelect',
+				secondarySelection: undefined,
+				isRenaming
+			});
 		}
 	};
 
 	const handleRenameBlur = () => {
-		setRenameItem(false);
+		editorDispatch({
+			type: 'rename',
+			isRenaming: false
+		});
 	};
 
 	const handleRenameFocus = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -98,9 +128,9 @@ export function Directory({
 
 	let style = '';
 
-	if (itemSelectContext?.path === item.path) {
+	if (secondarySelection?.path === item.path) {
 		style = 'border-blue-500 border-opacity-70 border-2';
-	} else if (selection?.path === item.path) {
+	} else if (primarySelection?.path === item.path) {
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
 	} else {
@@ -109,7 +139,7 @@ export function Directory({
 	}
 
 	let displayItem = undefined;
-	if (renameItem && itemSelectContext?.path === item.path) {
+	if (isRenaming && secondarySelection?.path === item.path) {
 		displayItem = (
 			<input
 				type='text'
@@ -155,12 +185,10 @@ export function Directory({
 						<Directory
 							item={item}
 							depth={depth + 1}
-							selection={selection}
-							setSelection={setSelection}
-							itemSelectContext={itemSelectContext}
-							setItemSelectContext={setItemSelectContext}
-							renameItem={renameItem}
-							setRenameItem={setRenameItem}
+							primarySelection={primarySelection}
+							secondarySelection={secondarySelection}
+							isRenaming={isRenaming}
+							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>
@@ -168,12 +196,10 @@ export function Directory({
 						<Note
 							item={item}
 							depth={depth + 1}
-							selection={selection}
-							setSelection={setSelection}
-							itemSelectContext={itemSelectContext}
-							setItemSelectContext={setItemSelectContext}
-							renameItem={renameItem}
-							setRenameItem={setRenameItem}
+							primarySelection={primarySelection}
+							secondarySelection={secondarySelection}
+							isRenaming={isRenaming}
+							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>

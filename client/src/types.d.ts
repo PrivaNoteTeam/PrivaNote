@@ -1,11 +1,4 @@
-export interface AppState {
-	notebook?: string;
-	currentNote?: FileItem;
-}
-
-export interface AppAction extends AppState {
-	type: 'openNotebook' | 'openNote';
-}
+import { Dispatch } from 'react';
 
 export interface FileSystemItem {
 	name: string;
@@ -23,4 +16,25 @@ export interface PrivaNoteConfig {
 	fontSize: number;
 	tabWidth: number;
 	columns: number;
+}
+
+// Reducer Types
+
+export interface AppState {
+	notebook?: string;
+	currentNote?: FileItem;
+}
+
+export interface AppAction extends AppState {
+	type: 'openNotebook' | 'openNote';
+}
+
+export interface EditorState {
+	primarySelection?: FileSystemItem;
+	secondarySelection?: FileSystemItem;
+	isRenaming: boolean;
+}
+
+export interface EditorAction extends EditorState {
+	type: 'primarySelect' | 'secondarySelect' | 'rename';
 }

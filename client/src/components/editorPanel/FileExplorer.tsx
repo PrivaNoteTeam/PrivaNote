@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSystemItem } from '../../types';
+import { FileSystemItem, EditorAction } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
 import PlusIcon from '../../assets/icons/plus.svg';
@@ -13,29 +13,25 @@ import { useStore } from '../../useStore';
 
 interface Props {
 	items: FileSystemItem[];
-	selection?: FileSystemItem;
-	setSelection: React.Dispatch<FileSystemItem | undefined>;
-	itemSelectContext?: FileSystemItem;
-	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
-	renameItem: boolean;
-	setRenameItem: React.Dispatch<boolean>;
+	primarySelection?: FileSystemItem;
+	secondarySelection?: FileSystemItem;
+	isRenaming: boolean;
+	editorDispatch: React.Dispatch<EditorAction>;
 }
 
 export function FileExplorer({
 	items,
-	selection,
-	setSelection,
-	itemSelectContext,
-	setItemSelectContext,
-	renameItem,
-	setRenameItem
+	primarySelection,
+	secondarySelection,
+	isRenaming,
+	editorDispatch
 }: Props) {
 	const [{ notebook, currentNote }, dispatch] = useStore();
 	const [renameText, setRenameText] = useState('');
 
 	const handleAddFileClick = () => {
-		const newFilePath = selection
-			? getParentDirectory(selection.path, { onlyFiles: true })
+		const newFilePath = primarySelection
+			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
 		const newFile = createFile(newFilePath as string);
 
@@ -46,24 +42,48 @@ export function FileExplorer({
 	};
 
 	const handleAddDirectoryClick = () => {
-		const newDirectoryPath = selection
-			? getParentDirectory(selection.path, { onlyFiles: true })
+		const newDirectoryPath = primarySelection
+			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
 		const newDirectory = createDirectory(newDirectoryPath as string);
-		setSelection(newDirectory);
+
+		editorDispatch({
+			type: 'primarySelect',
+			primarySelection: newDirectory,
+			isRenaming
+		});
 	};
 
 	const handleOuterClick = (event: React.MouseEvent<HTMLDivElement>) => {
 		if (event.target !== event.currentTarget) return;
 
-		setSelection(undefined);
-		setItemSelectContext(undefined);
-		if (renameItem) {
-			renameExplorerItem(itemSelectContext?.path!, renameText)
+		editorDispatch({
+			type: 'primarySelect',
+			primarySelection: undefined,
+			isRenaming
+		});
+
+		editorDispatch({
+			type: 'secondarySelect',
+			secondarySelection: undefined,
+			isRenaming
+		});
+
+		if (isRenaming) {
+			renameExplorerItem(secondarySelection?.path!, renameText)
 				.then((renamedItem) => {
-					setRenameItem(false);
-					setItemSelectContext(undefined!);
-					if (itemSelectContext?.path == currentNote?.path) {
+					editorDispatch({
+						type: 'rename',
+						isRenaming: false
+					});
+
+					editorDispatch({
+						type: 'secondarySelect',
+						secondarySelection: undefined,
+						isRenaming
+					});
+
+					if (secondarySelection?.path == currentNote?.path) {
 						dispatch({
 							type: 'openNote',
 							currentNote: renamedItem
@@ -103,24 +123,20 @@ export function FileExplorer({
 					return item.type === 'directory' ? (
 						<Directory
 							item={item}
-							setSelection={setSelection}
-							selection={selection}
-							itemSelectContext={itemSelectContext}
-							setItemSelectContext={setItemSelectContext}
-							renameItem={renameItem}
-							setRenameItem={setRenameItem}
+							primarySelection={primarySelection}
+							secondarySelection={secondarySelection}
+							isRenaming={isRenaming}
+							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>
 					) : (
 						<Note
 							item={item}
-							setSelection={setSelection}
-							selection={selection}
-							itemSelectContext={itemSelectContext}
-							setItemSelectContext={setItemSelectContext}
-							renameItem={renameItem}
-							setRenameItem={setRenameItem}
+							primarySelection={primarySelection}
+							secondarySelection={secondarySelection}
+							isRenaming={isRenaming}
+							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>

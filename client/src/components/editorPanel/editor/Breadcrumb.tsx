@@ -1,16 +1,16 @@
 import React from 'react';
-import { FileSystemItem } from '../../../types';
+import { EditorAction } from '../../../types';
 import ChevronIcon from '../../../assets/icons/chevron-right.svg';
 import { useRelativePath } from '../../../utils/useRelativePath';
 import { isFile } from '../../../utils/isFile';
 import { useStore } from '../../../useStore';
 
 interface Props {
-	unSaved: boolean;
-	setSelection: React.Dispatch<FileSystemItem | undefined>;
+	unsaved: boolean;
+	editorDispatch: React.Dispatch<EditorAction>;
 }
 
-export function Breadcrumb({ unSaved, setSelection }: Props) {
+export function Breadcrumb({ unsaved, editorDispatch }: Props) {
 	const [{ notebook, currentNote }] = useStore();
 
 	const parts = useRelativePath(notebook!, currentNote!.path).split(/[\/\\]/);
@@ -22,17 +22,21 @@ export function Breadcrumb({ unSaved, setSelection }: Props) {
 				.join('/')
 				.replace(/^/, notebook!.concat('/'));
 
-			setSelection({
-				name: part,
-				path,
-				type: isFile(path) ? 'note' : 'directory'
+			editorDispatch({
+				type: 'primarySelect',
+				primarySelection: {
+					name: part,
+					path,
+					type: isFile(path) ? 'note' : 'directory'
+				},
+				isRenaming: false // this is NOT supposed to be here. Delete ASAP
 			});
 		};
 
 		let text = part;
 
 		if (i === parts.length - 1) {
-			text = unSaved ? currentNote!.name.concat('*') : currentNote!.name;
+			text = unsaved ? currentNote!.name.concat('*') : currentNote!.name;
 		}
 
 		return (

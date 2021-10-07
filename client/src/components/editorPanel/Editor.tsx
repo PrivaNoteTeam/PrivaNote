@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import fs from 'fs';
 import { ipcRenderer } from 'electron';
-import { FileSystemItem } from '../../types';
+import { EditorAction } from '../../types';
 import { Breadcrumb } from './editor/Breadcrumb';
 import { saveFile } from '../../utils/saveFile';
 import { useStore } from '../../useStore';
 
 interface Props {
-	setSelection: React.Dispatch<FileSystemItem | undefined>;
+	editorDispatch: React.Dispatch<EditorAction>;
 }
 
-export function Editor({ setSelection }: Props) {
+export function Editor({ editorDispatch }: Props) {
 	const [{ currentNote }] = useStore();
 	const [text, setText] = useState<string>('');
-	const [unSaved, setUnsaved] = useState(false);
+	const [unsaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
 
 	const autoSave = true; // ADD TO SETTINGS
@@ -41,7 +41,7 @@ export function Editor({ setSelection }: Props) {
 
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
-			<Breadcrumb unSaved={unSaved} setSelection={setSelection} />
+			<Breadcrumb unsaved={unsaved} editorDispatch={editorDispatch} />
 			<div className='overflow-auto flex-grow w-full'>
 				<textarea
 					onChange={handleChange}
