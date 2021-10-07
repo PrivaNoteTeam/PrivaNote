@@ -9,11 +9,11 @@ const template: MenuItemConstructorOptions[] = [
 		}
 	},
 	{
-		label: 'Delete'
-		//     click(_, window) {
-		//         if (!window) return;
-		//         window.webContents.send('deleteExplorerItem');
-		//     }
+		label: 'Delete',
+		click(_, window) {
+			if (!window) return;
+			window.webContents.send('deleteExplorerItem');
+		}
 	}
 ];
 

@@ -7,6 +7,8 @@ import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
 import { FileItem, FileSystemItem } from '../types';
 import { getParentDirectory } from '../utils/getParentDirectory';
+import { deleteExplorerItem } from '../utils/deleteExplorerItem';
+import { fileExist } from '../utils/fileExists';
 
 interface Props {
 	currentNotebook?: string;
@@ -49,7 +51,20 @@ export function EditorPanel({
 		ipcRenderer.on('renameExplorerItem', () => {
 			setRenameItem(true);
 		});
-	}, [currentNotebook, selection, fileExplorerVisible]);
+
+		ipcRenderer.removeAllListeners('deleteExplorerItem');
+		ipcRenderer.on('deleteExplorerItem', () => {
+			deleteExplorerItem(itemSelectContext?.path).then(() => {
+				if (
+					currentFile?.path === itemSelectContext?.path ||
+					!fileExist(currentFile?.path)
+				) {
+					setCurrentFile(undefined);
+				}
+				setItemSelectContext(undefined);
+			});
+		});
+	}, [currentNotebook, selection, fileExplorerVisible, itemSelectContext]);
 
 	return currentNotebook ? (
 		<>
