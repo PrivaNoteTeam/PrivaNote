@@ -5,6 +5,8 @@ import ChevronDownIcon from '../../../assets/icons/chevron-down.svg';
 import FolderIcon from '../../../assets/icons/folder-f.svg';
 import { getFileSystemItems } from '../../../utils/getFileSystemItems';
 import { Note } from './Note';
+import { ipcRenderer } from 'electron';
+import { renameExplorerItem } from '../../../utils/renameExplorerItem';
 
 interface Props {
 	item: FileSystemItem;
@@ -46,6 +48,40 @@ export function Directory({
 		setIsOpened(!isOpened);
 	};
 
+	const handleContextMenu = () => {
+		ipcRenderer.send('openExplorerFileContextMenu');
+		setItemSelectContext(item);
+		setRenameText(item.name);
+	};
+
+	const handleRenameOnChange = (event: any) => {
+		setRenameText(event.target.value);
+	};
+
+	const handleRenameKeyDown = (event: any) => {
+		if (event.key === 'Enter' || event.KeyCode === 13) {
+			renameExplorerItem(item.path, renameText)
+				.then((renamedItem) => {
+					setRenameItem(false);
+					setItemSelectContext(undefined!);
+					if (item.path == currentFile?.path) {
+						setCurrentFile(renamedItem!);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+		if (event.key === 'Escape' || event.KeyCode === 27) {
+			setRenameItem(false);
+			setItemSelectContext(undefined!);
+		}
+	};
+
+	const handleRenameOnBlur = () => {
+		setRenameItem(false);
+	};
+
 	let style = '';
 
 	if (selection?.path === item.path) {
@@ -55,10 +91,27 @@ export function Directory({
 		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
 	}
 
+	let displayItem = undefined;
+	if (renameItem && itemSelectContext?.path === item.path) {
+		displayItem = (
+			<input
+				type='text'
+				value={renameText}
+				onChange={handleRenameOnChange}
+				onKeyDown={handleRenameKeyDown}
+				onBlur={handleRenameOnBlur}
+				autoFocus
+			/>
+		);
+	} else {
+		displayItem = <p className='text-gray-300 text-sm'>{item.name}</p>;
+	}
+
 	return (
 		<div>
 			<div
 				onClick={handleClick}
+				onContextMenu={handleContextMenu}
 				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom border ${style}`}
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
@@ -71,7 +124,7 @@ export function Directory({
 					fill='#9CA3AF'
 					className='self-end w-5 mr-1 align-bottom'
 				/>
-				<p className='text-gray-300 text-sm'>{item.name}</p>
+				{displayItem}
 			</div>
 			<div className='relative'>
 				<div
