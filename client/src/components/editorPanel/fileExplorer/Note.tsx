@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileSystemItem, FileItem } from '../../../types';
 import FileIcon from '../../../assets/icons/file.svg';
+import { ipcRenderer } from 'electron';
 
 interface Props {
 	item: FileSystemItem;
@@ -28,6 +29,11 @@ export function Note({
 		});
 	};
 
+	const handleContextMenu = () => {
+		ipcRenderer.send('openExplorerFileContextMenu');
+		console.log('here');
+	};
+
 	let style = '';
 
 	if (selection?.path === item.path) {
@@ -40,6 +46,7 @@ export function Note({
 	return (
 		<div
 			onClick={handleClick}
+			onContextMenu={handleContextMenu}
 			style={{ paddingLeft: `${depth + 2}rem` }}
 			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
 		>

@@ -40,6 +40,12 @@ export function EditorPanel({
 
 			setFileExplorerVisible(!fileExplorerVisible);
 		});
+
+		ipcRenderer.removeAllListeners('renameExplorerItem');
+		ipcRenderer.on('renameExplorerItem', () => {
+			// setRenameItem(true);
+			console.log('recievied rename click');
+		});
 	}, [currentNotebook, selection, fileExplorerVisible]);
 
 	return currentNotebook ? (
