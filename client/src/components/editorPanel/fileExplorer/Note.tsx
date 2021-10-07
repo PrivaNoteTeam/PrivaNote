@@ -14,6 +14,8 @@ interface Props {
 	setItemSelectContext: React.Dispatch<FileSystemItem>;
 	renameItem: boolean;
 	setRenameItem: React.Dispatch<boolean>;
+	renameText: string;
+	setRenameText: React.Dispatch<string>;
 }
 
 export function Note({
@@ -26,7 +28,9 @@ export function Note({
 	itemSelectContext,
 	setItemSelectContext,
 	renameItem,
-	setRenameItem
+	setRenameItem,
+	renameText,
+	setRenameText
 }: Props) {
 	const handleClick = () => {
 		setSelection(item);
@@ -40,6 +44,21 @@ export function Note({
 	const handleContextMenu = () => {
 		ipcRenderer.send('openExplorerFileContextMenu');
 		setItemSelectContext(item);
+		setRenameText(item.name);
+	};
+
+	const handleRenameOnChange = (event: any) => {
+		setRenameText(event.target.value);
+	};
+
+	const handleRenameKeyDown = (event: any) => {
+		if (event.key === 'Enter' || event.KeyCode === 13) {
+			console.log('Save ' + item.name + ' to ' + renameText);
+		}
+		if (event.key === 'Escape' || event.KeyCode === 27) {
+			setRenameItem(false);
+			setItemSelectContext(undefined!);
+		}
 	};
 
 	let style = '';
@@ -57,10 +76,10 @@ export function Note({
 		displayItem = (
 			<input
 				type='text'
-				// value={renameText}
-				value={item.name}
-				// onChange={handleRenameOnChange}
-				// onKeyDown={handleRenameKeyDown}
+				value={renameText}
+				// value={item.name}
+				onChange={handleRenameOnChange}
+				onKeyDown={handleRenameKeyDown}
 				autoFocus
 			/>
 		);

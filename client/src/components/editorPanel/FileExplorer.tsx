@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileSystemItem, FileItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
@@ -34,6 +34,8 @@ export function FileExplorer({
 	renameItem,
 	setRenameItem
 }: Props) {
+	const [renameText, setRenameText] = useState('');
+
 	const handleAddFileClick = () => {
 		const newFilePath = selection
 			? getParentDirectory(selection.path, { onlyFiles: true })
@@ -91,6 +93,8 @@ export function FileExplorer({
 							setItemSelectContext={setItemSelectContext}
 							renameItem={renameItem}
 							setRenameItem={setRenameItem}
+							renameText={renameText}
+							setRenameText={setRenameText}
 						/>
 					) : (
 						<Note
@@ -103,6 +107,8 @@ export function FileExplorer({
 							setItemSelectContext={setItemSelectContext}
 							renameItem={renameItem}
 							setRenameItem={setRenameItem}
+							renameText={renameText}
+							setRenameText={setRenameText}
 						/>
 					);
 				})}
