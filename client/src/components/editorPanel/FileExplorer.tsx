@@ -8,6 +8,7 @@ import { getFileName } from '../../utils/getFileName';
 import { createFile } from '../../utils/createFile';
 import { createDirectory } from '../../utils/createDirectory';
 import { getParentDirectory } from '../../utils/getParentDirectory';
+import { renameExplorerItem } from '../../utils/renameExplorerItem';
 
 interface Props {
 	items: FileSystemItem[];
@@ -56,6 +57,19 @@ export function FileExplorer({
 		if (event.target !== event.currentTarget) return;
 
 		setSelection(undefined);
+		if (renameItem) {
+			renameExplorerItem(itemSelectContext?.path!, renameText)
+				.then((renamedItem) => {
+					setRenameItem(false);
+					setItemSelectContext(undefined!);
+					if (itemSelectContext?.path == currentFile?.path) {
+						setCurrentFile(renamedItem!);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
 	};
 
 	return (
