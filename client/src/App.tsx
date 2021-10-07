@@ -2,7 +2,7 @@ import React from 'react';
 import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
-import { getFileName } from './utils/getFileName';
+import { getFileName } from './utils';
 import { useEffect, useState } from 'react';
 import { useStore } from './useStore';
 

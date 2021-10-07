@@ -1,0 +1,15 @@
+export { createDirectory } from './fileSystem/createDirectory';
+export { createFile } from './fileSystem/createFile';
+export { createNotebook } from './fileSystem/createNotebook';
+export { defaultConfig } from './defaultConfig';
+export { deleteExplorerItem } from './fileSystem/deleteExplorerItem';
+export { fileExist } from './fileSystem/fileExists';
+export { getConfig } from './getConfig';
+export { getFileName } from './fileSystem/getFileName';
+export { getFileSystemItem } from './fileSystem/getFileSystemItem';
+export { getFileSystemItems } from './fileSystem/getFileSystemItems';
+export { getParentDirectory } from './fileSystem/getParentDirectory';
+export { isFile } from './fileSystem/isFile';
+export { renameExplorerItem } from './fileSystem/renameExplorerItem';
+export { saveFile } from './fileSystem/saveFile';
+export { useRelativePath } from './fileSystem/useRelativePath';
