@@ -2,6 +2,7 @@ import React from 'react';
 import { FileSystemItem, FileItem } from '../../../types';
 import FileIcon from '../../../assets/icons/file.svg';
 import { ipcRenderer } from 'electron';
+import { renameExplorerItem } from '../../../utils/renameExplorerItem';
 
 interface Props {
 	item: FileSystemItem;
@@ -53,12 +54,22 @@ export function Note({
 
 	const handleRenameKeyDown = (event: any) => {
 		if (event.key === 'Enter' || event.KeyCode === 13) {
-			console.log('Save ' + item.name + ' to ' + renameText);
+			renameExplorerItem(item.path, renameText).then((renamedItem) => {
+				setRenameItem(false);
+				setItemSelectContext(undefined!);
+				if (item.path == currentFile?.path) {
+					setCurrentFile(renamedItem!);
+				}
+			});
 		}
 		if (event.key === 'Escape' || event.KeyCode === 27) {
 			setRenameItem(false);
 			setItemSelectContext(undefined!);
 		}
+	};
+
+	const handleRenameOnBlur = () => {
+		setRenameItem(false);
 	};
 
 	let style = '';
@@ -77,9 +88,9 @@ export function Note({
 			<input
 				type='text'
 				value={renameText}
-				// value={item.name}
 				onChange={handleRenameOnChange}
 				onKeyDown={handleRenameKeyDown}
+				onBlur={handleRenameOnBlur}
 				autoFocus
 			/>
 		);
@@ -105,15 +116,6 @@ export function Note({
 			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
 		>
 			<FileIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
-			{/* <p
-				className={`${
-					currentFile?.path === item.path
-						? 'text-white'
-						: 'text-gray-300'
-				} text-sm`}
-			>
-				{item.name}
-			</p> */}
 			{displayItem}
 		</div>
 	);
