@@ -83,7 +83,6 @@ export function Note({
 
 	let displayItem = undefined;
 	if (renameItem && itemSelectContext?.path === item.path) {
-		console.log(setRenameItem);
 		displayItem = (
 			<input
 				type='text'
