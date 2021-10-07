@@ -72,6 +72,10 @@ export function Note({
 		setRenameItem(false);
 	};
 
+	const handleRenameFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+		event.target.select();
+	};
+
 	let style = '';
 
 	if (selection?.path === item.path) {
@@ -90,7 +94,9 @@ export function Note({
 				onChange={handleRenameOnChange}
 				onKeyDown={handleRenameKeyDown}
 				onBlur={handleRenameOnBlur}
+				onFocus={handleRenameFocus}
 				autoFocus
+				className='bg-transparent outline-none text-white text-sm'
 			/>
 		);
 	} else {
