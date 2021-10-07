@@ -7,6 +7,8 @@ import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
 import { FileItem, FileSystemItem } from '../types';
 import { getParentDirectory } from '../utils/getParentDirectory';
+import { deleteExplorerItem } from '../utils/deleteExplorerItem';
+import { fileExist } from '../utils/fileExists';
 
 interface Props {
 	currentNotebook?: string;
@@ -21,6 +23,10 @@ export function EditorPanel({
 }: Props) {
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
+	const [itemSelectContext, setItemSelectContext] = useState<
+		FileSystemItem | undefined
+	>();
+	const [renameItem, setRenameItem] = useState(false);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
@@ -40,7 +46,25 @@ export function EditorPanel({
 
 			setFileExplorerVisible(!fileExplorerVisible);
 		});
-	}, [currentNotebook, selection, fileExplorerVisible]);
+
+		ipcRenderer.removeAllListeners('renameExplorerItem');
+		ipcRenderer.on('renameExplorerItem', () => {
+			setRenameItem(true);
+		});
+
+		ipcRenderer.removeAllListeners('deleteExplorerItem');
+		ipcRenderer.on('deleteExplorerItem', () => {
+			deleteExplorerItem(itemSelectContext?.path).then(() => {
+				if (
+					currentFile?.path === itemSelectContext?.path ||
+					!fileExist(currentFile?.path)
+				) {
+					setCurrentFile(undefined);
+				}
+				setItemSelectContext(undefined);
+			});
+		});
+	}, [currentNotebook, selection, fileExplorerVisible, itemSelectContext]);
 
 	return currentNotebook ? (
 		<>
@@ -52,6 +76,10 @@ export function EditorPanel({
 					selection={selection}
 					setSelection={setSelection}
 					items={getFileSystemItems(currentNotebook)}
+					itemSelectContext={itemSelectContext}
+					setItemSelectContext={setItemSelectContext}
+					renameItem={renameItem}
+					setRenameItem={setRenameItem}
 				/>
 			)}
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileSystemItem, FileItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
@@ -8,6 +8,7 @@ import { getFileName } from '../../utils/getFileName';
 import { createFile } from '../../utils/createFile';
 import { createDirectory } from '../../utils/createDirectory';
 import { getParentDirectory } from '../../utils/getParentDirectory';
+import { renameExplorerItem } from '../../utils/renameExplorerItem';
 
 interface Props {
 	items: FileSystemItem[];
@@ -16,6 +17,10 @@ interface Props {
 	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
+	itemSelectContext?: FileSystemItem;
+	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
+	renameItem: boolean;
+	setRenameItem: React.Dispatch<boolean>;
 }
 
 export function FileExplorer({
@@ -24,8 +29,14 @@ export function FileExplorer({
 	currentFile,
 	setCurrentFile,
 	selection,
-	setSelection
+	setSelection,
+	itemSelectContext,
+	setItemSelectContext,
+	renameItem,
+	setRenameItem
 }: Props) {
+	const [renameText, setRenameText] = useState('');
+
 	const handleAddFileClick = () => {
 		const newFilePath = selection
 			? getParentDirectory(selection.path, { onlyFiles: true })
@@ -46,6 +57,20 @@ export function FileExplorer({
 		if (event.target !== event.currentTarget) return;
 
 		setSelection(undefined);
+		setItemSelectContext(undefined);
+		if (renameItem) {
+			renameExplorerItem(itemSelectContext?.path!, renameText)
+				.then((renamedItem) => {
+					setRenameItem(false);
+					setItemSelectContext(undefined!);
+					if (itemSelectContext?.path == currentFile?.path) {
+						setCurrentFile(renamedItem!);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
 	};
 
 	return (
@@ -79,6 +104,12 @@ export function FileExplorer({
 							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
+							renameText={renameText}
+							setRenameText={setRenameText}
 						/>
 					) : (
 						<Note
@@ -87,6 +118,12 @@ export function FileExplorer({
 							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
+							itemSelectContext={itemSelectContext}
+							setItemSelectContext={setItemSelectContext}
+							renameItem={renameItem}
+							setRenameItem={setRenameItem}
+							renameText={renameText}
+							setRenameText={setRenameText}
 						/>
 					);
 				})}
