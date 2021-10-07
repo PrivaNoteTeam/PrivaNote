@@ -90,11 +90,14 @@ export function Directory({
 
 	let style = '';
 
-	if (selection?.path === item.path) {
+	if (itemSelectContext?.path === item.path) {
+		style = 'border-blue-500 border-opacity-70 border-2';
+	} else if (selection?.path === item.path) {
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
 	} else {
-		style = 'hover:bg-opacity-30 hover:bg-gray-700 border-transparent';
+		style =
+			'hover:bg-opacity-30 hover:bg-gray-700 border border-transparent';
 	}
 
 	let displayItem = undefined;
@@ -120,7 +123,7 @@ export function Directory({
 			<div
 				onClick={handleClick}
 				onContextMenu={handleContextMenu}
-				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom border ${style}`}
+				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom ${style}`}
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
 				{isOpened ? (

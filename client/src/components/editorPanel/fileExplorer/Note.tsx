@@ -80,7 +80,9 @@ export function Note({
 
 	let style = '';
 
-	if (selection?.path === item.path) {
+	if (itemSelectContext?.path === item.path) {
+		style = 'border-blue-500 border-opacity-70 border-2';
+	} else if (selection?.path === item.path) {
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
 	} else {
@@ -120,7 +122,7 @@ export function Note({
 			onClick={handleClick}
 			onContextMenu={handleContextMenu}
 			style={{ paddingLeft: `${depth + 2}rem` }}
-			className={`flex select-none cursor-pointer py-0.5 align-bottom border ${style} `}
+			className={`flex select-none cursor-pointer py-0.5 align-bottom ${style} `}
 		>
 			<FileIcon fill='#9CA3AF' className='self-end w-5 mr-1' />
 			{displayItem}
