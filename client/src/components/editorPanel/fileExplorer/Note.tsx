@@ -1,20 +1,17 @@
 import React from 'react';
-import { FileSystemItem, FileItem } from '../../../types';
+import { FileSystemItem, EditorAction } from '../../../types';
 import FileIcon from '../../../assets/icons/file.svg';
 import { ipcRenderer } from 'electron';
 import { renameExplorerItem } from '../../../utils/renameExplorerItem';
+import { useStore } from '../../../useStore';
 
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
-	currentFile?: FileItem;
-	setCurrentFile: React.Dispatch<FileItem>;
-	selection?: FileSystemItem;
-	setSelection: React.Dispatch<FileSystemItem>;
-	itemSelectContext?: FileSystemItem;
-	setItemSelectContext: React.Dispatch<FileSystemItem | undefined>;
-	renameItem: boolean;
-	setRenameItem: React.Dispatch<boolean>;
+	primarySelection?: FileSystemItem;
+	secondarySelection?: FileSystemItem;
+	isRenaming: boolean;
+	editorDispatch: React.Dispatch<EditorAction>;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 }
@@ -22,36 +19,49 @@ interface Props {
 export function Note({
 	item,
 	depth = 0,
-	setCurrentFile,
-	currentFile,
-	selection,
-	setSelection,
-	itemSelectContext,
-	setItemSelectContext,
-	renameItem,
-	setRenameItem,
+	primarySelection,
+	secondarySelection,
+	isRenaming,
+	editorDispatch,
 	renameText,
 	setRenameText
 }: Props) {
+	const [{ currentNote }, dispatch] = useStore();
 	const handleClick = () => {
-		if (itemSelectContext?.path === item.path) {
+		if (secondarySelection?.path === item.path) {
 			return;
-		} else if (itemSelectContext) {
-			// clicking another note should remove current context selection
-			setItemSelectContext(undefined);
+		} else if (secondarySelection) {
+			editorDispatch({
+				type: 'secondarySelect',
+				secondarySelection: undefined,
+				isRenaming
+			});
 		}
 
-		setSelection(item);
+		editorDispatch({
+			type: 'primarySelect',
+			primarySelection: item,
+			isRenaming
+		});
 
-		setCurrentFile({
-			name: item.name,
-			path: item.path
+		dispatch({
+			type: 'openNote',
+			currentNote: {
+				name: item.name,
+				path: item.path
+			}
 		});
 	};
 
 	const handleContextMenu = () => {
 		ipcRenderer.send('openExplorerFileContextMenu');
-		setItemSelectContext(item);
+
+		editorDispatch({
+			type: 'secondarySelect',
+			secondarySelection: item,
+			isRenaming
+		});
+
 		setRenameText(item.name);
 	};
 
@@ -64,21 +74,44 @@ export function Note({
 	) => {
 		if (event.key === 'Enter' || event.code === '13') {
 			renameExplorerItem(item.path, renameText).then((renamedItem) => {
-				setRenameItem(false);
-				setItemSelectContext(undefined!);
-				if (item.path == currentFile?.path) {
-					setCurrentFile(renamedItem!);
+				editorDispatch({
+					type: 'rename',
+					isRenaming: false
+				});
+
+				editorDispatch({
+					type: 'secondarySelect',
+					secondarySelection: undefined,
+					isRenaming
+				});
+
+				if (item.path == currentNote?.path) {
+					dispatch({
+						type: 'openNote',
+						currentNote: renamedItem
+					});
 				}
 			});
 		}
 		if (event.key === 'Escape' || event.code === '27') {
-			setRenameItem(false);
-			setItemSelectContext(undefined!);
+			editorDispatch({
+				type: 'rename',
+				isRenaming: false
+			});
+
+			editorDispatch({
+				type: 'secondarySelect',
+				secondarySelection: undefined,
+				isRenaming
+			});
 		}
 	};
 
 	const handleRenameBlur = () => {
-		setRenameItem(false);
+		editorDispatch({
+			type: 'rename',
+			isRenaming: false
+		});
 	};
 
 	const handleRenameFocus = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -87,9 +120,9 @@ export function Note({
 
 	let style = '';
 
-	if (itemSelectContext?.path === item.path) {
+	if (secondarySelection?.path === item.path) {
 		style = 'border-blue-500 border-opacity-70 border-2';
-	} else if (selection?.path === item.path) {
+	} else if (primarySelection?.path === item.path) {
 		style =
 			'bg-blue-500 border-blue-300 border bg-opacity-30 border-opacity-30';
 	} else {
@@ -97,7 +130,7 @@ export function Note({
 	}
 
 	let displayItem = undefined;
-	if (renameItem && itemSelectContext?.path === item.path) {
+	if (isRenaming && secondarySelection?.path === item.path) {
 		displayItem = (
 			<input
 				type='text'
@@ -114,7 +147,7 @@ export function Note({
 		displayItem = (
 			<p
 				className={`${
-					currentFile?.path === item.path
+					currentNote?.path === item.path
 						? 'text-white'
 						: 'text-gray-300'
 				} text-sm`}

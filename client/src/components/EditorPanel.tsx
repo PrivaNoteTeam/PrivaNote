@@ -1,94 +1,102 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { FileExplorer } from './editorPanel/FileExplorer';
 import { Editor } from './editorPanel/Editor';
 import { Placeholder } from './editorPanel/Placeholder';
 import { ipcRenderer } from 'electron';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
-import { FileItem, FileSystemItem } from '../types';
 import { getParentDirectory } from '../utils/getParentDirectory';
 import { deleteExplorerItem } from '../utils/deleteExplorerItem';
 import { fileExist } from '../utils/fileExists';
+import { useStore } from '../useStore';
+import { EditorState, EditorAction } from '../types';
 
-interface Props {
-	currentNotebook?: string;
-	currentFile: FileItem | undefined;
-	setCurrentFile: React.Dispatch<FileItem | undefined>;
-}
+const reducer = (state: EditorState, action: EditorAction) => {
+	switch (action.type) {
+		case 'primarySelect':
+			return { ...state, primarySelection: action.primarySelection };
+		case 'secondarySelect':
+			return { ...state, secondarySelection: action.secondarySelection };
+		case 'rename':
+			return { ...state, isRenaming: action.isRenaming };
+	}
+};
 
-export function EditorPanel({
-	currentNotebook,
-	currentFile,
-	setCurrentFile
-}: Props) {
-	const [selection, setSelection] = useState<FileSystemItem | undefined>();
+export function EditorPanel() {
+	const [{ notebook, currentNote }, dispatch] = useStore();
+	const [
+		{ primarySelection, secondarySelection, isRenaming },
+		editorDispatch
+	] = useReducer(reducer, { isRenaming: false });
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
-	const [itemSelectContext, setItemSelectContext] = useState<
-		FileSystemItem | undefined
-	>();
-	const [renameItem, setRenameItem] = useState(false);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
 		ipcRenderer.on('createNote', () => {
-			if (!currentNotebook) return;
+			if (!notebook) return;
 
-			const newFilePath = selection
-				? getParentDirectory(selection.path, { onlyFiles: true })
-				: currentNotebook;
+			const newFilePath = primarySelection
+				? getParentDirectory(primarySelection.path, { onlyFiles: true })
+				: notebook;
 			const newFile = createFile(newFilePath);
-			setCurrentFile(newFile);
+
+			dispatch({
+				type: 'openNote',
+				currentNote: newFile
+			});
 		});
 
 		ipcRenderer.removeAllListeners('toggleFileExplorer');
 		ipcRenderer.on('toggleFileExplorer', () => {
-			if (!currentNotebook) return;
+			if (!notebook) return;
 
 			setFileExplorerVisible(!fileExplorerVisible);
 		});
 
 		ipcRenderer.removeAllListeners('renameExplorerItem');
 		ipcRenderer.on('renameExplorerItem', () => {
-			setRenameItem(true);
+			editorDispatch({
+				type: 'rename',
+				isRenaming: true
+			});
 		});
 
 		ipcRenderer.removeAllListeners('deleteExplorerItem');
 		ipcRenderer.on('deleteExplorerItem', () => {
-			deleteExplorerItem(itemSelectContext?.path).then(() => {
+			deleteExplorerItem(secondarySelection?.path).then(() => {
 				if (
-					currentFile?.path === itemSelectContext?.path ||
-					!fileExist(currentFile?.path)
+					currentNote?.path === secondarySelection?.path ||
+					!fileExist(currentNote?.path)
 				) {
-					setCurrentFile(undefined);
+					dispatch({
+						type: 'openNote',
+						currentNote: undefined
+					});
 				}
-				setItemSelectContext(undefined);
+
+				editorDispatch({
+					type: 'secondarySelect',
+					secondarySelection: undefined,
+					isRenaming // find a way to not need this
+				});
 			});
 		});
-	}, [currentNotebook, selection, fileExplorerVisible, itemSelectContext]);
+	}, [notebook, primarySelection, secondarySelection, fileExplorerVisible]);
 
-	return currentNotebook ? (
+	return notebook ? (
 		<>
 			{fileExplorerVisible && (
 				<FileExplorer
-					currentNotebook={currentNotebook}
-					currentFile={currentFile}
-					setCurrentFile={setCurrentFile}
-					selection={selection}
-					setSelection={setSelection}
-					items={getFileSystemItems(currentNotebook)}
-					itemSelectContext={itemSelectContext}
-					setItemSelectContext={setItemSelectContext}
-					renameItem={renameItem}
-					setRenameItem={setRenameItem}
+					items={getFileSystemItems(notebook)}
+					primarySelection={primarySelection}
+					secondarySelection={secondarySelection}
+					isRenaming={isRenaming}
+					editorDispatch={editorDispatch}
 				/>
 			)}
 
-			{currentFile ? (
-				<Editor
-					currentNotebook={currentNotebook}
-					currentFile={currentFile}
-					setSelection={setSelection}
-				/>
+			{currentNote ? (
+				<Editor editorDispatch={editorDispatch} />
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}
