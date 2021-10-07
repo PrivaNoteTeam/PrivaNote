@@ -2,10 +2,12 @@ import { useEffect, useReducer, useState } from 'react';
 import { useStore } from '../../useStore';
 import { EditorState, EditorAction } from '../../types';
 import { ipcRenderer } from 'electron';
-import { getParentDirectory } from '../../utils/getParentDirectory';
-import { createFile } from '../../utils/createFile';
-import { deleteExplorerItem } from '../../utils/deleteExplorerItem';
-import { fileExist } from '../../utils/fileExists';
+import {
+	getParentDirectory,
+	deleteExplorerItem,
+	fileExist,
+	createFile
+} from '../../utils';
 
 const reducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { FileSystemItem } from 'src/types';
+import { FileSystemItem } from '../../types';
 import { getFileSystemItem } from './getFileSystemItem';
 
 export const renameExplorerItem = async (path: string, newName: string) => {

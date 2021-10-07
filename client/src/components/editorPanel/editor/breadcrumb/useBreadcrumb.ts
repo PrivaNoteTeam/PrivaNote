@@ -1,7 +1,6 @@
 import React from 'react';
 import { useStore } from '../../../../useStore';
-import { useRelativePath } from '../../../../utils/useRelativePath';
-import { isFile } from '../../../../utils/isFile';
+import { useRelativePath, isFile } from '../../../../utils';
 import { EditorAction } from '../../../../types';
 
 interface Args {

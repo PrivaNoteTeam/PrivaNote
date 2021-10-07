@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { FileSystemItem } from '../types';
+import { FileSystemItem } from '../../types';
 
 export function createDirectory(path: string) {
 	let count = 0;

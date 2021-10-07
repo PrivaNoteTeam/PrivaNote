@@ -3,7 +3,7 @@ import { useStore } from '../../../useStore';
 import { EditorAction, FileSystemItem } from '../../../types';
 import { Directory } from './Directory';
 import { Note } from './Note';
-import { getFileName } from '../../../utils/getFileName';
+import { getFileName } from '../../../utils';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import FolderOpenIcon from '../../../assets/icons/folder-open.svg';
 

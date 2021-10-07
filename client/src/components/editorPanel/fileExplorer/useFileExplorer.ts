@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useStore } from '../../../useStore';
 import { FileSystemItem, EditorAction } from '../../../types';
-import { createFile } from '../../../utils/createFile';
-import { getParentDirectory } from '../../../utils/getParentDirectory';
-import { createDirectory } from '../../../utils/createDirectory';
-import { renameExplorerItem } from '../../../utils/renameExplorerItem';
+import {
+	createFile,
+	getParentDirectory,
+	createDirectory,
+	renameExplorerItem
+} from '../../../utils/';
 
 interface Args {
 	primarySelection?: FileSystemItem;

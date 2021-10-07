@@ -1,5 +1,5 @@
 import { useStore } from '../../useStore';
-import { createNotebook } from '../../utils/createNotebook';
+import { createNotebook } from '../../utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';

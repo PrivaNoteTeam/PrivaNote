@@ -2,7 +2,7 @@ import React from 'react';
 import { useStore } from '../../../../useStore';
 import { ipcRenderer } from 'electron';
 import { FileSystemItem, EditorAction } from '../../../../types';
-import { renameExplorerItem } from '../../../../utils/renameExplorerItem';
+import { renameExplorerItem } from '../../../../utils';
 
 interface Args {
 	item: FileSystemItem;

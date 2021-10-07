@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStore } from '../../useStore';
 import { FileSystemItem, EditorAction } from '../../types';
-import { getFileSystemItems } from '../../utils/getFileSystemItems';
+import { getFileSystemItems } from '../../utils';
 import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
 import { Placeholder } from './Placeholder';

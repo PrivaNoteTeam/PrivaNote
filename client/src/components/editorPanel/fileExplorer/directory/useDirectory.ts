@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../../../../useStore';
 import { ipcRenderer } from 'electron';
 import { FileSystemItem, EditorAction } from '../../../../types';
-import { renameExplorerItem } from '../../../../utils/renameExplorerItem';
-import { getFileSystemItems } from '../../../../utils/getFileSystemItems';
+import { renameExplorerItem, getFileSystemItems } from '../../../../utils';
 
 interface Args {
 	item: FileSystemItem;
