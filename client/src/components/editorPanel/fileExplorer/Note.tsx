@@ -48,7 +48,7 @@ export function Note({
 		setRenameText(item.name);
 	};
 
-	const handleRenameOnChange = (event: any) => {
+	const handleRenameChange = (event: any) => {
 		setRenameText(event.target.value);
 	};
 
@@ -68,7 +68,7 @@ export function Note({
 		}
 	};
 
-	const handleRenameOnBlur = () => {
+	const handleRenameBlur = () => {
 		setRenameItem(false);
 	};
 
@@ -91,9 +91,9 @@ export function Note({
 			<input
 				type='text'
 				value={renameText}
-				onChange={handleRenameOnChange}
+				onChange={handleRenameChange}
 				onKeyDown={handleRenameKeyDown}
-				onBlur={handleRenameOnBlur}
+				onBlur={handleRenameBlur}
 				onFocus={handleRenameFocus}
 				autoFocus
 				className='bg-transparent outline-none text-white text-sm'
