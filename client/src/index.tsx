@@ -15,6 +15,11 @@ const reducer = (state: AppState, action: AppAction) => {
 				...state,
 				notebook: action.notebook
 			};
+		case 'openNote':
+			return {
+				...state,
+				currentNote: action.currentNote
+			};
 		default:
 			throw new Error('An unknown action has been sent to the store.');
 	}

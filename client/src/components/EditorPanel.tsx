@@ -5,19 +5,14 @@ import { Placeholder } from './editorPanel/Placeholder';
 import { ipcRenderer } from 'electron';
 import { createFile } from '../utils/createFile';
 import { getFileSystemItems } from '../utils/getFileSystemItems';
-import { FileItem, FileSystemItem } from '../types';
+import { FileSystemItem } from '../types';
 import { getParentDirectory } from '../utils/getParentDirectory';
 import { deleteExplorerItem } from '../utils/deleteExplorerItem';
 import { fileExist } from '../utils/fileExists';
 import { useStore } from '../useStore';
 
-interface Props {
-	currentFile: FileItem | undefined;
-	setCurrentFile: React.Dispatch<FileItem | undefined>;
-}
-
-export function EditorPanel({ currentFile, setCurrentFile }: Props) {
-	const [{ notebook }] = useStore();
+export function EditorPanel() {
+	const [{ notebook, currentNote }, dispatch] = useStore();
 	const [selection, setSelection] = useState<FileSystemItem | undefined>();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 	const [itemSelectContext, setItemSelectContext] = useState<
@@ -34,7 +29,11 @@ export function EditorPanel({ currentFile, setCurrentFile }: Props) {
 				? getParentDirectory(selection.path, { onlyFiles: true })
 				: notebook;
 			const newFile = createFile(newFilePath);
-			setCurrentFile(newFile);
+
+			dispatch({
+				type: 'openNote',
+				currentNote: newFile
+			});
 		});
 
 		ipcRenderer.removeAllListeners('toggleFileExplorer');
@@ -53,10 +52,13 @@ export function EditorPanel({ currentFile, setCurrentFile }: Props) {
 		ipcRenderer.on('deleteExplorerItem', () => {
 			deleteExplorerItem(itemSelectContext?.path).then(() => {
 				if (
-					currentFile?.path === itemSelectContext?.path ||
-					!fileExist(currentFile?.path)
+					currentNote?.path === itemSelectContext?.path ||
+					!fileExist(currentNote?.path)
 				) {
-					setCurrentFile(undefined);
+					dispatch({
+						type: 'openNote',
+						currentNote: undefined
+					});
 				}
 				setItemSelectContext(undefined);
 			});
@@ -67,8 +69,6 @@ export function EditorPanel({ currentFile, setCurrentFile }: Props) {
 		<>
 			{fileExplorerVisible && (
 				<FileExplorer
-					currentFile={currentFile}
-					setCurrentFile={setCurrentFile}
 					selection={selection}
 					setSelection={setSelection}
 					items={getFileSystemItems(notebook)}
@@ -79,8 +79,8 @@ export function EditorPanel({ currentFile, setCurrentFile }: Props) {
 				/>
 			)}
 
-			{currentFile ? (
-				<Editor currentFile={currentFile} setSelection={setSelection} />
+			{currentNote ? (
+				<Editor setSelection={setSelection} />
 			) : (
 				<Placeholder text='Create or open a note to continue' />
 			)}

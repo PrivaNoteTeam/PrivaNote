@@ -1,10 +1,10 @@
 export interface AppState {
 	notebook?: string;
-	currentFile?: FileItem;
+	currentNote?: FileItem;
 }
 
 export interface AppAction extends AppState {
-	type: 'openNotebook';
+	type: 'openNotebook' | 'openNote';
 }
 
 export interface FileSystemItem {

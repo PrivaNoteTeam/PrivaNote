@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSystemItem, FileItem } from '../../types';
+import { FileSystemItem } from '../../types';
 import { Directory } from './fileExplorer/Directory';
 import { Note } from './fileExplorer/Note';
 import PlusIcon from '../../assets/icons/plus.svg';
@@ -13,8 +13,6 @@ import { useStore } from '../../useStore';
 
 interface Props {
 	items: FileSystemItem[];
-	currentFile?: FileItem;
-	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem | undefined>;
 	itemSelectContext?: FileSystemItem;
@@ -25,8 +23,6 @@ interface Props {
 
 export function FileExplorer({
 	items,
-	currentFile,
-	setCurrentFile,
 	selection,
 	setSelection,
 	itemSelectContext,
@@ -34,7 +30,7 @@ export function FileExplorer({
 	renameItem,
 	setRenameItem
 }: Props) {
-	const [{ notebook }] = useStore();
+	const [{ notebook, currentNote }, dispatch] = useStore();
 	const [renameText, setRenameText] = useState('');
 
 	const handleAddFileClick = () => {
@@ -42,7 +38,11 @@ export function FileExplorer({
 			? getParentDirectory(selection.path, { onlyFiles: true })
 			: notebook;
 		const newFile = createFile(newFilePath as string);
-		setCurrentFile(newFile);
+
+		dispatch({
+			type: 'openNote',
+			currentNote: newFile
+		});
 	};
 
 	const handleAddDirectoryClick = () => {
@@ -63,8 +63,11 @@ export function FileExplorer({
 				.then((renamedItem) => {
 					setRenameItem(false);
 					setItemSelectContext(undefined!);
-					if (itemSelectContext?.path == currentFile?.path) {
-						setCurrentFile(renamedItem!);
+					if (itemSelectContext?.path == currentNote?.path) {
+						dispatch({
+							type: 'openNote',
+							currentNote: renamedItem
+						});
 					}
 				})
 				.catch((error) => {
@@ -100,8 +103,6 @@ export function FileExplorer({
 					return item.type === 'directory' ? (
 						<Directory
 							item={item}
-							currentFile={currentFile}
-							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
 							itemSelectContext={itemSelectContext}
@@ -114,8 +115,6 @@ export function FileExplorer({
 					) : (
 						<Note
 							item={item}
-							currentFile={currentFile}
-							setCurrentFile={setCurrentFile}
 							setSelection={setSelection}
 							selection={selection}
 							itemSelectContext={itemSelectContext}

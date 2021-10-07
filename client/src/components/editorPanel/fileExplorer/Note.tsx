@@ -1,14 +1,13 @@
 import React from 'react';
-import { FileSystemItem, FileItem } from '../../../types';
+import { FileSystemItem } from '../../../types';
 import FileIcon from '../../../assets/icons/file.svg';
 import { ipcRenderer } from 'electron';
 import { renameExplorerItem } from '../../../utils/renameExplorerItem';
+import { useStore } from '../../../useStore';
 
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
-	currentFile?: FileItem;
-	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem>;
 	itemSelectContext?: FileSystemItem;
@@ -22,8 +21,6 @@ interface Props {
 export function Note({
 	item,
 	depth = 0,
-	setCurrentFile,
-	currentFile,
 	selection,
 	setSelection,
 	itemSelectContext,
@@ -33,6 +30,7 @@ export function Note({
 	renameText,
 	setRenameText
 }: Props) {
+	const [{ currentNote }, dispatch] = useStore();
 	const handleClick = () => {
 		if (itemSelectContext?.path === item.path) {
 			return;
@@ -43,9 +41,12 @@ export function Note({
 
 		setSelection(item);
 
-		setCurrentFile({
-			name: item.name,
-			path: item.path
+		dispatch({
+			type: 'openNote',
+			currentNote: {
+				name: item.name,
+				path: item.path
+			}
 		});
 	};
 
@@ -66,8 +67,11 @@ export function Note({
 			renameExplorerItem(item.path, renameText).then((renamedItem) => {
 				setRenameItem(false);
 				setItemSelectContext(undefined!);
-				if (item.path == currentFile?.path) {
-					setCurrentFile(renamedItem!);
+				if (item.path == currentNote?.path) {
+					dispatch({
+						type: 'openNote',
+						currentNote: renamedItem
+					});
 				}
 			});
 		}
@@ -114,7 +118,7 @@ export function Note({
 		displayItem = (
 			<p
 				className={`${
-					currentFile?.path === item.path
+					currentNote?.path === item.path
 						? 'text-white'
 						: 'text-gray-300'
 				} text-sm`}

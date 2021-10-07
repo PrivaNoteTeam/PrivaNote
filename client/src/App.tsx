@@ -4,12 +4,10 @@ import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils/getFileName';
 import { useEffect, useState } from 'react';
-import { FileItem } from './types';
 import { useStore } from './useStore';
 
 export function App() {
-	const [, dispatch] = useStore();
-	const [currentFile, setCurrentFile] = useState<FileItem | undefined>();
+	const [{ currentNote }, dispatch] = useStore();
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
 
@@ -31,7 +29,11 @@ export function App() {
 					return;
 				}
 
-				setCurrentFile(undefined);
+				dispatch({
+					type: 'openNote',
+					currentNote: undefined
+				});
+
 				dispatch({
 					type: 'openNotebook',
 					notebook: location
@@ -41,22 +43,18 @@ export function App() {
 
 		ipcRenderer.removeAllListeners('exportNote');
 		ipcRenderer.on('exportNote', () => {
-			ipcRenderer.send('currentFileToExport', currentFile);
+			ipcRenderer.send('currentFileToExport', currentNote);
 		});
-	}, [currentFile]);
+	}, [currentNote]);
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
 			<div className='bg-gray-700 py-1 px-4'>
 				<p>Menu</p>
 			</div>
-			<EditorPanel
-				currentFile={currentFile}
-				setCurrentFile={setCurrentFile}
-			/>
+			<EditorPanel />
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
-					setCurrentFile={setCurrentFile}
 					close={() => setCreateNotebookModalVisible(false)}
 				/>
 			)}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSystemItem, FileItem } from '../../../types';
+import { FileSystemItem } from '../../../types';
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
 import ChevronDownIcon from '../../../assets/icons/chevron-down.svg';
 import FolderIcon from '../../../assets/icons/folder-f.svg';
@@ -7,12 +7,11 @@ import { getFileSystemItems } from '../../../utils/getFileSystemItems';
 import { Note } from './Note';
 import { ipcRenderer } from 'electron';
 import { renameExplorerItem } from '../../../utils/renameExplorerItem';
+import { useStore } from '../../../useStore';
 
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
-	currentFile?: FileItem;
-	setCurrentFile: React.Dispatch<FileItem>;
 	selection?: FileSystemItem;
 	setSelection: React.Dispatch<FileSystemItem>;
 	itemSelectContext?: FileSystemItem;
@@ -26,8 +25,6 @@ interface Props {
 export function Directory({
 	item,
 	depth = 0,
-	currentFile,
-	setCurrentFile,
 	selection,
 	setSelection,
 	itemSelectContext,
@@ -37,6 +34,7 @@ export function Directory({
 	renameText,
 	setRenameText
 }: Props) {
+	const [{ currentNote }, dispatch] = useStore();
 	const [isOpened, setIsOpened] = useState(false);
 
 	let childItems: FileSystemItem[] = isOpened
@@ -73,8 +71,11 @@ export function Directory({
 				.then((renamedItem) => {
 					setRenameItem(false);
 					setItemSelectContext(undefined!);
-					if (item.path == currentFile?.path) {
-						setCurrentFile(renamedItem!);
+					if (item.path == currentNote?.path) {
+						dispatch({
+							type: 'openNote',
+							currentNote: renamedItem
+						});
 					}
 				})
 				.catch((error) => {
@@ -154,8 +155,6 @@ export function Directory({
 						<Directory
 							item={item}
 							depth={depth + 1}
-							currentFile={currentFile}
-							setCurrentFile={setCurrentFile}
 							selection={selection}
 							setSelection={setSelection}
 							itemSelectContext={itemSelectContext}
@@ -169,8 +168,6 @@ export function Directory({
 						<Note
 							item={item}
 							depth={depth + 1}
-							currentFile={currentFile}
-							setCurrentFile={setCurrentFile}
 							selection={selection}
 							setSelection={setSelection}
 							itemSelectContext={itemSelectContext}
