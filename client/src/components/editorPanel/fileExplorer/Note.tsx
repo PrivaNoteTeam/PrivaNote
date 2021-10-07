@@ -48,12 +48,14 @@ export function Note({
 		setRenameText(item.name);
 	};
 
-	const handleRenameChange = (event: any) => {
+	const handleRenameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setRenameText(event.target.value);
 	};
 
-	const handleRenameKeyDown = (event: any) => {
-		if (event.key === 'Enter' || event.KeyCode === 13) {
+	const handleRenameKeyDown = (
+		event: React.KeyboardEvent<HTMLInputElement>
+	) => {
+		if (event.key === 'Enter' || event.code === '13') {
 			renameExplorerItem(item.path, renameText).then((renamedItem) => {
 				setRenameItem(false);
 				setItemSelectContext(undefined!);
@@ -62,7 +64,7 @@ export function Note({
 				}
 			});
 		}
-		if (event.key === 'Escape' || event.KeyCode === 27) {
+		if (event.key === 'Escape' || event.code === '27') {
 			setRenameItem(false);
 			setItemSelectContext(undefined!);
 		}
