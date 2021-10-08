@@ -6,7 +6,11 @@ const main = async () => {
 
 	const HTTP_PORT = 8080;
 
-	app.use(cors);
+	app.use(cors());
+
+	app.get('/', (_, res, __) => {
+		res.send(`<h1>Hello from PrivaNote Server`);
+	});
 
 	app.listen(HTTP_PORT, () => {
 		console.log('Listening on port ' + HTTP_PORT);
