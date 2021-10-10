@@ -7,7 +7,7 @@ async function main() {
     await prisma.user.createMany({
         data: [
             {
-                // firstname: "Tom", 
+                firstName: "Tom", 
                 lastName: "Laufey", 
                 email: "tom.laufey1982@hotmail.com", 
                 password: "fPej51Vjea=ebenPqjbw3pqigo+me[", 
@@ -85,6 +85,25 @@ async function main() {
             }
         ]
     });
+
+    await prisma.subscriptionPlan.createMany({
+        data: [
+            {
+                name: "Monthly Plan", 
+                description: "Sync unlimited devices. 10GB monthly uploads. 200MB max. note size. Billed 			every month. Pay as you go.",
+                price: 2.99,
+                duration: 30
+            },
+            {
+                name: "Annual Plan", 
+               description: "Sync unlimited devices. 15GB monthly uploads. 300MB max. note size. Saves 15%. Billed every year. Pay as you go.",
+                price: 29.99,
+                duration: 365
+            }
+        ]
+    });
+    
+    
 
 }
 
