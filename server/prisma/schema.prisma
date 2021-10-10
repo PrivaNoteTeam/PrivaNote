@@ -161,3 +161,8 @@ model VaultSubscription {
   @@index([SubscriptionPlanplanID], map: "accommodates")
   @@index([UseruserID], map: "has")
 }
+
+
+
+
+
