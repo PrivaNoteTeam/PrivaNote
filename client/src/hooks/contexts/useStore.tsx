@@ -6,7 +6,7 @@ import React, {
 	useReducer,
 	Dispatch
 } from 'react';
-import { AppState, AppAction } from './types';
+import { AppState, AppAction } from '../../types';
 
 interface StoreContext {
 	initialState: AppState;

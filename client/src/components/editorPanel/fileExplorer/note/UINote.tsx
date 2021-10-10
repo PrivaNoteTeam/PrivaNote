@@ -1,15 +1,11 @@
 import React from 'react';
-import { useStore } from '../../../../useStore';
-import { FileSystemItem, EditorAction } from '../../../../types';
+import { useEditorStore, useStore } from '../../../../hooks';
+import { FileSystemItem } from '../../../../types';
 import FileIcon from '../../../../assets/icons/file.svg';
 
 interface Props {
 	item: FileSystemItem;
 	depth: number;
-	primarySelection?: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	editorDispatch: React.Dispatch<EditorAction>;
-	isRenaming: boolean;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 	handleRenameKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -22,9 +18,6 @@ interface Props {
 
 export function UINote({
 	item,
-	isRenaming,
-	primarySelection,
-	secondarySelection,
 	renameText,
 	depth = 0,
 	handleRenameBlur,
@@ -35,6 +28,8 @@ export function UINote({
 	handleRenameKeyDown
 }: Props) {
 	const [{ currentNote }] = useStore();
+	const [{ primarySelection, secondarySelection, isRenaming }] =
+		useEditorStore();
 
 	let style = '';
 

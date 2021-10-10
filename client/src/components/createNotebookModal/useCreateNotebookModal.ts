@@ -1,4 +1,4 @@
-import { useStore } from '../../useStore';
+import { useStore } from '../../hooks';
 import { createNotebook } from '../../utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';

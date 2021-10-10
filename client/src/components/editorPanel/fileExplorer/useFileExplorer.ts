@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useStore } from '../../../useStore';
-import { FileSystemItem, EditorAction } from '../../../types';
+import { useEditorStore, useStore } from '../../../hooks';
 import {
 	createFile,
 	getParentDirectory,
@@ -8,20 +7,12 @@ import {
 	renameExplorerItem
 } from '../../../utils/';
 
-interface Args {
-	primarySelection?: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	editorDispatch: React.Dispatch<EditorAction>;
-	isRenaming: boolean;
-}
-
-export function useFileExplorer({
-	primarySelection,
-	secondarySelection,
-	editorDispatch,
-	isRenaming
-}: Args) {
+export function useFileExplorer() {
 	const [{ notebook, currentNote }, dispatch] = useStore();
+	const [
+		{ primarySelection, secondarySelection, isRenaming },
+		editorDispatch
+	] = useEditorStore();
 	const [renameText, setRenameText] = useState('');
 
 	const handleAddFileClick = () => {

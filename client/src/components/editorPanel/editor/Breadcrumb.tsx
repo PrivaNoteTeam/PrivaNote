@@ -1,19 +1,17 @@
 import React from 'react';
 import { useBreadcrumb } from './breadcrumb/useBreadcrumb';
-import { EditorAction } from '../../../types';
 import { UIBreadcrumb } from './breadcrumb/UIBreadcrumb';
 
 interface Props {
 	unsaved: boolean;
-	editorDispatch: React.Dispatch<EditorAction>;
 }
 
-export function Breadcrumb({ unsaved, editorDispatch }: Props) {
+export function Breadcrumb({ unsaved }: Props) {
 	const {
 		pathSegments,
 		applyDirectoryClickHandler,
 		applyUnsavedChangesIndicator
-	} = useBreadcrumb({ unsaved, editorDispatch });
+	} = useBreadcrumb({ unsaved });
 
 	return (
 		<UIBreadcrumb

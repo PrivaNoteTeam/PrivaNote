@@ -1,15 +1,11 @@
 import React from 'react';
-import { FileSystemItem, EditorAction } from '../../../types';
+import { FileSystemItem } from '../../../types';
 import { UIDirectory } from './directory/UIDirectory';
 import { useDirectory } from './directory/useDirectory';
 
 interface Props {
 	item: FileSystemItem;
 	depth?: number;
-	primarySelection?: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	isRenaming: boolean;
-	editorDispatch: React.Dispatch<EditorAction>;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 }
@@ -17,10 +13,6 @@ interface Props {
 export function Directory({
 	item,
 	depth = 0,
-	primarySelection,
-	secondarySelection,
-	isRenaming,
-	editorDispatch,
 	renameText,
 	setRenameText
 }: Props) {
@@ -35,11 +27,8 @@ export function Directory({
 		handleRenameBlur
 	} = useDirectory({
 		item,
-		secondarySelection,
-		isRenaming,
 		renameText,
-		setRenameText,
-		editorDispatch
+		setRenameText
 	});
 
 	return (
@@ -47,10 +36,6 @@ export function Directory({
 			item={item}
 			depth={depth}
 			isOpened={isOpened}
-			primarySelection={primarySelection}
-			secondarySelection={secondarySelection}
-			isRenaming={isRenaming}
-			editorDispatch={editorDispatch}
 			renameText={renameText}
 			childItems={childItems}
 			setRenameText={setRenameText}

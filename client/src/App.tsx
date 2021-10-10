@@ -4,7 +4,20 @@ import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils';
 import { useEffect, useState } from 'react';
-import { useStore } from './useStore';
+import { useStore } from './hooks';
+import { EditorProvider } from './hooks/contexts/useEditorStore';
+import { EditorState, EditorAction } from './types';
+
+export const editorReducer = (state: EditorState, action: EditorAction) => {
+	switch (action.type) {
+		case 'primarySelect':
+			return { ...state, primarySelection: action.primarySelection };
+		case 'secondarySelect':
+			return { ...state, secondarySelection: action.secondarySelection };
+		case 'rename':
+			return { ...state, isRenaming: action.isRenaming };
+	}
+};
 
 export function App() {
 	const [{ currentNote }, dispatch] = useStore();
@@ -52,7 +65,12 @@ export function App() {
 			<div className='bg-gray-700 py-1 px-4'>
 				<p>Menu</p>
 			</div>
-			<EditorPanel />
+			<EditorProvider
+				initialState={{ isRenaming: false }}
+				reducer={editorReducer}
+			>
+				<EditorPanel />
+			</EditorProvider>
 			{createNotebookModalVisible && (
 				<CreateNotebookModal
 					close={() => setCreateNotebookModalVisible(false)}

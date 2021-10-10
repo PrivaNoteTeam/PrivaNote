@@ -1,22 +1,19 @@
 import React from 'react';
-import { EditorAction, FileSystemItem } from '../../../../types';
+import { FileSystemItem } from '../../../../types';
 import { Note } from '../Note';
 import { Directory } from '../Directory';
 import ChevronRightIcon from '../../../../assets/icons/chevron-right.svg';
 import ChevronDownIcon from '../../../../assets/icons/chevron-down.svg';
 import FolderIcon from '../../../../assets/icons/folder-f.svg';
+import { useEditorStore } from '../../../../hooks';
 
 interface Props {
 	item: FileSystemItem;
 	childItems: FileSystemItem[];
 	depth: number;
 	isOpened: boolean;
-	primarySelection?: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	isRenaming: boolean;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
-	editorDispatch: React.Dispatch<EditorAction>;
 	handleClick: () => void;
 	handleRenameBlur: () => void;
 	handleRenameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,9 +27,6 @@ export function UIDirectory({
 	childItems,
 	depth,
 	isOpened,
-	primarySelection,
-	secondarySelection,
-	isRenaming,
 	renameText,
 	setRenameText,
 	handleClick,
@@ -40,9 +34,11 @@ export function UIDirectory({
 	handleRenameChange,
 	handleRenameFocus,
 	handleRenameKeyDown,
-	handleContextMenu,
-	editorDispatch
+	handleContextMenu
 }: Props) {
+	const [{ primarySelection, secondarySelection, isRenaming }] =
+		useEditorStore();
+
 	let style = '';
 
 	if (secondarySelection?.path === item.path) {
@@ -102,10 +98,6 @@ export function UIDirectory({
 						<Directory
 							item={item}
 							depth={depth + 1}
-							primarySelection={primarySelection}
-							secondarySelection={secondarySelection}
-							isRenaming={isRenaming}
-							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>
@@ -113,10 +105,6 @@ export function UIDirectory({
 						<Note
 							item={item}
 							depth={depth + 1}
-							primarySelection={primarySelection}
-							secondarySelection={secondarySelection}
-							isRenaming={isRenaming}
-							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>

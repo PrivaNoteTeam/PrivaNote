@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import './styles.css';
 
 import { AppState, AppAction } from './types';
-import { StoreProvider } from './useStore';
+import { StoreProvider } from './hooks';
 import { App } from './App';
 
 const initialState: AppState = {};
