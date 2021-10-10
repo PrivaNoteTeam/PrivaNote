@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useStore } from '../../../useStore';
+import { useStore } from '../../../hooks';
 import { ipcRenderer } from 'electron';
 import { saveFile } from '../../../utils';
 import fs from 'fs';

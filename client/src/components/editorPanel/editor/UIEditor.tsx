@@ -1,23 +1,16 @@
 import React from 'react';
-import { EditorAction } from '../../../types';
 import { Breadcrumb } from './Breadcrumb';
 
 interface Props {
 	unsaved: boolean;
 	text: string;
-	editorDispatch: React.Dispatch<EditorAction>;
 	handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function UIEditor({
-	unsaved,
-	text,
-	editorDispatch,
-	handleChange
-}: Props) {
+export function UIEditor({ unsaved, text, handleChange }: Props) {
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
-			<Breadcrumb unsaved={unsaved} editorDispatch={editorDispatch} />
+			<Breadcrumb unsaved={unsaved} />
 			<div className='overflow-auto flex-grow w-full'>
 				<textarea
 					onChange={handleChange}

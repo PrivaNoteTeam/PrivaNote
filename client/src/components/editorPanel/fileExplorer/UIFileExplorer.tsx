@@ -1,6 +1,6 @@
 import React from 'react';
-import { useStore } from '../../../useStore';
-import { EditorAction, FileSystemItem } from '../../../types';
+import { useStore } from '../../../hooks';
+import { FileSystemItem } from '../../../types';
 import { Directory } from './Directory';
 import { Note } from './Note';
 import { getFileName } from '../../../utils';
@@ -12,25 +12,17 @@ interface Props {
 	handleAddFileClick: () => void;
 	handleAddDirectoryClick: () => void;
 	handleOuterClick: (event: React.MouseEvent<HTMLDivElement>) => void;
-	primarySelection?: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	isRenaming: boolean;
-	editorDispatch: React.Dispatch<EditorAction>;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 }
 
 export function UIFileExplorer({
 	items,
+	renameText,
+	setRenameText,
 	handleAddFileClick,
 	handleAddDirectoryClick,
-	handleOuterClick,
-	editorDispatch,
-	primarySelection,
-	secondarySelection,
-	isRenaming,
-	renameText,
-	setRenameText
+	handleOuterClick
 }: Props) {
 	const [{ notebook }] = useStore();
 
@@ -61,20 +53,12 @@ export function UIFileExplorer({
 					return item.type === 'directory' ? (
 						<Directory
 							item={item}
-							primarySelection={primarySelection}
-							secondarySelection={secondarySelection}
-							isRenaming={isRenaming}
-							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>
 					) : (
 						<Note
 							item={item}
-							primarySelection={primarySelection}
-							secondarySelection={secondarySelection}
-							isRenaming={isRenaming}
-							editorDispatch={editorDispatch}
 							renameText={renameText}
 							setRenameText={setRenameText}
 						/>

@@ -1,6 +1,5 @@
-import { useEffect, useReducer, useState } from 'react';
-import { useStore } from '../../useStore';
-import { EditorState, EditorAction } from '../../types';
+import { useEffect, useState } from 'react';
+import { useStore } from '../../hooks';
 import { ipcRenderer } from 'electron';
 import {
 	getParentDirectory,
@@ -8,24 +7,14 @@ import {
 	fileExist,
 	createFile
 } from '../../utils';
-
-const reducer = (state: EditorState, action: EditorAction) => {
-	switch (action.type) {
-		case 'primarySelect':
-			return { ...state, primarySelection: action.primarySelection };
-		case 'secondarySelect':
-			return { ...state, secondarySelection: action.secondarySelection };
-		case 'rename':
-			return { ...state, isRenaming: action.isRenaming };
-	}
-};
+import { useEditorStore } from '../../hooks/contexts/useEditorStore';
 
 export function useEditorPanel() {
 	const [{ notebook, currentNote }, dispatch] = useStore();
 	const [
 		{ primarySelection, secondarySelection, isRenaming },
 		editorDispatch
-	] = useReducer(reducer, { isRenaming: false });
+	] = useEditorStore();
 	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 
 	useEffect(() => {

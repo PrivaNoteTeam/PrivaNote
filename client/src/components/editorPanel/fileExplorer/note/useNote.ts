@@ -1,27 +1,19 @@
 import React from 'react';
-import { useStore } from '../../../../useStore';
+import { useEditorStore, useStore } from '../../../../hooks';
 import { ipcRenderer } from 'electron';
-import { FileSystemItem, EditorAction } from '../../../../types';
+import { FileSystemItem } from '../../../../types';
 import { renameExplorerItem } from '../../../../utils';
 
 interface Args {
 	item: FileSystemItem;
-	secondarySelection?: FileSystemItem;
-	editorDispatch: React.Dispatch<EditorAction>;
-	isRenaming: boolean;
 	renameText: string;
 	setRenameText: React.Dispatch<string>;
 }
 
-export function useNote({
-	item,
-	secondarySelection,
-	editorDispatch,
-	renameText,
-	isRenaming,
-	setRenameText
-}: Args) {
+export function useNote({ item, renameText, setRenameText }: Args) {
 	const [{ currentNote }, dispatch] = useStore();
+	const [{ secondarySelection, isRenaming }, editorDispatch] =
+		useEditorStore();
 	const handleClick = () => {
 		if (secondarySelection?.path === item.path) {
 			return;

@@ -1,15 +1,13 @@
-import React from 'react';
-import { useStore } from '../../../../useStore';
+import { useEditorStore, useStore } from '../../../../hooks';
 import { useRelativePath, isFile } from '../../../../utils';
-import { EditorAction } from '../../../../types';
 
 interface Args {
 	unsaved: boolean;
-	editorDispatch: React.Dispatch<EditorAction>;
 }
 
-export function useBreadcrumb({ unsaved, editorDispatch }: Args) {
+export function useBreadcrumb({ unsaved }: Args) {
 	const [{ notebook, currentNote }] = useStore();
+	const [, editorDispatch] = useEditorStore();
 
 	const pathSegments = useRelativePath(notebook!, currentNote!.path).split(
 		/[\/\\]/

@@ -1,27 +1,19 @@
 import React, { useState } from 'react';
-import { useStore } from '../../../../useStore';
+import { useEditorStore, useStore } from '../../../../hooks';
 import { ipcRenderer } from 'electron';
-import { FileSystemItem, EditorAction } from '../../../../types';
+import { FileSystemItem } from '../../../../types';
 import { renameExplorerItem, getFileSystemItems } from '../../../../utils';
 
 interface Args {
 	item: FileSystemItem;
-	editorDispatch: React.Dispatch<EditorAction>;
 	renameText: string;
-	isRenaming: boolean;
-	secondarySelection?: FileSystemItem;
 	setRenameText: React.Dispatch<string>;
 }
 
-export function useDirectory({
-	item,
-	secondarySelection,
-	isRenaming,
-	renameText,
-	setRenameText,
-	editorDispatch
-}: Args) {
+export function useDirectory({ item, renameText, setRenameText }: Args) {
 	const [{ currentNote }, dispatch] = useStore();
+	const [{ secondarySelection, isRenaming }, editorDispatch] =
+		useEditorStore();
 	const [isOpened, setIsOpened] = useState(false);
 
 	let childItems: FileSystemItem[] = isOpened
