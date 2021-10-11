@@ -6,19 +6,21 @@ interface Props {
 	error?: FieldError;
 	register: any;
 	type?: 'password' | 'text';
+	text?: string;
 }
 
 export function TextField({
 	name,
 	register,
 	error,
-	type
+	type,
+	text = name
 }: Props & React.HTMLProps<HTMLInputElement>) {
 	return (
 		<div className='flex flex-col'>
 			<div className='flex justify-between'>
 				<label htmlFor={name} className='pn-label'>
-					{name}
+					{text}
 				</label>
 				<p className='text-red-400 text-xs uppercase'>
 					{error && error.message}

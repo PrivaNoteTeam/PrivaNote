@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { ModalLayout } from './Modal';
 import { TextField } from './TextField';
 
-interface LoginFormValues {
+interface RegisterFormValues {
 	email: string;
 	password: string;
 }
@@ -12,7 +12,7 @@ interface Props {
 	setLoginModalVisible: (value: boolean) => void;
 	setRegisterModalVisible: (value: boolean) => void;
 }
-export function LoginModal({
+export function RegisterModal({
 	close,
 	setLoginModalVisible,
 	setRegisterModalVisible
@@ -21,11 +21,11 @@ export function LoginModal({
 		e.preventDefault();
 	};
 
-	const { register } = useForm<LoginFormValues>();
+	const { register } = useForm<RegisterFormValues>();
 
 	const handleClick = () => {
-		setLoginModalVisible(false);
-		setRegisterModalVisible(true);
+		setRegisterModalVisible(false);
+		setLoginModalVisible(true);
 	};
 
 	return (
@@ -53,17 +53,23 @@ export function LoginModal({
 							type='password'
 							register={register}
 						/>
+						<TextField
+							name='confirmPassword'
+							type='password'
+							text='confirm password'
+							register={register}
+						/>
 						<div className='flex justify-between items-end'>
 							<a
 								href='#'
 								onClick={handleClick}
 								className='text-blue-500 hover:underline cursor-pointer'
 							>
-								Not registered?
+								Already have an account?
 							</a>
 							<input
 								type='submit'
-								value='Sign in'
+								value='Register'
 								className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
 							/>
 						</div>

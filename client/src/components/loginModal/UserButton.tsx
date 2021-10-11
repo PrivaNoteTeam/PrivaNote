@@ -3,16 +3,16 @@ import UserCircleIcon from '../../assets/icons/user-circle.svg';
 import { ipcRenderer } from 'electron';
 
 interface Props {
-	authModalVisible: boolean;
-	setAuthModalVisible: React.Dispatch<boolean>;
+	loginModalVisible: boolean;
+	setLoginModalVisible: React.Dispatch<boolean>;
 }
 
 let signedIn = true;
 
-export function UserButton({ authModalVisible, setAuthModalVisible }: Props) {
+export function UserButton({ loginModalVisible, setLoginModalVisible }: Props) {
 	const handleClick = () => {
 		if (!signedIn) {
-			setAuthModalVisible(!authModalVisible);
+			setLoginModalVisible(!loginModalVisible);
 		} else {
 			ipcRenderer.send('openUserContextMenu');
 		}
