@@ -56,8 +56,8 @@ function App() {
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
-			<div className='bg-gray-700 py-1 px-4'>
-				<p>Menu</p>
+			<div className='flex flex-col-reverse bg-gray-700 py-1 px-4'>
+				
 
 				<LoginButton authModalVisible={authModalVisible} setAuthModalVisible={setAuthModalVisible}/>
 
