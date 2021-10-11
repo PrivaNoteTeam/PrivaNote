@@ -25,17 +25,29 @@ export function LoginModal({ close, error }: Props) {
 	return (
 		<ModalLayout close={close}>
 			<form onSubmit={submitHandler} className='w-80 space-y-10'>
-				<h2 className='text-center text-3xl text-white'>Login</h2>
+				<h2 className='text-center text-3xl text-white select-none'>
+					Login
+				</h2>
 				<div className='form-inner'>
 					{error != '' ? <div className='error'></div> : ''}
 					<div className='space-y-6 ...'>
 						<TextField name='email' register={register} />
-						<TextField name='password' register={register} />
-						<div className='flex justify-end'>
+						<TextField
+							name='password'
+							type='password'
+							register={register}
+						/>
+						<div className='flex justify-between items-end'>
+							<a
+								href='#'
+								className='text-blue-500 hover:underline cursor-pointer'
+							>
+								Not registered?
+							</a>
 							<input
 								type='submit'
 								value='Sign in'
-								className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400 mergin-top:'
+								className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
 							/>
 						</div>
 					</div>

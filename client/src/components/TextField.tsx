@@ -5,12 +5,14 @@ interface Props {
 	name: string;
 	error?: FieldError;
 	register: any;
+	type?: 'password' | 'text';
 }
 
 export function TextField({
 	name,
 	register,
-	error
+	error,
+	type
 }: Props & React.HTMLProps<HTMLInputElement>) {
 	return (
 		<div className='flex flex-col'>
@@ -27,6 +29,7 @@ export function TextField({
 					{...register(name)}
 					name={name}
 					className='pn-input w-full'
+					type={type}
 				/>
 			</div>
 		</div>
