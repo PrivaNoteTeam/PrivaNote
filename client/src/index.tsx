@@ -8,6 +8,11 @@ import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils/getFileName';
 import { FileItem } from './types';
 
+// For Login and Authentication
+import LoginForm from "./components/Authentication/LoginForm"
+import LoginButton from './components/Authentication/LoginButton';
+import { login } from './utils/login';
+
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
 		string | undefined
@@ -16,6 +21,9 @@ function App() {
 
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
+	
+		const [authModalVisible, setAuthModalVisible] = useState(false);
+
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
@@ -50,6 +58,9 @@ function App() {
 		<div className='bg-gray-800 w-screen h-screen flex'>
 			<div className='bg-gray-700 py-1 px-4'>
 				<p>Menu</p>
+
+				<LoginButton authModalVisible={authModalVisible} setAuthModalVisible={setAuthModalVisible}/>
+
 			</div>
 			<EditorPanel
 				currentNotebook={currentNotebook}
@@ -63,6 +74,8 @@ function App() {
 					close={() => setCreateNotebookModalVisible(false)}
 				/>
 			)}
+			{authModalVisible && <LoginForm close={() => setAuthModalVisible(false) }Login={login} error={''}  />}
+
 		</div>
 	);
 }
