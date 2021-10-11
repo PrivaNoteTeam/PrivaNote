@@ -2,11 +2,7 @@ import { MenuItemConstructorOptions, Menu } from 'electron';
 
 const template: MenuItemConstructorOptions[] = [
 	{
-		label: 'johndoe@privanote.com',
-		click(_, window) {
-			if (!window) return;
-			window.webContents.send('renameExplorerItem');
-		}
+		label: 'johndoe@privanote.com'
 	},
 	{
 		type: 'separator'
@@ -15,7 +11,7 @@ const template: MenuItemConstructorOptions[] = [
 		label: 'Sign Out',
 		click(_, window) {
 			if (!window) return;
-			window.webContents.send('deleteExplorerItem');
+			window.webContents.send('signOut');
 		}
 	}
 ];

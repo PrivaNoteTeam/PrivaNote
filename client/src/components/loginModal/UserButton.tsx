@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import UserCircleIcon from '../../assets/icons/user-circle.svg';
 import { ipcRenderer } from 'electron';
 
@@ -7,7 +7,7 @@ interface Props {
 	setAuthModalVisible: React.Dispatch<boolean>;
 }
 
-const signedIn = true;
+let signedIn = true;
 
 export function UserButton({ authModalVisible, setAuthModalVisible }: Props) {
 	const handleClick = () => {
@@ -18,13 +18,13 @@ export function UserButton({ authModalVisible, setAuthModalVisible }: Props) {
 		}
 	};
 
+	useEffect(() => {
+		ipcRenderer.on('signOut', () => (signedIn = false));
+	}, [signedIn]);
+
 	return (
-		<div className='cursor-pointer'>
-			<UserCircleIcon
-				fill='#566573'
-				className='cursor-pointer'
-				onClick={handleClick}
-			/>
+		<div className='text-gray-500 hover:text-gray-400'>
+			<UserCircleIcon className='cursor-pointer' onClick={handleClick} />
 		</div>
 	);
 }
