@@ -2,7 +2,7 @@ import mock from 'mock-fs';
 import { FileSystemItem } from '../../../types';
 import { createDirectory } from '../createDirectory';
 
-describe('createDirectory utility function', () => {
+describe.skip('createDirectory utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

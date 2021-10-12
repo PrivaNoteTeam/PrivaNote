@@ -2,7 +2,7 @@ import { deleteExplorerItem } from '../deleteExplorerItem';
 import mock from 'mock-fs';
 import fs from 'fs';
 
-describe('deleteExplorerItem utility function', () => {
+describe.skip('deleteExplorerItem utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

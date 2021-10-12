@@ -3,7 +3,7 @@ import fs from 'fs';
 import { FileItem } from 'src/types';
 import { saveFile } from '../saveFile';
 
-describe('saveFile utility function', () => {
+describe.skip('saveFile utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

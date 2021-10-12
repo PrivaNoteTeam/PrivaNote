@@ -1,7 +1,7 @@
 import mock from 'mock-fs';
 import { isFile } from '../isFile';
 
-describe('isFile utility function', () => {
+describe.skip('isFile utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

@@ -3,7 +3,7 @@ import { fileExist } from '../fileExists';
 
 // todo: rename fileExist to fileItemExist
 
-describe('fileExist utility function', () => {
+describe.skip('fileExist utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

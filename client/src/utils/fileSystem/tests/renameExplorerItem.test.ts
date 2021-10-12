@@ -2,7 +2,7 @@ import mock from 'mock-fs';
 import { renameExplorerItem } from '../renameExplorerItem';
 import { FileSystemItem } from '../../../types';
 
-describe('renameExplorerItem utility function', () => {
+describe.skip('renameExplorerItem utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {

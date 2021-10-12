@@ -2,7 +2,7 @@ import mock from 'mock-fs';
 import { getParentDirectory } from '../getParentDirectory';
 import { FileSystemItem, FileItem } from '../../../types';
 
-describe('getParentDirectory utility function', () => {
+describe.skip('getParentDirectory utility function', () => {
 	beforeEach(() => {
 		mock({
 			root: {
