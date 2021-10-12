@@ -29,6 +29,16 @@ export interface AppAction extends AppState {
 	type: 'openNotebook' | 'openNote';
 }
 
+export interface ModalManagerState {
+	loginModalVisible: boolean;
+	registerModalVisible: boolean;
+	createNotebookModalVisible: boolean;
+}
+
+export interface ModalManagerAction extends Partial<ModalManagerState> {
+	type: 'loginModal' | 'registerModal' | 'createNotebookModal';
+}
+
 export interface EditorState {
 	primarySelection?: FileSystemItem;
 	secondarySelection?: FileSystemItem;

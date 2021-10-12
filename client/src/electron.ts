@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, ipcMain } from 'electron';
 import { menu } from './electron/applicationMenu';
 import { selectDirectory } from './electron/handlers/selectDirectory';
 import { explorerItemContextMenu } from './electron/explorerItemContextMenu';
+import { userContextMenu } from './electron/userContextMenu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -22,5 +23,9 @@ app.on('ready', () => {
 
 	ipcMain.on('openExplorerFileContextMenu', () => {
 		explorerItemContextMenu.popup();
+	});
+
+	ipcMain.on('openUserContextMenu', () => {
+		userContextMenu.popup();
 	});
 });

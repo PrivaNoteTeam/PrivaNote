@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model Attachment {
@@ -15,7 +12,7 @@ model Attachment {
   createdAt       DateTime          @db.Timestamp(0)
   fileName        String            @unique(map: "fileName") @db.VarChar(255)
   mimeType        String            @db.VarChar(255)
-  blobValue       String            @db.Text
+  blobValue       String
   NotebookbookID  Int
   Notebook        Notebook          @relation(fields: [NotebookbookID], references: [bookID], onDelete: Cascade, onUpdate: NoAction, map: "attached")
   Attachment_Page Attachment_Page[]
@@ -24,7 +21,7 @@ model Attachment {
 }
 
 model Attachment_Page {
-  AttachmentattachmentID Int
+  AttachmentattachmentID Int   
   PagepageID             Int
   Attachment             Attachment @relation(fields: [AttachmentattachmentID], references: [attachmentID], onDelete: Cascade, onUpdate: NoAction, map: "related to page")
   Page                   Page       @relation(fields: [PagepageID], references: [pageID], onDelete: Cascade, onUpdate: NoAction, map: "may involve")
@@ -33,22 +30,10 @@ model Attachment_Page {
   @@index([PagepageID], map: "may involve")
 }
 
-model CloudSettings {
-  cloudID                 Int          @id @default(autoincrement())
-  SettingssettingsID      Int
-  CloudStoragestorageIDID Int
-  CloudStorage            CloudStorage @relation(fields: [CloudStoragestorageIDID], references: [storageID], onDelete: Cascade, onUpdate: NoAction, map: "takes in")
-  Settings                Settings     @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction, map: "covers 2")
-
-  @@index([SettingssettingsID], map: "covers 2")
-  @@index([CloudStoragestorageIDID], map: "takes in")
-}
-
 model CloudStorage {
   storageID     Int             @id @default(autoincrement())
   name          String          @db.VarChar(255)
-  description   String          @db.Text
-  CloudSettings CloudSettings[]
+  description   String
 }
 
 model EditorSettings {
@@ -109,7 +94,7 @@ model Page {
   name            String            @db.VarChar(255)
   createdAt       DateTime          @db.Timestamp(0)
   updatedAt       DateTime          @db.Timestamp(0)
-  content         String            @db.Text
+  content         String
   FolderfolderID  Int
   Folder          Folder            @relation(fields: [FolderfolderID], references: [folderID], onDelete: Cascade, onUpdate: NoAction, map: "consists of")
   Attachment_Page Attachment_Page[]
@@ -121,7 +106,7 @@ model Settings {
   settingsID     Int              @id @default(autoincrement())
   UseruserID     Int
   User           User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "changes")
-  CloudSettings  CloudSettings[]
+  // CloudSettings  CloudSettings[]
   EditorSettings EditorSettings[]
 
   @@index([UseruserID], map: "changes")
@@ -130,7 +115,7 @@ model Settings {
 model SubscriptionPlan {
   planID            Int                 @id @default(autoincrement())
   name              String              @db.VarChar(255)
-  description       String              @db.Text
+  description       String
   price             Decimal             @db.Decimal(19, 2)
   duration          Int
   VaultSubscription VaultSubscription[]
@@ -142,7 +127,7 @@ model User {
   lastName                String?                   @db.VarChar(255)
   email                   String                    @unique(map: "email") @db.VarChar(255)
   password                String                    @db.VarChar(255)
-  verified                Boolean                   @db.Boolean
+  verified                Boolean
   Notebook                Notebook[]
   OneTimeVerificationCode OneTimeVerificationCode[]
   Settings                Settings[]
@@ -152,7 +137,7 @@ model User {
 model VaultSubscription {
   subID                  Int              @id @default(autoincrement())
   purchasedAt            DateTime         @db.Timestamp(0)
-  recurring              Boolean          @db.Boolean
+  recurring              Boolean
   SubscriptionPlanplanID Int
   UseruserID             Int
   SubscriptionPlan       SubscriptionPlan @relation(fields: [SubscriptionPlanplanID], references: [planID], onDelete: NoAction, onUpdate: NoAction, map: "accommodates")
@@ -160,4 +145,12 @@ model VaultSubscription {
 
   @@index([SubscriptionPlanplanID], map: "accommodates")
   @@index([UseruserID], map: "has")
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
 }

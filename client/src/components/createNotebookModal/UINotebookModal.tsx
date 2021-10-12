@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ModalLayout } from '../Modal';
+import { ModalLayout } from '../modalManager/Modal';
 import { TextField } from '../TextField';
 import { BrowseInputField } from '../BrowseInputField';
 import {

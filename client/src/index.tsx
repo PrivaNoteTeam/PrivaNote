@@ -2,13 +2,18 @@ import React from 'react';
 import * as ReactDOM from 'react-dom';
 import './styles.css';
 
-import { AppState, AppAction } from './types';
-import { StoreProvider } from './hooks';
+import {
+	AppState,
+	AppAction,
+	ModalManagerState,
+	ModalManagerAction
+} from './types';
+import { StoreProvider, ModalProvider } from './hooks';
 import { App } from './App';
 
-const initialState: AppState = {};
+const initialAppState: AppState = {};
 
-const reducer = (state: AppState, action: AppAction) => {
+const storeReducer = (state: AppState, action: AppAction) => {
 	switch (action.type) {
 		case 'openNotebook':
 			return {
@@ -25,9 +30,44 @@ const reducer = (state: AppState, action: AppAction) => {
 	}
 };
 
+const initialModalState: ModalManagerState = {
+	createNotebookModalVisible: false,
+	loginModalVisible: false,
+	registerModalVisible: false
+};
+
+// This reducer resets the state every time so no modal gets stacked
+function modalReducer(
+	state: ModalManagerState,
+	action: ModalManagerAction
+): ModalManagerState {
+	switch (action.type) {
+		case 'loginModal':
+			return {
+				...initialModalState,
+				loginModalVisible: action.loginModalVisible!
+			};
+		case 'registerModal':
+			return {
+				...initialModalState,
+				registerModalVisible: action.registerModalVisible!
+			};
+		case 'createNotebookModal':
+			return {
+				...initialModalState,
+				createNotebookModalVisible: action.createNotebookModalVisible!
+			};
+		default:
+			console.error('Invalid action provided to modal manager reducer.');
+			return state;
+	}
+}
+
 const tree = (
-	<StoreProvider initialState={initialState} reducer={reducer}>
-		<App />
+	<StoreProvider initialState={initialAppState} reducer={storeReducer}>
+		<ModalProvider initialState={initialModalState} reducer={modalReducer}>
+			<App />
+		</ModalProvider>
 	</StoreProvider>
 );
 

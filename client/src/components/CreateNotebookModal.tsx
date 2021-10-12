@@ -2,18 +2,15 @@ import React from 'react';
 import { UINotebookModal } from './createNotebookModal/UINotebookModal';
 import { useCreateNotebookModal } from './createNotebookModal/useCreateNotebookModal';
 
-interface Props {
-	close: () => void;
-}
-
-export function CreateNotebookModal({ close }: Props) {
+export function CreateNotebookModal() {
 	const {
 		isValid,
 		errors,
 		setValue,
 		register,
 		handleSubmit,
-		isSubmitSuccessful
+		isSubmitSuccessful,
+		close
 	} = useCreateNotebookModal();
 
 	return (

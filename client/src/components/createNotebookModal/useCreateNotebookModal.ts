@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import * as yup from 'yup';
+import { useModalStore } from '../../hooks';
 
 interface FormValues {
 	name: string;
@@ -22,6 +23,14 @@ const validationSchema = yup.object({
 
 export function useCreateNotebookModal() {
 	const [, dispatch] = useStore();
+	const [, modalManagerDispatch] = useModalStore();
+
+	const close = () => {
+		modalManagerDispatch({
+			type: 'createNotebookModal',
+			createNotebookModalVisible: false
+		});
+	};
 
 	const {
 		register,
@@ -77,6 +86,7 @@ export function useCreateNotebookModal() {
 		errors,
 		isValid,
 		setValue,
-		isSubmitSuccessful
+		isSubmitSuccessful,
+		close
 	};
 }

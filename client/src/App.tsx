@@ -1,12 +1,13 @@
 import React from 'react';
-import { CreateNotebookModal } from './components/CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useStore } from './hooks';
 import { EditorProvider } from './hooks/contexts/useEditorStore';
 import { EditorState, EditorAction } from './types';
+import { ModalManager } from './components/ModalManager';
+import { SideMenu } from './components/SideMenu';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -21,14 +22,9 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 
 export function App() {
 	const [{ currentNote }, dispatch] = useStore();
-	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
-		useState(false);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
-		ipcRenderer.on('createNotebook', () => {
-			setCreateNotebookModalVisible(true);
-		});
 
 		ipcRenderer.removeAllListeners('openNotebook');
 		ipcRenderer.on(
@@ -62,20 +58,14 @@ export function App() {
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
-			<div className='bg-gray-700 py-1 px-4'>
-				<p>Menu</p>
-			</div>
+			<SideMenu />
 			<EditorProvider
 				initialState={{ isRenaming: false }}
 				reducer={editorReducer}
 			>
 				<EditorPanel />
 			</EditorProvider>
-			{createNotebookModalVisible && (
-				<CreateNotebookModal
-					close={() => setCreateNotebookModalVisible(false)}
-				/>
-			)}
+			<ModalManager />
 		</div>
 	);
 }
