@@ -21,24 +21,13 @@ model Attachment {
 }
 
 model Attachment_Page {
-  AttachmentattachmentID Int
+  AttachmentattachmentID Int   
   PagepageID             Int
   Attachment             Attachment @relation(fields: [AttachmentattachmentID], references: [attachmentID], onDelete: Cascade, onUpdate: NoAction, map: "related to page")
   Page                   Page       @relation(fields: [PagepageID], references: [pageID], onDelete: Cascade, onUpdate: NoAction, map: "may involve")
 
   @@id([AttachmentattachmentID, PagepageID])
   @@index([PagepageID], map: "may involve")
-}
-
-model CloudSettings {
-  cloudID                 Int          @id @default(autoincrement())
-  SettingssettingsID      Int
-  CloudStoragestorageIDID Int
-  CloudStorage            CloudStorage @relation(fields: [CloudStoragestorageIDID], references: [storageID], onDelete: Cascade, onUpdate: NoAction, map: "takes in")
-  Settings                Settings     @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction, map: "covers 2")
-
-  @@index([SettingssettingsID], map: "covers 2")
-  @@index([CloudStoragestorageIDID], map: "takes in")
 }
 
 model CloudStorage {
@@ -50,7 +39,7 @@ model CloudStorage {
 
 model EditorSettings {
   editorID           Int      @id @default(autoincrement())
-  spellCheck         Boolean
+  spellCheck         Boolean  @db.Boolean
   dictionaryLanguage String   @db.VarChar(255)
   tabWidth           Int
   columns            Int
@@ -118,7 +107,7 @@ model Settings {
   settingsID     Int              @id @default(autoincrement())
   UseruserID     Int
   User           User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "changes")
-  CloudSettings  CloudSettings[]
+  // CloudSettings  CloudSettings[]
   EditorSettings EditorSettings[]
 
   @@index([UseruserID], map: "changes")
