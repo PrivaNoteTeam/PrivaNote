@@ -8,6 +8,10 @@ import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from './utils/getFileName';
 import { FileItem } from './types';
 
+import { LoginModal } from './components/LoginModal';
+import { UserButton } from './components/loginModal/UserButton';
+import { RegisterModal } from './components/RegisterModal';
+
 function App() {
 	const [currentNotebook, setCurrentNotebook] = useState<
 		string | undefined
@@ -16,6 +20,9 @@ function App() {
 
 	const [createNotebookModalVisible, setCreateNotebookModalVisible] =
 		useState(false);
+
+	const [loginModalVisible, setLoginModalVisible] = useState(false);
+	const [registerModalVisible, setRegisterModalVisible] = useState(false);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
@@ -48,8 +55,11 @@ function App() {
 
 	return (
 		<div className='bg-gray-800 w-screen h-screen flex'>
-			<div className='bg-gray-700 py-1 px-4'>
-				<p>Menu</p>
+			<div className='flex flex-col-reverse bg-gray-700 py-4 px-4'>
+				<UserButton
+					loginModalVisible={loginModalVisible}
+					setLoginModalVisible={setLoginModalVisible}
+				/>
 			</div>
 			<EditorPanel
 				currentNotebook={currentNotebook}
@@ -61,6 +71,22 @@ function App() {
 					setCurrentNotebook={setCurrentNotebook}
 					setCurrentFile={setCurrentFile}
 					close={() => setCreateNotebookModalVisible(false)}
+				/>
+			)}
+
+			{loginModalVisible && (
+				<LoginModal
+					close={() => setLoginModalVisible(false)}
+					setLoginModalVisible={setLoginModalVisible}
+					setRegisterModalVisible={setRegisterModalVisible}
+				/>
+			)}
+
+			{registerModalVisible && (
+				<RegisterModal
+					close={() => setRegisterModalVisible(false)}
+					setLoginModalVisible={setLoginModalVisible}
+					setRegisterModalVisible={setRegisterModalVisible}
 				/>
 			)}
 		</div>
