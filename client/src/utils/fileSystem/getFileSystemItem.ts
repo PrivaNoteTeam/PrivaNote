@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { FileSystemItem } from '../types';
+import { FileSystemItem } from '../../types';
 
 /** Returns the path as a FileSystemItem type
  * @param path The absolute path of the targetted directory/file

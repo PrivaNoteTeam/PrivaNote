@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import CloseIcon from '../assets/icons/close.svg';
+import CloseIcon from '../../assets/icons/close.svg';
 
 interface Props {
 	close: () => void;

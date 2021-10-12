@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import UserCircleIcon from '../../assets/icons/user-circle.svg';
 import { ipcRenderer } from 'electron';
-
-interface Props {
-	loginModalVisible: boolean;
-	setLoginModalVisible: React.Dispatch<boolean>;
-}
+import { useModalStore } from '../../hooks';
 
 let signedIn = true;
 
-export function UserButton({ loginModalVisible, setLoginModalVisible }: Props) {
+export function UserButton() {
+	const [{ loginModalVisible }, modalManagerDispatch] = useModalStore();
 	const handleClick = () => {
 		if (!signedIn) {
-			setLoginModalVisible(!loginModalVisible);
+			modalManagerDispatch({
+				type: 'loginModal',
+				loginModalVisible: !loginModalVisible
+			});
 		} else {
 			ipcRenderer.send('openUserContextMenu');
 		}

@@ -1,22 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ModalLayout } from './Modal';
-import { TextField } from './TextField';
+import { TextField } from '../TextField';
+import { useModalStore } from '../../hooks';
 
 interface LoginFormValues {
 	email: string;
 	password: string;
 }
-interface Props {
-	close: () => void;
-	setLoginModalVisible: (value: boolean) => void;
-	setRegisterModalVisible: (value: boolean) => void;
-}
-export function LoginModal({
-	close,
-	setLoginModalVisible,
-	setRegisterModalVisible
-}: Props) {
+
+export function LoginModal() {
+	const [, modalManagerDispatch] = useModalStore();
 	const submitHandler = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 	};
@@ -24,12 +18,22 @@ export function LoginModal({
 	const { register } = useForm<LoginFormValues>();
 
 	const handleClick = () => {
-		setLoginModalVisible(false);
-		setRegisterModalVisible(true);
+		modalManagerDispatch({ type: 'loginModal', loginModalVisible: false });
+		modalManagerDispatch({
+			type: 'registerModal',
+			registerModalVisible: true
+		});
 	};
 
 	return (
-		<ModalLayout close={close}>
+		<ModalLayout
+			close={() =>
+				modalManagerDispatch({
+					type: 'loginModal',
+					loginModalVisible: false
+				})
+			}
+		>
 			<form onSubmit={submitHandler} className='w-80 space-y-8'>
 				<div className='space-y-3'>
 					<h2 className='text-center text-2xl text-white select-none'>
