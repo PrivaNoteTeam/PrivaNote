@@ -43,12 +43,26 @@ const main = async () => {
 		console.log(req.body);
 		let username = req.body.username;
 		let password = req.body.password;
-
+		let errors = [];
 		if (username == userLogin.email && password == userLogin.password) {
 			req.session.user = userLogin;
-			return res.status(200).send();
+			// return res.status(200).send();
+		} else if (username != userLogin.email) {
+			errors.push({
+				field: 'username',
+				message: 'This username does not exist'
+			});
+		} else if (
+			username == userLogin.email &&
+			password != userLogin.password
+		) {
+			errors.push({ field: 'password', message: 'Invalid password' });
+		}
+
+		if (req.session.user && errors.length === 0) {
+			return res.status(200).json({ message: 'Login Success!' });
 		} else {
-			return res.status(500).send();
+			return res.status(500).json(errors);
 		}
 	});
 
@@ -62,7 +76,7 @@ const main = async () => {
 		}
 	});
 
-	app.get('/logout', (req, res) => {
+	app.post('/logout', (req, res) => {
 		req.session.destroy(() => {});
 		res.redirect('/');
 	});
