@@ -1,6 +1,6 @@
 import { useRelativePath } from '../useRelativePath';
 
-describe('useRelativePath', () => {
+describe.skip('useRelativePath', () => {
 	const fullPath = '/User/admin/notebook/groceries/list.md';
 
 	test('returns path relative to base of format: /notebook/', () => {
