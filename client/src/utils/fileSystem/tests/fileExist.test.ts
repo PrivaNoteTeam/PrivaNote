@@ -35,4 +35,10 @@ describe('fileExist utility function', () => {
 
 		expect(result).toBe(true);
 	});
+
+	test('returns false if passing a non-existent directory', () => {
+		const result = fileExist(`${process.cwd()}/root/images`);
+
+		expect(result).toBe(false);
+	});
 });
