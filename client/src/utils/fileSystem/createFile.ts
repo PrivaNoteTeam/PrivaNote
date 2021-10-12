@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { FileItem } from '../types';
+import { FileItem } from '../../types';
 
 export function createFile(path: string) {
 	let count = 0;
