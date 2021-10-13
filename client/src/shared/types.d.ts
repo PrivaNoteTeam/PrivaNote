@@ -48,3 +48,9 @@ export interface EditorState {
 export interface EditorAction extends EditorState {
 	type: 'primarySelect' | 'secondarySelect' | 'rename';
 }
+
+export interface RegisterFormValues {
+	email: string;
+	password: string;
+	confirmPassword: string;
+}

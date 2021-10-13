@@ -5,6 +5,7 @@ import { useModalStore } from '../../hooks';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import * as yup from 'yup';
+import { registerUser } from '@shared/Api/registerUser';
 
 interface RegisterFormValues {
 	email: string;
@@ -49,8 +50,7 @@ export function RegisterModal() {
 
 	const handleSubmit = useFormHandleSubmit(
 		async ({ email, password, confirmPassword }: RegisterFormValues) => {
-			console.log(email + password + confirmPassword);
-
+			registerUser({ email, password, confirmPassword });
 			return;
 		}
 	);

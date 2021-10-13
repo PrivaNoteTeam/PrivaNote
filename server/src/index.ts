@@ -39,6 +39,14 @@ const main = async () => {
 		res.send(`<h1>Hello World</h1>`);
 	});
 
+	app.post('/register', (req, _res) => {
+        console.log(req.body);
+		const email = req.body.email;
+		const password = req.body.password;
+		console.log(email + password);
+
+	})
+
 	app.post('/login', (req, res) => {
 		console.log(req.body);
 		let username = req.body.username;
