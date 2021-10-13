@@ -8,6 +8,7 @@ import { PrismaClient } from '@prisma/client';
 import { registerValidation } from './validation/registerUserValidation';
 import { setupContext } from './middleware/setupContext';
 import { createUser } from './database/createUser';
+import argon2 from 'argon2';
 
 const main = async () => {
 	const app = express();
@@ -41,16 +42,23 @@ const main = async () => {
 	app.post('/register', async (req, res) => {
 		const email = req.body.email;
 		const password = req.body.password;
+		const hashedPassword = await argon2.hash(password);
 
-		const error = await registerValidation(req.ctx!, { email, password });
+		const error = await registerValidation(req.ctx!, {
+			email,
+			password: hashedPassword
+		});
 
 		if (error) {
 			res.status(409).json(error);
 			return;
 		}
 
-		const user = await createUser(req.ctx!, { email, password });
-		console.log(user);
+		const user = await createUser(req.ctx!, {
+			email,
+			password: hashedPassword
+		});
+
 		if (!user) {
 			res.status(400).json({
 				message: 'user could not be created'
