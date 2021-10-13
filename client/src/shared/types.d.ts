@@ -1,5 +1,4 @@
 import { Dispatch } from 'react';
-
 export interface FileSystemItem {
 	name: string;
 	path: string;

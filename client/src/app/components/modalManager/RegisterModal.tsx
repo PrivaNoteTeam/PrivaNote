@@ -5,7 +5,7 @@ import { useModalStore } from '../../hooks';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import * as yup from 'yup';
-import { registerUser } from '@shared/Api/registerUser';
+import { registerUser } from '@shared/api/registerUser';
 
 interface RegisterFormValues {
 	email: string;

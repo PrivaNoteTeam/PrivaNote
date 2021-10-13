@@ -3,24 +3,23 @@ import cors from 'cors';
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
 require('dotenv').config();
-import { userSession } from './types';
-
-declare module 'express-session' {
-	export interface SessionData {
-		user: userSession;
-	}
-}
+import { UserSession } from './types';
+import { PrismaClient } from '@prisma/client';
+import { registerValidation } from './validation/registerUserValidation';
+import { setupContext } from './middleware/setupContext';
+import { createUser } from './database/createUser';
 
 const main = async () => {
 	const app = express();
 	const HTTP_PORT = 8080;
 
-	const userLogin: userSession = {
+	const userLogin: UserSession = {
 		id: 12,
 		email: 'mark.recile@senecacollege.ca',
 		password: 'PrivaNoteRocks'
 	};
 
+	app.use(setupContext({ prisma: new PrismaClient() }));
 	app.use(cors());
 	app.use(express.json());
 	app.use(
@@ -39,11 +38,26 @@ const main = async () => {
 		res.send(`<h1>Hello World</h1>`);
 	});
 
-	app.post('/register', (req, _res) => {
-		console.log(req.body);
+	app.post('/register', async (req, res) => {
 		const email = req.body.email;
 		const password = req.body.password;
-		console.log(email + password);
+
+		const error = await registerValidation(req.ctx!, { email, password });
+
+		if (error) {
+			res.status(409).json(error);
+			return;
+		}
+
+		const user = await createUser(req.ctx!, { email, password });
+		console.log(user);
+		if (!user) {
+			res.status(400).json({
+				message: 'user could not be created'
+			});
+		}
+
+		res.status(200).json(user);
 	});
 
 	app.post('/login', (req, res) => {
@@ -93,6 +107,10 @@ const main = async () => {
 	});
 };
 
-main().catch((error) => {
-	console.error(error);
-});
+main()
+	.finally(() => {
+		//ctx.prisma.$disconnect();
+	})
+	.catch((error) => {
+		console.error(error);
+	});

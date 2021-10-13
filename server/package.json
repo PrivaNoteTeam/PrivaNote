@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc",
-		"start": "node dist/index.js",
+		"start": "npm run build && node dist/index.js",
 		"prepare": "cd .. && husky install server/.husky",
 		"prettier-check": "prettier --check .",
 		"prettier-write": "prettier --write ."
