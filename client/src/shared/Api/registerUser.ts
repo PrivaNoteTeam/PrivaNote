@@ -2,11 +2,15 @@ import { RegisterFormValues } from '@types';
 import axios from 'axios';
 
 export function registerUser({ email, password }: RegisterFormValues) {
-	console.log(email + password);
-	// axios
-
-	axios.post('/register', {
+	axios.post('http://localhost:8080/register', {
 		email,
 		password
+	})
+	.then((v) => {
+		console.log('Received from server: ');
+		console.log(v);
+	})
+	.catch((err) => {
+		console.error(err);
 	});
 }

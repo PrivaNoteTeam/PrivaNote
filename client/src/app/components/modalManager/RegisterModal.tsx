@@ -50,6 +50,7 @@ export function RegisterModal() {
 
 	const handleSubmit = useFormHandleSubmit(
 		async ({ email, password, confirmPassword }: RegisterFormValues) => {
+			console.log('Running submit!');
 			registerUser({ email, password, confirmPassword });
 			return;
 		}

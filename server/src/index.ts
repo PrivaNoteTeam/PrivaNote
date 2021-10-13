@@ -40,12 +40,11 @@ const main = async () => {
 	});
 
 	app.post('/register', (req, _res) => {
-        console.log(req.body);
+		console.log(req.body);
 		const email = req.body.email;
 		const password = req.body.password;
 		console.log(email + password);
-
-	})
+	});
 
 	app.post('/login', (req, res) => {
 		console.log(req.body);
