@@ -6,7 +6,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 module.exports = [
 	{
 		mode: 'development',
-		entry: './src/electron/index.ts',
+		entry: './src/electron/main.ts',
 		target: 'electron-main',
 		resolve: {
 			extensions: ['.ts', '.tsx', '.js', '.jsx'],
