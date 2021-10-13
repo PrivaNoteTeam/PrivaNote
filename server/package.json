@@ -20,6 +20,7 @@
 		"express": "^4.17.1",
 		"express-cors": "0.0.3",
 		"express-session": "^1.17.2",
+		"nodemailer": "^6.7.0",
 		"pg": "^8.7.1"
 	},
 	"devDependencies": {
@@ -27,6 +28,7 @@
 		"@types/cors": "^2.8.12",
 		"@types/express-session": "^1.17.4",
 		"@types/node": "^16.9.6",
+		"@types/nodemailer": "^6.4.4",
 		"husky": "^7.0.0",
 		"prettier": "2.4.1",
 		"prisma": "^3.1.1",
