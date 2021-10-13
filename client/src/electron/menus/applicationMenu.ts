@@ -1,6 +1,6 @@
 import { MenuItemConstructorOptions, Menu, dialog, ipcMain } from 'electron';
 import { getConfig } from '@utils';
-import { exportNote } from './handlers/exportNote';
+import { exportNote } from '../handlers/exportNote';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -129,6 +129,6 @@ if (process.platform === 'darwin') {
 	template.unshift({ label: 'PrivaNote', submenu: [] });
 }
 
-const menu = Menu.buildFromTemplate(template);
+const applicationMenu = Menu.buildFromTemplate(template);
 
-export { menu };
+export { applicationMenu };

@@ -1,8 +1,10 @@
 import { app, BrowserWindow, Menu, ipcMain } from 'electron';
-import { menu } from './applicationMenu';
+import {
+	applicationMenu,
+	explorerItemContextMenu,
+	userContextMenu
+} from './menus';
 import { selectDirectory } from './handlers/selectDirectory';
-import { explorerItemContextMenu } from './explorerItemContextMenu';
-import { userContextMenu } from './userContextMenu';
 
 app.on('ready', () => {
 	let window = new BrowserWindow({
@@ -17,7 +19,7 @@ app.on('ready', () => {
 
 	window.loadFile('index.html');
 
-	Menu.setApplicationMenu(menu);
+	Menu.setApplicationMenu(applicationMenu);
 
 	ipcMain.on('selectDirectory', (event) => selectDirectory(window, event));
 
