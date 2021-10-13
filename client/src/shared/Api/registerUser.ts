@@ -2,7 +2,7 @@ import { RegisterFormValues } from '@types';
 import axios from 'axios';
 
 export function registerUser({ email, password }: RegisterFormValues) {
-	axios.post('http://localhost:8080/register', {
+	axios.post('http://localhost:8080/api/register', {
 		email,
 		password
 	})
