@@ -1,17 +1,16 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = [
 	{
 		mode: 'development',
-		entry: './src/electron.ts',
+		entry: './src/electron/index.ts',
 		target: 'electron-main',
 		resolve: {
-			alias: {
-				components: './src/components'
-			},
-			extensions: ['.ts', '.tsx', '.js', '.jsx']
+			extensions: ['.ts', '.tsx', '.js', '.jsx'],
+			plugins: [new TsconfigPathsPlugin({})]
 		},
 		module: {
 			rules: [
@@ -29,13 +28,10 @@ module.exports = [
 	},
 	{
 		mode: 'development',
-		entry: './src/index.tsx',
+		entry: './src/app/index.tsx',
 		target: 'electron-renderer',
 		resolve: {
-			alias: {
-				components: './src/components',
-				assets: './src/assets'
-			},
+			plugins: [new TsconfigPathsPlugin({})],
 			extensions: ['.ts', '.tsx', '.js', '.jsx']
 		},
 		devtool: 'source-map',

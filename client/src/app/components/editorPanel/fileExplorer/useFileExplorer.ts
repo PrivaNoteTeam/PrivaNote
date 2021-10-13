@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useEditorStore, useStore } from '../../../hooks';
+import { useEditorStore, useStore } from '@hooks';
 import {
 	createFile,
 	getParentDirectory,
 	createDirectory,
 	renameExplorerItem
-} from '../../../utils/';
+} from '@utils';
 
 export function useFileExplorer() {
 	const [{ notebook, currentNote }, dispatch] = useStore();

@@ -1,5 +1,5 @@
-import { useEditorStore, useStore } from '../../../../hooks';
-import { useRelativePath, isFile } from '../../../../utils';
+import { useEditorStore, useStore } from '@hooks';
+import { useRelativePath, isFile } from '@utils';
 
 interface Args {
 	unsaved: boolean;

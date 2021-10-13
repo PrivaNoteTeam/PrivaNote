@@ -1,11 +1,11 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
-import { getFileName } from './utils';
+import { getFileName } from '../shared/utils';
 import { useEffect } from 'react';
 import { useStore } from './hooks';
 import { EditorProvider } from './hooks/contexts/useEditorStore';
-import { EditorState, EditorAction } from './types';
+import { EditorState, EditorAction } from '../shared/types';
 import { ModalManager } from './components/ModalManager';
 import { SideMenu } from './components/SideMenu';
 

@@ -7,8 +7,8 @@ import {
 	AppAction,
 	ModalManagerState,
 	ModalManagerAction
-} from './types';
-import { StoreProvider, ModalProvider } from './hooks';
+} from '@types';
+import { StoreProvider, ModalProvider } from './hooks/contexts';
 import { App } from './App';
 
 const initialAppState: AppState = {};

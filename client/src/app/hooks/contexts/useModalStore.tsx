@@ -6,7 +6,7 @@ import React, {
 	useReducer,
 	Dispatch
 } from 'react';
-import { ModalManagerState, ModalManagerAction } from '../../types';
+import { ModalManagerState, ModalManagerAction } from '@types';
 
 interface ModalContext {
 	initialState: ModalManagerState;

@@ -6,7 +6,7 @@ import React, {
 	useReducer,
 	Dispatch
 } from 'react';
-import { EditorState, EditorAction } from '../../types';
+import { EditorState, EditorAction } from '@types';
 
 interface EditorContext {
 	initialState: EditorState;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useStore } from '../../hooks';
-import { getFileSystemItems } from '../../utils';
+import { useStore } from '@hooks';
+import { getFileSystemItems } from '@utils';
 import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
 import { Placeholder } from './Placeholder';

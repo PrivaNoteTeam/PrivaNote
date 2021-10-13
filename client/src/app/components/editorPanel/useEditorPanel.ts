@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useStore } from '../../hooks';
+import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import {
 	getParentDirectory,
 	deleteExplorerItem,
 	fileExist,
 	createFile
-} from '../../utils';
-import { useEditorStore } from '../../hooks/contexts/useEditorStore';
+} from '@utils';
+import { useEditorStore } from '@hooks';
 
 export function useEditorPanel() {
 	const [{ notebook, currentNote }, dispatch] = useStore();

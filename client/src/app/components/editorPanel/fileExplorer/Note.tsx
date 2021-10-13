@@ -1,7 +1,7 @@
 import React from 'react';
-import { FileSystemItem } from '../../../types';
-import { UIDirectory } from './directory/UIDirectory';
-import { useDirectory } from './directory/useDirectory';
+import { FileSystemItem } from '@types';
+import { useNote } from './note/useNote';
+import { UINote } from './note/UINote';
 
 interface Props {
 	item: FileSystemItem;
@@ -10,34 +10,25 @@ interface Props {
 	setRenameText: React.Dispatch<string>;
 }
 
-export function Directory({
-	item,
-	depth = 0,
-	renameText,
-	setRenameText
-}: Props) {
+export function Note({ item, depth = 0, renameText, setRenameText }: Props) {
 	const {
-		isOpened,
-		childItems,
+		handleRenameKeyDown,
+		handleRenameBlur,
 		handleClick,
 		handleContextMenu,
-		handleRenameKeyDown,
-		handleRenameFocus,
 		handleRenameChange,
-		handleRenameBlur
-	} = useDirectory({
+		handleRenameFocus
+	} = useNote({
 		item,
 		renameText,
 		setRenameText
 	});
 
 	return (
-		<UIDirectory
+		<UINote
 			item={item}
 			depth={depth}
-			isOpened={isOpened}
 			renameText={renameText}
-			childItems={childItems}
 			setRenameText={setRenameText}
 			handleClick={handleClick}
 			handleContextMenu={handleContextMenu}

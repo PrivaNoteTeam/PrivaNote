@@ -1,7 +1,7 @@
 import React from 'react';
-import { useEditorStore, useStore } from '../../../../hooks';
-import { FileSystemItem } from '../../../../types';
-import FileIcon from '../../../../assets/icons/file.svg';
+import { useEditorStore, useStore } from '@hooks';
+import { FileSystemItem } from '@types';
+import FileIcon from '@assets/icons/file.svg';
 
 interface Props {
 	item: FileSystemItem;

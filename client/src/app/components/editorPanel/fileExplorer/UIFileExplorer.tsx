@@ -1,9 +1,9 @@
 import React from 'react';
 import { useStore } from '../../../hooks';
-import { FileSystemItem } from '../../../types';
+import { FileSystemItem } from '@types';
 import { Directory } from './Directory';
 import { Note } from './Note';
-import { getFileName } from '../../../utils';
+import { getFileName } from '../../../../shared/utils';
 import PlusIcon from '../../../assets/icons/plus.svg';
 import FolderOpenIcon from '../../../assets/icons/folder-open.svg';
 

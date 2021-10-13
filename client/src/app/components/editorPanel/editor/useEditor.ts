@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useStore } from '../../../hooks';
+import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
-import { saveFile } from '../../../utils';
+import { saveFile } from '@utils';
 import fs from 'fs';
 
 export function useEditor() {

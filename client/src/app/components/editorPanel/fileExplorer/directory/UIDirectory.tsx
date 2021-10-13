@@ -1,11 +1,11 @@
 import React from 'react';
-import { FileSystemItem } from '../../../../types';
+import { FileSystemItem } from '@types';
 import { Note } from '../Note';
 import { Directory } from '../Directory';
-import ChevronRightIcon from '../../../../assets/icons/chevron-right.svg';
-import ChevronDownIcon from '../../../../assets/icons/chevron-down.svg';
-import FolderIcon from '../../../../assets/icons/folder-f.svg';
-import { useEditorStore } from '../../../../hooks';
+import ChevronRightIcon from '@assets/icons/chevron-right.svg';
+import ChevronDownIcon from '@assets/icons/chevron-down.svg';
+import FolderIcon from '@assets/icons/folder-f.svg';
+import { useEditorStore } from '@hooks';
 
 interface Props {
 	item: FileSystemItem;

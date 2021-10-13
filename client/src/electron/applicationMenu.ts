@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions, Menu, dialog, ipcMain } from 'electron';
-import { getConfig } from '../utils';
+import { getConfig } from '../shared/utils';
 import { exportNote } from './handlers/exportNote';
 
 const template: MenuItemConstructorOptions[] = [

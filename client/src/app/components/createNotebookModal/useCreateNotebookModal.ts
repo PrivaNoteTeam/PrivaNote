@@ -1,10 +1,9 @@
-import { useStore } from '../../hooks';
-import { createNotebook } from '../../utils';
+import { useStore, useModalStore } from '@hooks';
+import { createNotebook } from '@utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import * as yup from 'yup';
-import { useModalStore } from '../../hooks';
 
 interface FormValues {
 	name: string;
