@@ -1,5 +1,5 @@
 import { BrowserWindow, dialog } from 'electron';
-import { FileItem } from '../../types';
+import { FileItem } from '../../shared/types';
 import fs from 'fs';
 
 export function exportNote(window: BrowserWindow, currentFile: FileItem) {

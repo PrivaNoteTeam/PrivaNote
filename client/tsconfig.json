@@ -22,6 +22,16 @@
 		"experimentalDecorators": true,
 		"resolveJsonModule": true,
 		"baseUrl": ".",
+		"paths": {
+			"@types": ["./src/shared/types.d.ts"],
+			"@app/*": ["./src/app/*"],
+			"@hooks": ["./src/app/hooks/index.ts"],
+			"@components/*": ["./src/app/components/*"],
+			"@assets/*": ["./src/app/assets/*"],
+			"@shared/*": ["./src/shared/*"],
+			"@utils": ["./src/shared/utils/index.ts"],
+			"@electron/*": ["./src/electron/*"]
+		},
 		"jsx": "react"
 	},
 	"exclude": ["node_modules"],
