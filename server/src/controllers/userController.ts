@@ -9,7 +9,7 @@ import { verifyUser } from '../database/verifyUser';
 export const userController = {
 	verify: async (req: Request, res: Response) => {
 		const verificationCode = req.body.verificationCode;
-		const error = await verifyUserValidation(req.ctx!, {
+		let error = await verifyUserValidation(req.ctx!, {
 			verificationCode
 		});
 
@@ -17,10 +17,10 @@ export const userController = {
 			res.json({ fieldError: error });
 		}
 
-		const error2 = await verifyUser(req.ctx!, verificationCode);
+		error = await verifyUser(req.ctx!, verificationCode);
 
-		if (error2) {
-			res.json({ fieldError: error2 });
+		if (error) {
+			res.json({ fieldError: error });
 		}
 
 		return res.json({ message: 'Account has been verified!' });

@@ -38,7 +38,6 @@ const main = async () => {
 	});
 
 	app.post('/login', (req, res) => {
-		console.log(req.body);
 		let username = req.body.username;
 		let password = req.body.password;
 		let errors = [];

@@ -31,6 +31,7 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 		html: `<b>Your verification code is ${code}</b>`
 	});
 
+	// DO NOT REMOVE THESE CONSOLE LOGS
 	console.log('Message sent: ' + info.messageId);
 	console.log('Email link: ' + getTestMessageUrl(info));
 }

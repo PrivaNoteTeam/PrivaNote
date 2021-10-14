@@ -22,8 +22,6 @@ export async function verifyUser({verificationCode}: VerificationFormValues){
 		})
 
         .then((response) => {
-			console.log(response.data);
-			
 			resolve(response.data as VerificationResponse)
 		})
 		.catch((err) => {

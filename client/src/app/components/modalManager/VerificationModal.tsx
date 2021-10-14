@@ -18,11 +18,7 @@ export function VerificiationModal() {
 
     const handleSubmit = useFormHandleSubmit(
         async ({ verificationCode}: VerificationFormValues) => {
-            // api stuff here 
             const response = await verifyUser({verificationCode})
-            
-            console.log("RESPONSE")
-            console.log(response);
             
             if (response.fieldError) {
                 setError('verificationCode', { message: response.fieldError.message });
@@ -33,8 +29,6 @@ export function VerificiationModal() {
                 type: 'verificationModal',
                 verificationModalVisible: false
             })
-
-            console.log('Succesfully verified account');
         }
     )
 
