@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useModalStore } from '../../hooks';
+import { useModalStore } from '@hooks';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import * as yup from 'yup';
 import { registerUser } from '@shared/api/registerUser';
+import { FormBanner } from './FormBanner';
+import { FormError } from '@types';
+import { AxiosError } from 'axios';
 
 interface RegisterFormValues {
 	email: string;
@@ -31,6 +34,7 @@ const validationSchema = yup.object({
 
 export function RegisterModal() {
 	const [, modalManagerDispatch] = useModalStore();
+	const [formError, setFormError] = useState<FormError | undefined>()
 
 	const {
 		register,
@@ -52,14 +56,25 @@ export function RegisterModal() {
 
 	const handleSubmit = useFormHandleSubmit(
 		async ({ email, password, confirmPassword }: RegisterFormValues) => {
-			const response = await registerUser({ email, password, confirmPassword });
+			const unknownError = { message: 'An unknown error has occurred'};
 
-			if (response.fieldError) {
-				if (response.fieldError.field !== 'email' && response.fieldError.field !== 'password' && response.fieldError.field !== 'confirmPassword') return;
-				setError(response.fieldError.field!, { message: response.fieldError.message });
-			} else if (response.user) {
-				modalManagerDispatch({ type: 'verificationModal', verificationModalVisible: true })
-			}
+			registerUser({ email, password, confirmPassword }).then((response) => {
+				if (response.fieldError) {
+					if (response.fieldError.field !== 'email' && response.fieldError.field !== 'password' && response.fieldError.field !== 'confirmPassword') return;
+					setError(response.fieldError.field!, { message: response.fieldError.message });
+				} else if (response.user) {
+					modalManagerDispatch({ type: 'verificationModal', verificationModalVisible: true })
+				} else if (response.formError) {
+					setFormError(response.formError);
+				} else {
+					setFormError(unknownError);
+				}
+			}).catch((err: AxiosError) => {
+				setFormError({ message: err.message })
+			}).catch(() => {
+				setFormError(unknownError);
+			});
+
 
 			return;
 		}
@@ -79,6 +94,7 @@ export function RegisterModal() {
 					<h2 className='text-center text-2xl text-white select-none'>
 						Sign up for an account
 					</h2>
+					{ formError && <FormBanner text={ formError.message } status='error' /> }
 					<p className='text-gray-500 text-xs break-words text-center select-none'>
 						Signing into a PrivaNote account allows you to{' '}
 						<span className='text-gray-400'>
