@@ -3,6 +3,7 @@ import { ModalLayout } from './Modal';
 import { useModalStore } from '@hooks';
 import { TextField } from '@components/TextField';
 import { useForm } from 'react-hook-form';
+import { verifyUser } from '@shared/Api/verifyUser';
 
 interface VerificationFormValues {
     verificationCode: string;
@@ -11,14 +12,26 @@ interface VerificationFormValues {
 export function VerificiationModal() {
     const [, modalManagerDispatch] = useModalStore();
 
-    const { register, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>({
+    const { register, setError, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>({
         mode: 'onBlur'
     });
 
     const handleSubmit = useFormHandleSubmit(
         async ({ verificationCode}: VerificationFormValues) => {
             // api stuff here 
-            console.log(verificationCode);  
+            const response = await verifyUser({verificationCode})
+            
+            if (response.fieldError) {
+                setError('verificationCode', { message: response.fieldError.message });
+                return;
+            }
+
+            modalManagerDispatch({
+                type: 'verificationModal',
+                verificationModalVisible: false
+            })
+
+            console.log('Succesfully verified account');
         }
     )
 

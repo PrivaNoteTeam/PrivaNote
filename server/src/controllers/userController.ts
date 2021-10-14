@@ -3,8 +3,29 @@ import argon2 from 'argon2';
 import { registerValidation } from '../validation/registerUserValidation';
 import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
+import { verifyUserValidation } from '../Validation/verifyUserValidation';
+import { verifyUser } from '../database/verifyUser';
 
 export const userController = {
+	verify: async (req: Request, res: Response) => {
+		const verificationCode = req.body.verificationCode;
+		const error = await verifyUserValidation(req.ctx!, {
+			verificationCode
+		});
+
+		if (error) {
+			res.json({ fieldError: error });
+		}
+
+		const error2 = await verifyUser(req.ctx!, verificationCode);
+
+		if (error2) {
+			res.json({ fieldError: error2 });
+		}
+
+		return res.json({ message: 'Account has been verified!' });
+	},
+
 	register: async (req: Request, res: Response) => {
 		const email = req.body.email;
 		const password = req.body.password;
