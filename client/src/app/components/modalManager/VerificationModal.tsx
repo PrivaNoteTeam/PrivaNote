@@ -11,7 +11,9 @@ interface VerificationFormValues {
 export function VerificiationModal() {
     const [, modalManagerDispatch] = useModalStore();
 
-    const { register, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>();
+    const { register, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>({
+        mode: 'onBlur'
+    });
 
     const handleSubmit = useFormHandleSubmit(
         async ({ verificationCode}: VerificationFormValues) => {

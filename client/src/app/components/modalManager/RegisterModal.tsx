@@ -38,6 +38,7 @@ export function RegisterModal() {
 		handleSubmit: useFormHandleSubmit,
 		setError
 	} = useForm<RegisterFormValues>({
+		mode: 'onBlur',
 		resolver: yupResolver(validationSchema)
 	});
 
