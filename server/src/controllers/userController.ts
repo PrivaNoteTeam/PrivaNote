@@ -29,9 +29,11 @@ export const userController = {
 			res.status(400).json({
 				message: 'user could not be created'
 			});
+
+			return;
 		}
 
-		sendVerificationEmail(email);
+		sendVerificationEmail(req.ctx!, user);
 
 		res.status(200).json(user);
 	}

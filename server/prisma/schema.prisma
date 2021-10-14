@@ -81,7 +81,7 @@ model Notebook {
 
 model OneTimeVerificationCode {
   codeID     Int      @id @default(autoincrement())
-  code       String   @db.Char(6)
+  code       String   @default(uuid())
   expiresAt  DateTime @db.Timestamp(0)
   UseruserID Int
   User       User     @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "completes")
