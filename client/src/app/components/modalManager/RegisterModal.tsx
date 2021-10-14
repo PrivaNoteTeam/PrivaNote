@@ -77,7 +77,7 @@ export function RegisterModal() {
 			<form onSubmit={handleSubmit} className='w-80 space-y-8'>
 				<div className='space-y-3'>
 					<h2 className='text-center text-2xl text-white select-none'>
-						Sign in to your account
+						Sign up for an account
 					</h2>
 					<p className='text-gray-500 text-xs break-words text-center select-none'>
 						Signing into a PrivaNote account allows you to{' '}
