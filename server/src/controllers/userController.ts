@@ -14,9 +14,9 @@ export const userController = {
 			email,
 			password: hashedPassword
 		});
-
+		// FieldError
 		if (error) {
-			res.status(409).json(error);
+			res.json({ fieldError: error });
 			return;
 		}
 
@@ -24,10 +24,12 @@ export const userController = {
 			email,
 			password: hashedPassword
 		});
-
+		// FormError
 		if (!user) {
-			res.status(400).json({
-				message: 'user could not be created'
+			res.json({
+				formError: {
+					message: 'user could not be created'
+				}
 			});
 
 			return;
@@ -35,6 +37,7 @@ export const userController = {
 
 		sendVerificationEmail(req.ctx!, user);
 
-		res.status(200).json(user);
+		// User
+		res.status(200).json({ user: user });
 	}
 };

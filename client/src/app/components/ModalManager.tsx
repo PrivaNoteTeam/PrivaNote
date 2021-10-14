@@ -4,10 +4,11 @@ import { RegisterModal } from './modalManager/RegisterModal';
 import { CreateNotebookModal } from './CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { useModalStore } from '../hooks';
+import { VerificiationModal } from './modalManager/VerificationModal';
 
 export function ModalManager() {
 	const [
-		{ loginModalVisible, registerModalVisible, createNotebookModalVisible },
+		{ loginModalVisible, registerModalVisible, createNotebookModalVisible, verificationModalVisible },
 		modalManagerDispatch
 	] = useModalStore();
 
@@ -26,6 +27,8 @@ export function ModalManager() {
 		render = <RegisterModal />;
 	} else if (createNotebookModalVisible) {
 		render = <CreateNotebookModal />;
+	} else if (verificationModalVisible) {
+		render = <VerificiationModal />
 	}
 
 	return render;
