@@ -16,13 +16,17 @@ export async function verifyUser(ctx: Context, code: string) {
 		};
 	}
 
-	ctx.prisma.user.update({
-		where: {
-			userID: verificationCode.UseruserID
-		},
-		data: {
-			verified: true
-		}
-	});
+	ctx.prisma.user
+		.update({
+			where: {
+				userID: verificationCode.UseruserID
+			},
+			data: {
+				verified: true
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 	return;
 }

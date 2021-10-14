@@ -12,7 +12,7 @@ interface VerificationFormValues {
 export function VerificiationModal() {
     const [, modalManagerDispatch] = useModalStore();
 
-    const { register, setError, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>({
+    const { register, formState: { errors }, setError, handleSubmit: useFormHandleSubmit } = useForm<VerificationFormValues>({
         mode: 'onBlur'
     });
 
@@ -20,6 +20,9 @@ export function VerificiationModal() {
         async ({ verificationCode}: VerificationFormValues) => {
             // api stuff here 
             const response = await verifyUser({verificationCode})
+            
+            console.log("RESPONSE")
+            console.log(response);
             
             if (response.fieldError) {
                 setError('verificationCode', { message: response.fieldError.message });
@@ -55,7 +58,7 @@ export function VerificiationModal() {
 				</div>
 				<div className='form-inner'>
 					<div className='space-y-6 ...'>
-						<TextField name='verificationCode' text='verification code' register={register} />
+						<TextField name='verificationCode' text='verification code' error={ errors.verificationCode } register={register} />
 						<div className='flex justify-between items-end'>
 							<p className='text-white'>Did not receive a link?</p>
                             <a
