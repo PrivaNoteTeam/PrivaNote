@@ -47,21 +47,23 @@ export function VerificiationModal() {
                         Verify your account
                     </h2>
 					<p className='text-gray-500 text-xs break-words text-center select-none'>
-                        Check for the verification link which was <span className='text-gray-400'>sent to your account</span>. This will finish the registration process.
+                        Check for the verification link or code which was <span className='text-gray-400'>sent to your account</span>. This will finish the registration process.
                     </p>
 				</div>
 				<div className='form-inner'>
 					<div className='space-y-6 ...'>
 						<TextField name='verificationCode' text='verification code' error={ errors.verificationCode } register={register} />
 						<div className='flex justify-between items-end'>
-							<p className='text-white'>Did not receive a link?</p>
-                            <a
-								href='#'
-								onClick={ () => {}}
-								className='text-blue-500 hover:underline cursor-pointer'
-							>
-                                Resend
-							</a>
+                            <div className='flex flex-col'>
+                                <p className='text-gray-200 text-sm'>Didn't receive an email?</p>
+                                <a
+                                    href='#'
+                                    onClick={ () => {}}
+                                    className='text-blue-500 text-sm hover:underline cursor-pointer'
+                                >
+                                    Resend
+                                </a>
+                            </div>
 							<input
 								type='submit'
 								value='Verify'
