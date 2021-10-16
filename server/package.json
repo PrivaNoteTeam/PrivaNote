@@ -8,7 +8,8 @@
 		"start": "npm run build && node dist/index.js",
 		"prepare": "cd .. && husky install server/.husky",
 		"prettier-check": "prettier --check .",
-		"prettier-write": "prettier --write ."
+		"prettier-write": "prettier --write .",
+		"prisma-migrate": "npx prisma migrate dev --name init"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.2.1",
