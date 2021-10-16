@@ -18,3 +18,5 @@ export interface CreateUserData {
 export type RegisterData = CreateUserData;
 
 export type User = Omit<SchemaUser, 'password'>;
+
+export type LoginData = CreateUserData; // need to refactor
