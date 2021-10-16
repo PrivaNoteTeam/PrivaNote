@@ -26,6 +26,15 @@ export const userController = {
 		return res.json({ message: 'Account has been verified!' });
 	},
 
+	login: async (req: Request, res: Response) => {
+		const email = req.body.email;
+		const password = req.body.password;
+		const hashedPassword = await argon2.hash(password);
+		console.log(email, password, hashedPassword);
+
+		res.status(500).send();
+	},
+
 	register: async (req: Request, res: Response) => {
 		const email = req.body.email;
 		const password = req.body.password;
