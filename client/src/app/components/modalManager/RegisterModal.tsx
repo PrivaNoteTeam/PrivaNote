@@ -6,12 +6,7 @@ import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import * as yup from 'yup';
 import { registerUser } from '@shared/api/registerUser';
-
-interface RegisterFormValues {
-	email: string;
-	password: string;
-	confirmPassword: string;
-}
+import { RegisterFormValues } from '@types';
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required(),

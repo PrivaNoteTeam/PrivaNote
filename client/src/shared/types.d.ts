@@ -59,6 +59,11 @@ export interface RegisterFormValues {
 	confirmPassword: string;
 }
 
+export interface LoginFormValues {
+	email: string;
+	password: string;
+}
+
 export interface VerificationFormValues {
 	verificationCode: string;
 }
@@ -69,4 +74,12 @@ export interface User {
 	lastName: string | null;
 	email: string;
 	verified: boolean;
+}
+
+export interface FormError {
+	message: string;
+}
+
+export interface FieldError extends FormError {
+	field: string;
 }

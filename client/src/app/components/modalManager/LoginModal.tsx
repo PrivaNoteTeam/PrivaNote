@@ -3,13 +3,14 @@ import { useForm } from 'react-hook-form';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import { useModalStore } from '../../hooks';
+import { LoginFormValues } from '@types';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-interface LoginFormValues {
-	email: string;
-	password: string;
-}
+// interface LoginFormValues {
+// 	email: string;
+// 	password: string;
+// }
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required(),
@@ -18,9 +19,6 @@ const validationSchema = yup.object({
 
 export function LoginModal() {
 	const [, modalManagerDispatch] = useModalStore();
-	const submitHandler = (e: { preventDefault: () => void }) => {
-		e.preventDefault();
-	};
 
 	const {
 		register,
@@ -37,6 +35,16 @@ export function LoginModal() {
 			registerModalVisible: true
 		});
 	};
+
+	const submitHandler = (e: { preventDefault: () => void }) => {
+		e.preventDefault();
+	};
+
+	// const submitHandler = useFormHandleSubmit(
+	// 	async ({ email, password }: LoginFormValues) => {
+
+	// 	}
+	// );
 
 	return (
 		<ModalLayout
