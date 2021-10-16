@@ -1,5 +1,4 @@
 import { Dispatch } from 'react';
-
 export interface FileSystemItem {
 	name: string;
 	path: string;
@@ -33,10 +32,11 @@ export interface ModalManagerState {
 	loginModalVisible: boolean;
 	registerModalVisible: boolean;
 	createNotebookModalVisible: boolean;
+	verificationModalVisible: boolean;
 }
 
 export interface ModalManagerAction extends Partial<ModalManagerState> {
-	type: 'loginModal' | 'registerModal' | 'createNotebookModal';
+	type: 'loginModal' | 'registerModal' | 'createNotebookModal' | 'verificationModal';
 }
 
 export interface EditorState {
@@ -47,4 +47,22 @@ export interface EditorState {
 
 export interface EditorAction extends EditorState {
 	type: 'primarySelect' | 'secondarySelect' | 'rename';
+}
+
+export interface RegisterFormValues {
+	email: string;
+	password: string;
+	confirmPassword: string;
+}
+
+export interface VerificationFormValues {
+	verificationCode: string;
+}
+
+export interface User {
+	userID: number;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+    verified: boolean;
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 import './styles.css';
-
 import {
 	AppState,
 	AppAction,
@@ -33,7 +32,8 @@ const storeReducer = (state: AppState, action: AppAction) => {
 const initialModalState: ModalManagerState = {
 	createNotebookModalVisible: false,
 	loginModalVisible: false,
-	registerModalVisible: false
+	registerModalVisible: false,
+	verificationModalVisible: false
 };
 
 // This reducer resets the state every time so no modal gets stacked
@@ -57,6 +57,11 @@ function modalReducer(
 				...initialModalState,
 				createNotebookModalVisible: action.createNotebookModalVisible!
 			};
+		case 'verificationModal':
+			return {
+				...initialModalState,
+				verificationModalVisible: action.verificationModalVisible!
+			}
 		default:
 			console.error('Invalid action provided to modal manager reducer.');
 			return state;

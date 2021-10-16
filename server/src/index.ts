@@ -3,24 +3,22 @@ import cors from 'cors';
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
 require('dotenv').config();
-import { userSession } from './types';
-
-declare module 'express-session' {
-	export interface SessionData {
-		user: userSession;
-	}
-}
+import { UserSession } from './types';
+import { PrismaClient } from '@prisma/client';
+import { setupContext } from './middleware/setupContext';
+import { router } from './routes';
 
 const main = async () => {
 	const app = express();
 	const HTTP_PORT = 8080;
 
-	const userLogin: userSession = {
+	const userLogin: UserSession = {
 		id: 12,
 		email: 'mark.recile@senecacollege.ca',
 		password: 'PrivaNoteRocks'
 	};
 
+	app.use(setupContext({ prisma: new PrismaClient() }));
 	app.use(cors());
 	app.use(express.json());
 	app.use(
@@ -40,7 +38,6 @@ const main = async () => {
 	});
 
 	app.post('/login', (req, res) => {
-		console.log(req.body);
 		let username = req.body.username;
 		let password = req.body.password;
 		let errors = [];
@@ -81,11 +78,17 @@ const main = async () => {
 		res.redirect('/');
 	});
 
+	app.use('/api', router);
+
 	app.listen(HTTP_PORT, () => {
 		console.log('Listening on port ' + HTTP_PORT);
 	});
 };
 
-main().catch((error) => {
-	console.error(error);
-});
+main()
+	.finally(() => {
+		//ctx.prisma.$disconnect();
+	})
+	.catch((error) => {
+		console.error(error);
+	});
