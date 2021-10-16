@@ -68,6 +68,10 @@ export interface VerificationFormValues {
 	verificationCode: string;
 }
 
+export interface FormError {
+	message: string;
+}
+
 export interface User {
 	userID: number;
 	firstName: string | null;
