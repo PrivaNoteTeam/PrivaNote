@@ -3,11 +3,18 @@ import { useForm } from 'react-hook-form';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import { useModalStore } from '../../hooks';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface LoginFormValues {
 	email: string;
 	password: string;
 }
+
+const validationSchema = yup.object({
+	email: yup.string().email('Invalid email').required(),
+	password: yup.string().required()
+});
 
 export function LoginModal() {
 	const [, modalManagerDispatch] = useModalStore();
@@ -15,7 +22,13 @@ export function LoginModal() {
 		e.preventDefault();
 	};
 
-	const { register } = useForm<LoginFormValues>();
+	const {
+		register,
+		formState: { errors }
+	} = useForm<LoginFormValues>({
+		mode: 'onBlur',
+		resolver: yupResolver(validationSchema)
+	});
 
 	const handleClick = () => {
 		modalManagerDispatch({ type: 'loginModal', loginModalVisible: false });
@@ -51,10 +64,15 @@ export function LoginModal() {
 				</div>
 				<div className='form-inner'>
 					<div className='space-y-6 ...'>
-						<TextField name='email' register={register} />
+						<TextField
+							name='email'
+							error={errors.email}
+							register={register}
+						/>
 						<TextField
 							name='password'
 							type='password'
+							error={errors.password}
 							register={register}
 						/>
 						<div className='flex justify-between items-end'>

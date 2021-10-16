@@ -61,7 +61,7 @@ function modalReducer(
 			return {
 				...initialModalState,
 				verificationModalVisible: action.verificationModalVisible!
-			}
+			};
 		default:
 			console.error('Invalid action provided to modal manager reducer.');
 			return state;

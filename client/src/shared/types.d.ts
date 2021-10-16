@@ -36,7 +36,11 @@ export interface ModalManagerState {
 }
 
 export interface ModalManagerAction extends Partial<ModalManagerState> {
-	type: 'loginModal' | 'registerModal' | 'createNotebookModal' | 'verificationModal';
+	type:
+		| 'loginModal'
+		| 'registerModal'
+		| 'createNotebookModal'
+		| 'verificationModal';
 }
 
 export interface EditorState {
@@ -61,8 +65,8 @@ export interface VerificationFormValues {
 
 export interface User {
 	userID: number;
-    firstName: string | null;
-    lastName: string | null;
-    email: string;
-    verified: boolean;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+	verified: boolean;
 }

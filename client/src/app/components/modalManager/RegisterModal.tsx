@@ -52,13 +52,27 @@ export function RegisterModal() {
 
 	const handleSubmit = useFormHandleSubmit(
 		async ({ email, password, confirmPassword }: RegisterFormValues) => {
-			const response = await registerUser({ email, password, confirmPassword });
+			const response = await registerUser({
+				email,
+				password,
+				confirmPassword
+			});
 
 			if (response.fieldError) {
-				if (response.fieldError.field !== 'email' && response.fieldError.field !== 'password' && response.fieldError.field !== 'confirmPassword') return;
-				setError(response.fieldError.field!, { message: response.fieldError.message });
+				if (
+					response.fieldError.field !== 'email' &&
+					response.fieldError.field !== 'password' &&
+					response.fieldError.field !== 'confirmPassword'
+				)
+					return;
+				setError(response.fieldError.field!, {
+					message: response.fieldError.message
+				});
 			} else if (response.user) {
-				modalManagerDispatch({ type: 'verificationModal', verificationModalVisible: true })
+				modalManagerDispatch({
+					type: 'verificationModal',
+					verificationModalVisible: true
+				});
 			}
 
 			return;
