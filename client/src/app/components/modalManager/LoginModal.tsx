@@ -6,11 +6,7 @@ import { useModalStore } from '../../hooks';
 import { LoginFormValues } from '@types';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-// interface LoginFormValues {
-// 	email: string;
-// 	password: string;
-// }
+import { loginUser } from '@shared/api/loginUser';
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required(),
@@ -22,7 +18,9 @@ export function LoginModal() {
 
 	const {
 		register,
-		formState: { errors }
+		formState: { errors },
+		handleSubmit: useFormHandleSubmit
+		// setError
 	} = useForm<LoginFormValues>({
 		mode: 'onBlur',
 		resolver: yupResolver(validationSchema)
@@ -36,15 +34,18 @@ export function LoginModal() {
 		});
 	};
 
-	const submitHandler = (e: { preventDefault: () => void }) => {
-		e.preventDefault();
-	};
+	const submitHandler = useFormHandleSubmit(
+		async ({ email, password }: LoginFormValues) => {
+			const response = await loginUser({ email, password });
 
-	// const submitHandler = useFormHandleSubmit(
-	// 	async ({ email, password }: LoginFormValues) => {
-
-	// 	}
-	// );
+			if (response.user) {
+				modalManagerDispatch({
+					type: 'verificationModal',
+					verificationModalVisible: true
+				});
+			}
+		}
+	);
 
 	return (
 		<ModalLayout
