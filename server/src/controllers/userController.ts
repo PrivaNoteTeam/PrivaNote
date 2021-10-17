@@ -5,7 +5,7 @@ import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { verifyUser } from '../database/verifyUser';
-import { loginValidation } from '../Validation/loginUserValidation';
+import { loginFieldValidation } from '../Validation/loginUserValidation';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -33,10 +33,7 @@ export const userController = {
 		// const hashedPassword = await argon2.hash(password);
 		// console.log(email, password, hashedPassword);
 
-		const error = await loginValidation(req.ctx!, {
-			email,
-			password
-		});
+		const error = await loginFieldValidation({ email, password });
 
 		if (error) {
 			res.json({ fieldError: error });
