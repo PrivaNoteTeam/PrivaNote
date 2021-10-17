@@ -5,7 +5,11 @@ import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { verifyUser } from '../database/verifyUser';
-import { loginFieldValidation } from '../Validation/loginUserValidation';
+import {
+	loginFieldValidation,
+	loginAccountValidation
+} from '../Validation/loginUserValidation';
+import { send } from 'process';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -37,6 +41,19 @@ export const userController = {
 
 		if (error) {
 			res.json({ fieldError: error });
+			return;
+		}
+		const user = await loginAccountValidation(req.ctx!, {
+			email,
+			password
+		});
+
+		if (!user) {
+			res.json({
+				formError: {
+					message: 'Please ensure your email and password is correct.'
+				}
+			});
 			return;
 		}
 		res.status(500).send();
