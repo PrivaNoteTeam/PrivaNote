@@ -5,6 +5,7 @@ import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { retrieveVerificationCode, verifyUser } from '../database/verifyUser';
+import { retrieveUserByID } from "../database/retrieveUser";
 import { loginFieldValidation, loginAccountValidation } from '../Validation/loginUserValidation';
 import { hasValidAuthCode, deleteAuthCode } from '../database/twoFactorAuthenication';
 
@@ -26,7 +27,8 @@ export const userController = {
 			res.json({ fieldError: error });
 		}
 
-		console.log(code);
+		const user = await retrieveUserByID(req.ctx!, code!.UseruserID)
+		req.session.user = user;
 
 		return res.json({ message: 'Account has been verified!' });
 	},

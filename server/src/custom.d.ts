@@ -1,4 +1,4 @@
-import { Context, UserSession } from './types';
+import { Context, User } from './types';
 declare module 'express-serve-static-core' {
 	export interface Request {
 		ctx?: Context;
@@ -7,6 +7,6 @@ declare module 'express-serve-static-core' {
 
 declare module 'express-session' {
 	export interface SessionData {
-		user: UserSession;
+		user: User | undefined;
 	}
 }

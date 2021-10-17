@@ -1,10 +1,10 @@
 import { PrismaClient, User as SchemaUser } from '@prisma/client';
 
-export interface UserSession {
-	id: number;
-	email: string;
-	password: string;
-}
+// export interface UserSession {
+// 	id: number;
+// 	email: string;
+// 	password: string;
+// }
 
 export interface Context {
 	prisma: PrismaClient;
