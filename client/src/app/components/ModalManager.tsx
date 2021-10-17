@@ -8,7 +8,12 @@ import { VerificiationModal } from './modalManager/VerificationModal';
 
 export function ModalManager() {
 	const [
-		{ loginModalVisible, registerModalVisible, createNotebookModalVisible, verificationModalVisible },
+		{
+			loginModalVisible,
+			registerModalVisible,
+			createNotebookModalVisible,
+			verificationModalVisible
+		},
 		modalManagerDispatch
 	] = useModalStore();
 
@@ -28,7 +33,7 @@ export function ModalManager() {
 	} else if (createNotebookModalVisible) {
 		render = <CreateNotebookModal />;
 	} else if (verificationModalVisible) {
-		render = <VerificiationModal />
+		render = <VerificiationModal />;
 	}
 
 	return render;

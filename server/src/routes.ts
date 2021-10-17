@@ -7,4 +7,5 @@ router.post('/verify', userController.verify);
 
 router.post('/register', userController.register);
 
+router.post('/login', userController.login);
 export { router };
