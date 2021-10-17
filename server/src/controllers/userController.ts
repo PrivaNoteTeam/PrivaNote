@@ -5,10 +5,8 @@ import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { verifyUser } from '../database/verifyUser';
-import {
-	loginFieldValidation,
-	loginAccountValidation
-} from '../Validation/loginUserValidation';
+import { loginFieldValidation, loginAccountValidation } from '../Validation/loginUserValidation';
+import { hasValidAuthCode, deleteAuthCode } from '../database/twoFactorAuthenication';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -35,6 +33,7 @@ export const userController = {
 		const password = req.body.password;
 		const error = await loginFieldValidation({ email, password });
 
+		// FieldError incase no client validation
 		if (error) {
 			res.json({ fieldError: error });
 			return;
@@ -44,6 +43,7 @@ export const userController = {
 			password
 		});
 
+		// Form Error
 		if (!user) {
 			res.json({
 				formError: {
@@ -52,6 +52,12 @@ export const userController = {
 			});
 			return;
 		}
+
+		if (await hasValidAuthCode(req.ctx!, user)) {
+			deleteAuthCode(req.ctx!, user)
+		}
+
+		sendVerificationEmail(req.ctx!, user);
 		res.status(200).json({ user: user });
 	},
 
