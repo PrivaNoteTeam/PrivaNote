@@ -4,7 +4,7 @@ import { registerValidation } from '../validation/registerUserValidation';
 import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
-import { verifyUser } from '../database/verifyUser';
+import { retrieveVerificationCode, verifyUser } from '../database/verifyUser';
 import { loginFieldValidation, loginAccountValidation } from '../Validation/loginUserValidation';
 import { hasValidAuthCode, deleteAuthCode } from '../database/twoFactorAuthenication';
 
@@ -19,11 +19,14 @@ export const userController = {
 			res.json({ fieldError: error });
 		}
 
-		error = await verifyUser(req.ctx!, verificationCode);
+		const code = await retrieveVerificationCode(req.ctx!, verificationCode);
+		error = await verifyUser(req.ctx!, code!);
 
 		if (error) {
 			res.json({ fieldError: error });
 		}
+
+		console.log(code);
 
 		return res.json({ message: 'Account has been verified!' });
 	},
