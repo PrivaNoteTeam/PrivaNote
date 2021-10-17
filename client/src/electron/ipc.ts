@@ -31,4 +31,12 @@ export function registerIpcHandlers() {
 			});
 		}
 	});
+
+	ipcMain.on('login', (_, email: string) => {
+		const emailLabel = userContextMenu.getMenuItemById('user-email');
+		
+		if (!emailLabel) return;
+
+		emailLabel.label = email;
+	})
 }

@@ -5,11 +5,12 @@ export async function retrieveVerificationCode(
 	ctx: Context,
 	code: string
 ): Promise<OneTimeVerificationCode | null> {
-	const verificationCode: OneTimeVerificationCode | null = await ctx.prisma.oneTimeVerificationCode.findFirst({
-		where: {
-			code
-		}
-	});
+	const verificationCode: OneTimeVerificationCode | null =
+		await ctx.prisma.oneTimeVerificationCode.findFirst({
+			where: {
+				code
+			}
+		});
 
 	return verificationCode as OneTimeVerificationCode;
 }

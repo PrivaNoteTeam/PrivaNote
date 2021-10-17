@@ -5,9 +5,11 @@ import {
 	AppState,
 	AppAction,
 	ModalManagerState,
-	ModalManagerAction
+	ModalManagerAction,
+	UserState,
+	UserAction
 } from '@types';
-import { StoreProvider, ModalProvider } from './hooks/contexts';
+import { StoreProvider, ModalProvider, UserProvider } from './hooks/contexts';
 import { App } from './App';
 
 const initialAppState: AppState = {};
@@ -28,6 +30,21 @@ const storeReducer = (state: AppState, action: AppAction) => {
 			throw new Error('An unknown action has been sent to the store.');
 	}
 };
+
+const initialUserState: UserState = {}
+
+const userReducer = (_: UserState, action: UserAction) => {
+	switch (action.type) {
+		case 'login':
+			return {
+				user: action.user
+			};
+		case 'logout':
+			return {
+				user: undefined
+			}
+	}
+}
 
 const initialModalState: ModalManagerState = {
 	createNotebookModalVisible: false,
@@ -70,9 +87,11 @@ function modalReducer(
 
 const tree = (
 	<StoreProvider initialState={initialAppState} reducer={storeReducer}>
-		<ModalProvider initialState={initialModalState} reducer={modalReducer}>
-			<App />
-		</ModalProvider>
+		<UserProvider initialState={initialUserState} reducer={userReducer}>
+			<ModalProvider initialState={initialModalState} reducer={modalReducer}>
+				<App />
+			</ModalProvider>
+		</UserProvider>
 	</StoreProvider>
 );
 
