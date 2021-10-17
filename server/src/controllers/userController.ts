@@ -9,7 +9,6 @@ import {
 	loginFieldValidation,
 	loginAccountValidation
 } from '../Validation/loginUserValidation';
-import { send } from 'process';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -34,9 +33,6 @@ export const userController = {
 	login: async (req: Request, res: Response) => {
 		const email = req.body.email;
 		const password = req.body.password;
-		// const hashedPassword = await argon2.hash(password);
-		// console.log(email, password, hashedPassword);
-
 		const error = await loginFieldValidation({ email, password });
 
 		if (error) {
@@ -56,7 +52,7 @@ export const userController = {
 			});
 			return;
 		}
-		res.status(500).send();
+		res.status(200).json({ user: user });
 	},
 
 	register: async (req: Request, res: Response) => {

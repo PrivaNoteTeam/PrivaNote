@@ -46,14 +46,12 @@ export async function loginAccountValidation(
 		if (user) {
 			if (await argon2.verify(user.password, password)) {
 				// Password matches
-
 				const { password: _, ...userWithoutPassword } =
 					user as unknown as any;
 
 				return userWithoutPassword as User;
 			}
 		}
-
 		return;
 	} catch (err) {
 		console.log(err);
