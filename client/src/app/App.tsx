@@ -3,11 +3,12 @@ import { ipcRenderer } from 'electron';
 import { EditorPanel } from './components/EditorPanel';
 import { getFileName } from '../shared/utils';
 import { useEffect } from 'react';
-import { useStore } from './hooks';
+import { useStore, useUserStore } from './hooks';
 import { EditorProvider } from './hooks/contexts/useEditorStore';
 import { EditorState, EditorAction } from '../shared/types';
 import { ModalManager } from './components/ModalManager';
 import { SideMenu } from './components/SideMenu';
+import { getUser } from '@shared/Api/getUser';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -22,7 +23,7 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 
 export function App() {
 	const [{ currentNote }, dispatch] = useStore();
-
+	const [, userDispatch] = useUserStore();
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
 
@@ -54,6 +55,13 @@ export function App() {
 		ipcRenderer.on('exportNote', () => {
 			ipcRenderer.send('currentFileToExport', currentNote);
 		});
+		
+		getUser().then(({ user }) => {
+			if (user)
+				userDispatch({ type: 'login', user })
+		});
+		// Log in user automatically
+		
 	}, [currentNote]);
 
 	return (

@@ -11,4 +11,6 @@ router.post('/login', userController.login);
 
 router.post('/logout', userController.logout);
 
+router.get('/user', userController.user);
+
 export { router };

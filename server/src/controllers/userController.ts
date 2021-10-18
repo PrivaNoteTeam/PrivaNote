@@ -108,6 +108,18 @@ export const userController = {
 		res.status(200).json({ user: user });
 	},
 
+	user: async (req: Request, res: Response) => {
+		if (req.session.user) {
+			res.json({ message: 'not log in' });
+
+			return;
+		}
+
+		res.json({ message: 'not log in' });
+
+		return;
+	},
+
 	logout: async (req: Request, res: Response) => {
 		req.session.user = undefined;
 
