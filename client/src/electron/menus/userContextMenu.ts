@@ -2,9 +2,9 @@ import { MenuItemConstructorOptions } from 'electron';
 import { logoutUser } from '@shared/api/logoutUser';
 
 const template: MenuItemConstructorOptions[] = [
-	{ 
+	{
 		label: '',
-		id: 'user-email' 
+		id: 'user-email'
 	},
 	{ type: 'separator' },
 	{

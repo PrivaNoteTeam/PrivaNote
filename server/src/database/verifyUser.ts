@@ -23,7 +23,7 @@ export async function verifyUser(ctx: Context, code: OneTimeVerificationCode) {
 		};
 	}
 
-	ctx.prisma.user
+	await ctx.prisma.user
 		.update({
 			where: {
 				userID: code.UseruserID

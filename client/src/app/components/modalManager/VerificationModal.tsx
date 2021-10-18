@@ -33,11 +33,11 @@ export function VerificiationModal() {
 				return;
 			}
 
-			if (response.user) {			
+			if (response.user) {
 				userDispatch({
 					type: 'login',
 					user: response.user
-				})
+				});
 			}
 
 			modalManagerDispatch({

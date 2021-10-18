@@ -29,11 +29,11 @@ export interface AppAction extends AppState {
 }
 
 export interface UserState {
-	user?: User
-}; 
+	user?: User;
+}
 
 export interface UserAction extends UserState {
-	type: 'login' | 'logout'	
+	type: 'login' | 'logout';
 }
 
 export interface ModalManagerState {

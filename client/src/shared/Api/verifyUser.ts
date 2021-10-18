@@ -12,7 +12,7 @@ interface VerificationResponse {
 	message?: string;
 	fieldError?: FieldError;
 	formError?: FormError;
-	user?: User
+	user?: User;
 }
 
 export async function verifyUser({ verificationCode }: VerificationFormValues) {

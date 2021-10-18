@@ -31,7 +31,7 @@ const storeReducer = (state: AppState, action: AppAction) => {
 	}
 };
 
-const initialUserState: UserState = {}
+const initialUserState: UserState = {};
 
 const userReducer = (_: UserState, action: UserAction) => {
 	switch (action.type) {
@@ -42,9 +42,9 @@ const userReducer = (_: UserState, action: UserAction) => {
 		case 'logout':
 			return {
 				user: undefined
-			}
+			};
 	}
-}
+};
 
 const initialModalState: ModalManagerState = {
 	createNotebookModalVisible: false,
@@ -88,7 +88,10 @@ function modalReducer(
 const tree = (
 	<StoreProvider initialState={initialAppState} reducer={storeReducer}>
 		<UserProvider initialState={initialUserState} reducer={userReducer}>
-			<ModalProvider initialState={initialModalState} reducer={modalReducer}>
+			<ModalProvider
+				initialState={initialModalState}
+				reducer={modalReducer}
+			>
 				<App />
 			</ModalProvider>
 		</UserProvider>

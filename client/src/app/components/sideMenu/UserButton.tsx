@@ -19,9 +19,8 @@ export function UserButton() {
 
 	useEffect(() => {
 		ipcRenderer.on('logout', () => {
-			userDispatch({type: 'logout'})
+			userDispatch({ type: 'logout' });
 		});
-		
 	}, [user]);
 
 	return (

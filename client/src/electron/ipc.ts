@@ -10,9 +10,9 @@ export function registerIpcHandlers() {
 
 	ipcMain.on('openUserContextMenu', (_, user: User) => {
 		let updatedUserContextMenuTemplate = userContextMenuTemplate;
-		
+
 		const i = updatedUserContextMenuTemplate.findIndex((item) => {
-			return item.id === 'user-email'
+			return item.id === 'user-email';
 		});
 
 		updatedUserContextMenuTemplate[i].label = user.email;
