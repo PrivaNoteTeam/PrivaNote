@@ -41,6 +41,7 @@ export interface ModalManagerState {
 	registerModalVisible: boolean;
 	createNotebookModalVisible: boolean;
 	verificationModalVisible: boolean;
+	twoFactorAuthModalVisible: boolean;
 }
 
 export interface ModalManagerAction extends Partial<ModalManagerState> {
@@ -48,7 +49,8 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 		| 'loginModal'
 		| 'registerModal'
 		| 'createNotebookModal'
-		| 'verificationModal';
+		| 'verificationModal'
+		| 'twoFactorAuthModal';
 }
 
 export interface EditorState {

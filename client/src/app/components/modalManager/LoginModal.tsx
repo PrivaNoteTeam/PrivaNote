@@ -57,8 +57,8 @@ export function LoginModal() {
 						setFormError(response.formError);
 					} else if (response.success) {
 						modalManagerDispatch({
-							type: 'verificationModal',
-							verificationModalVisible: true
+							type: 'twoFactorAuthModal',
+							twoFactorAuthModalVisible: true
 						});
 					} else {
 						setFormError(unknownError);
