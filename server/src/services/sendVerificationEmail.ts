@@ -43,8 +43,8 @@ const getEmailHtmlContent = (code: string) => `
 	<p>This code expires in 2 hours.</p>
 	<b>What to do if this wasn't you</b>
 	<p>If this wasn't you then <b>do not click the link</b>.</p>
-	<p>Sincerely,</p>
 	<br/>
+	<p>Sincerely,</p>
 	<p>PrivaNote Team</p>
 `;
 
