@@ -1,6 +1,6 @@
 import React from 'react';
 import { ModalLayout } from './Modal';
-import { useModalStore } from '@hooks';
+import { useUserStore, useModalStore } from '@hooks';
 import { TextField } from '@components/TextField';
 import { useForm } from 'react-hook-form';
 import { verifyUser } from '@shared/Api/verifyUser';
@@ -10,6 +10,7 @@ interface VerificationFormValues {
 }
 
 export function VerificiationModal() {
+	const [, userDispatch] = useUserStore();
 	const [, modalManagerDispatch] = useModalStore();
 
 	const {
@@ -30,6 +31,13 @@ export function VerificiationModal() {
 					message: response.fieldError.message
 				});
 				return;
+			}
+
+			if (response.user) {
+				userDispatch({
+					type: 'login',
+					user: response.user
+				});
 			}
 
 			modalManagerDispatch({

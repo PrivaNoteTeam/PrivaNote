@@ -5,9 +5,15 @@ import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { retrieveVerificationCode, verifyUser } from '../database/verifyUser';
-import { retrieveUserByID } from "../database/retrieveUser";
-import { loginFieldValidation, loginAccountValidation } from '../Validation/loginUserValidation';
-import { hasValidAuthCode, deleteAuthCode } from '../database/twoFactorAuthenication';
+import { retrieveUserByID } from '../database/retrieveUser';
+import {
+	loginFieldValidation,
+	loginAccountValidation
+} from '../Validation/loginUserValidation';
+import {
+	hasValidAuthCode,
+	deleteAuthCode
+} from '../database/twoFactorAuthenication';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -27,10 +33,10 @@ export const userController = {
 			res.json({ fieldError: error });
 		}
 
-		const user = await retrieveUserByID(req.ctx!, code!.UseruserID)
+		const user = await retrieveUserByID(req.ctx!, code!.UseruserID);
 		req.session.user = user;
 
-		return res.json({ message: 'Account has been verified!' });
+		return res.json({ user: user });
 	},
 
 	login: async (req: Request, res: Response) => {
@@ -59,7 +65,7 @@ export const userController = {
 		}
 
 		if (await hasValidAuthCode(req.ctx!, user)) {
-			deleteAuthCode(req.ctx!, user)
+			deleteAuthCode(req.ctx!, user);
 		}
 
 		sendVerificationEmail(req.ctx!, user);
@@ -100,5 +106,11 @@ export const userController = {
 
 		// User
 		res.status(200).json({ user: user });
+	},
+
+	logout: async (req: Request, res: Response) => {
+		req.session.user = undefined;
+
+		res.status(200).send({ message: 'Logged out successfully' });
 	}
 };

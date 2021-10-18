@@ -1,5 +1,6 @@
-import { VerificationFormValues } from '@types';
+import { User, VerificationFormValues } from '@types';
 import axios from 'axios';
+
 interface FormError {
 	message: string;
 }
@@ -11,6 +12,7 @@ interface VerificationResponse {
 	message?: string;
 	fieldError?: FieldError;
 	formError?: FormError;
+	user?: User;
 }
 
 export async function verifyUser({ verificationCode }: VerificationFormValues) {

@@ -28,6 +28,14 @@ export interface AppAction extends AppState {
 	type: 'openNotebook' | 'openNote';
 }
 
+export interface UserState {
+	user?: User;
+}
+
+export interface UserAction extends UserState {
+	type: 'login' | 'logout';
+}
+
 export interface ModalManagerState {
 	loginModalVisible: boolean;
 	registerModalVisible: boolean;
