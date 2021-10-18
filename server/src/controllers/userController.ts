@@ -36,7 +36,7 @@ export const userController = {
 		const user = await retrieveUserByID(req.ctx!, code!.UseruserID);
 		req.session.user = user;
 
-		return res.json({ message: 'Account has been verified!' });
+		return res.json({ user: user });
 	},
 
 	login: async (req: Request, res: Response) => {
