@@ -9,7 +9,7 @@ interface UserResponse {
 export async function getUser(){
     return new Promise<UserResponse>((resolve, reject )=>{
        axios 
-       .get('hhtp//locahost:8080/api/user')
+       .get('http://locahost:8080/api/user')
        .then((response) => {
            resolve(response.data as UserResponse)
        }) 
