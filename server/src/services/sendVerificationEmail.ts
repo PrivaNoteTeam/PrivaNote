@@ -4,9 +4,8 @@ import {
 	getTestMessageUrl
 } from 'nodemailer';
 import { createVerificationCode } from '../database/createVerifationCode';
-
-import { v4 as uuid } from 'uuid';
 import { Context, User } from '../types';
+import { customAlphabet } from 'nanoid';
 
 export async function sendVerificationEmail(ctx: Context, user: User) {
 	const privaNoteTestAccount = await createTestAccount();
@@ -37,7 +36,7 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 }
 
 export async function generateVerficationCode(ctx: Context, user: User) {
-	const verificationCode = uuid();
+	const verificationCode = customAlphabet('1234567890abcdef', 6)();
 	await createVerificationCode(ctx, verificationCode, user);
 
 	return verificationCode;
