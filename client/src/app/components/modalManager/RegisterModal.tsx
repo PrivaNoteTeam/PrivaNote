@@ -65,13 +65,13 @@ export function RegisterModal() {
 						setError(response.fieldError.field!, {
 							message: response.fieldError.message
 						});
-					} else if (response.user) {
+					} else if (response.formError) {
+						setFormError(response.formError);
+					} else if (response.success) {
 						modalManagerDispatch({
 							type: 'verificationModal',
 							verificationModalVisible: true
 						});
-					} else if (response.formError) {
-						setFormError(response.formError);
 					} else {
 						setFormError(unknownError);
 					}

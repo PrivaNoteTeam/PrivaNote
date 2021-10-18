@@ -70,7 +70,8 @@ export const userController = {
 		}
 
 		send2FAEmail(req.ctx!, user);
-		res.status(200).json({ user: user });
+
+		res.status(200).json({ success: true });
 	},
 
 	register: async (req: Request, res: Response) => {
@@ -106,17 +107,17 @@ export const userController = {
 		sendVerificationEmail(req.ctx!, user);
 
 		// User
-		res.status(200).json({ user: user });
+		res.status(200).json({ success: true });
 	},
 
 	user: async (req: Request, res: Response) => {
 		if (req.session.user) {
-			res.json({ message: 'not log in' });
+			res.json({ message: 'no authenticated user' });
 
 			return;
 		}
 
-		res.json({ message: 'not log in' });
+		res.json({ user: req.session.user });
 
 		return;
 	},
