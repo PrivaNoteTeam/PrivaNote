@@ -3,6 +3,7 @@ import argon2 from 'argon2';
 import { registerValidation } from '../validation/registerUserValidation';
 import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
+import { send2FAEmail } from '../services/send2FAEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { retrieveVerificationCode, verifyUser } from '../database/verifyUser';
 import { retrieveUserByID } from '../database/retrieveUser';
@@ -68,7 +69,7 @@ export const userController = {
 			deleteAuthCode(req.ctx!, user);
 		}
 
-		sendVerificationEmail(req.ctx!, user);
+		send2FAEmail(req.ctx!, user);
 		res.status(200).json({ user: user });
 	},
 
