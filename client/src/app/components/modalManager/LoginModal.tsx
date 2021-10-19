@@ -38,6 +38,13 @@ export function LoginModal() {
 		});
 	};
 
+	const handleForgotPasswordClick = () => {
+		modalManagerDispatch({
+			type: 'forgotPasswordModal',
+			forgotPasswordModalVisible: true
+		});
+	};
+
 	const submitHandler = useFormHandleSubmit(
 		async ({ email, password }: LoginFormValues) => {
 			const unknownError = { message: 'An unknown error has occurred' };
@@ -53,13 +60,13 @@ export function LoginModal() {
 						setError(response.fieldError.field!, {
 							message: response.fieldError.message
 						});
-					} else if (response.user) {
-						modalManagerDispatch({
-							type: 'verificationModal',
-							verificationModalVisible: true
-						});
 					} else if (response.formError) {
 						setFormError(response.formError);
+					} else if (response.success) {
+						modalManagerDispatch({
+							type: 'twoFactorAuthModal',
+							twoFactorAuthModalVisible: true
+						});
 					} else {
 						setFormError(unknownError);
 					}
@@ -115,14 +122,23 @@ export function LoginModal() {
 							error={errors.password}
 							register={register}
 						/>
-						<div className='flex justify-between items-end'>
-							<a
-								href='#'
-								onClick={handleClick}
-								className='text-blue-500 hover:underline cursor-pointer'
-							>
-								Not registered?
-							</a>
+						<div className='flex justify-between items-center'>
+							<div className='flex flex-col text-sm space-y-1'>
+								<a
+									href='#'
+									onClick={handleForgotPasswordClick}
+									className='text-blue-500 hover:underline cursor-pointer'
+								>
+									Forgot password?
+								</a>
+								<a
+									href='#'
+									onClick={handleClick}
+									className='text-blue-500 hover:underline cursor-pointer'
+								>
+									Create new account
+								</a>
+							</div>
 							<input
 								type='submit'
 								value='Sign in'

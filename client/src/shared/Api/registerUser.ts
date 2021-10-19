@@ -1,8 +1,8 @@
-import { RegisterFormValues, User, FormError, FieldError } from '@types';
+import { RegisterFormValues, FormError, FieldError } from '@types';
 import axios from 'axios';
 
 interface RegisterResponse {
-	user?: User;
+	success?: boolean;
 	fieldError?: FieldError;
 	formError?: FormError;
 }

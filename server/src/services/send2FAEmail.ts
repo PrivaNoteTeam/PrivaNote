@@ -6,7 +6,7 @@ import {
 import { generateCode } from './generateCode';
 import { Context, User } from '../types';
 
-export async function sendVerificationEmail(ctx: Context, user: User) {
+export async function send2FAEmail(ctx: Context, user: User) {
 	const privaNoteTestAccount = await createTestAccount();
 
 	const transporter = createTransport({
@@ -24,7 +24,7 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 	const info = await transporter.sendMail({
 		from: '"PrivaNote 📕" <do.notreply@privanote.com>',
 		to: user.email,
-		subject: 'Verify your email',
+		subject: 'Your two-factor authentication code',
 		text: getEmailTextContent(code),
 		html: getEmailHtmlContent(code)
 	});
@@ -36,14 +36,15 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 
 const getEmailHtmlContent = (code: string) => `
 	<p>Hi,</p>
-	<br/>
-	<p>Complete the registration of your PrivaNote account.</p>
-	<p>Here's your verification code:</p>
+    <br/>
+	<p>You have attempted to log into your PrivaNote account.</p>
+	<p>Here's your authentication code:</p>
 	<b style='text-align:center'>${code}</b>
 	<p>This code expires in 2 hours.</p>
 	<b>What to do if this wasn't you</b>
-	<p>If this wasn't you then <b>do not click the link</b>.</p>
-	<br/>
+	<p>This email was sent automatically by someone trying to log into your PrivaNote account. If this wasn't you, someone else may be trying to gain access to your account.</p>
+	<p>Please contact us immediately by email so we can ensure your data is safe.</p>
+    <br/>
 	<p>Sincerely,</p>
 	<p>PrivaNote Team</p>
 `;
@@ -51,15 +52,17 @@ const getEmailHtmlContent = (code: string) => `
 const getEmailTextContent = (code: string) => `
 	Hi,
 
-	Complete the registration of your PrivaNote account
-	Here's your verification code:
+	You have attempted to log into your PrivaNote account.
+	Here's your authentication code:
 
 	${code}
 
 	This code expires in 2 hours.
 
 	What to do if this wasn't you
-	If this wasn't you then DO NOT click the link.	
+	This email was sent automatically by someone trying to log into your PrivaNote account. If this wasn't you, someone else may be trying to gain access to your account.
+	
+	Please contact us immediately by email so we can ensure your data is safe.
 
 	Sincerely,
 

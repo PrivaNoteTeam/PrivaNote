@@ -50,7 +50,10 @@ const initialModalState: ModalManagerState = {
 	createNotebookModalVisible: false,
 	loginModalVisible: false,
 	registerModalVisible: false,
-	verificationModalVisible: false
+	verificationModalVisible: false,
+	twoFactorAuthModalVisible: false,
+	resetPasswordModalVisible: false,
+	forgotPasswordModalVisible: false
 };
 
 // This reducer resets the state every time so no modal gets stacked
@@ -78,6 +81,21 @@ function modalReducer(
 			return {
 				...initialModalState,
 				verificationModalVisible: action.verificationModalVisible!
+			};
+		case 'twoFactorAuthModal':
+			return {
+				...initialModalState,
+				twoFactorAuthModalVisible: action.twoFactorAuthModalVisible!
+			};
+		case 'forgotPasswordModal':
+			return {
+				...initialModalState,
+				forgotPasswordModalVisible: action.forgotPasswordModalVisible!
+			};
+		case 'resetPasswordModal':
+			return {
+				...initialModalState,
+				resetPasswordModalVisible: action.resetPasswordModalVisible!
 			};
 		default:
 			console.error('Invalid action provided to modal manager reducer.');

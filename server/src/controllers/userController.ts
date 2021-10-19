@@ -3,6 +3,7 @@ import argon2 from 'argon2';
 import { registerValidation } from '../validation/registerUserValidation';
 import { createUser } from '../database/createUser';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
+import { send2FAEmail } from '../services/send2FAEmail';
 import { verifyUserValidation } from '../Validation/verifyUserValidation';
 import { retrieveVerificationCode, verifyUser } from '../database/verifyUser';
 import { retrieveUserByID } from '../database/retrieveUser';
@@ -14,6 +15,9 @@ import {
 	hasValidAuthCode,
 	deleteAuthCode
 } from '../database/twoFactorAuthenication';
+import { getUserByEmail } from '../database/getUserByEmail';
+import { sendForgotPasswordEmail } from '../services/sendForgotPasswordEmail';
+import { updateUserPassword } from '../database/updateUserPassword';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -68,8 +72,9 @@ export const userController = {
 			deleteAuthCode(req.ctx!, user);
 		}
 
-		sendVerificationEmail(req.ctx!, user);
-		res.status(200).json({ user: user });
+		send2FAEmail(req.ctx!, user);
+
+		res.status(200).json({ success: true });
 	},
 
 	register: async (req: Request, res: Response) => {
@@ -105,12 +110,60 @@ export const userController = {
 		sendVerificationEmail(req.ctx!, user);
 
 		// User
-		res.status(200).json({ user: user });
+		res.status(200).json({ success: true });
+	},
+
+	user: async (req: Request, res: Response) => {
+		if (req.session.user) {
+			res.json({ message: 'no authenticated user' });
+
+			return;
+		}
+
+		res.json({ user: req.session.user });
+
+		return;
 	},
 
 	logout: async (req: Request, res: Response) => {
 		req.session.user = undefined;
 
 		res.status(200).send({ message: 'Logged out successfully' });
+	},
+
+	forgotPassword: async (req: Request, res: Response) => {
+		const email = req.body.email;
+
+		const user = await getUserByEmail(req.ctx!, email);
+
+		if (!user) {
+			res.status(200).json({
+				field: 'email',
+				message: 'no account by that email'
+			});
+
+			return;
+		}
+
+		sendForgotPasswordEmail(req.ctx!, user);
+
+		res.status(200).json({ success: true });
+	},
+
+	resetPassword: async (req: Request, res: Response) => {
+		const user = req.session.user;
+
+		const newPassword: string | undefined = req.body.password;
+
+		if (!user || !newPassword) {
+			res.status(200).json({ success: false });
+			return;
+		}
+
+		const successful = await updateUserPassword(req.ctx!, user.userID, {
+			newPassword
+		});
+
+		res.status(200).json({ success: successful });
 	}
 };
