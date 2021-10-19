@@ -42,6 +42,8 @@ export interface ModalManagerState {
 	createNotebookModalVisible: boolean;
 	verificationModalVisible: boolean;
 	twoFactorAuthModalVisible: boolean;
+	forgotPasswordModalVisible: boolean;
+	resetPasswordModalVisible: boolean;
 }
 
 export interface ModalManagerAction extends Partial<ModalManagerState> {
@@ -50,7 +52,9 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 		| 'registerModal'
 		| 'createNotebookModal'
 		| 'verificationModal'
-		| 'twoFactorAuthModal';
+		| 'twoFactorAuthModal'
+		| 'forgotPasswordModal'
+		| 'resetPasswordModal'
 }
 
 export interface EditorState {
@@ -72,6 +76,14 @@ export interface RegisterFormValues {
 export interface LoginFormValues {
 	email: string;
 	password: string;
+}
+
+export interface ForgotPasswordFormValues{
+	email: string;
+}
+
+export interface resetPasswordFormValues{
+	password: string
 }
 
 export interface VerificationFormValues {
