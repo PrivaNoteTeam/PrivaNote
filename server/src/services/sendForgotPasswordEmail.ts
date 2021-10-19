@@ -40,7 +40,7 @@ const getEmailHtmlContent = (code: string) => `
     <p>We received a request to reset the password of your PrivaNote account.</p>
     <br/>
     <p>To reset your password, click on the link below</p>
-    <a href='http://localhost:8080/api/reset-password/${code}'>Reset password</a>
+    <a href='privanote://reset-password/${code}'>Reset password</a>
     <br/>
     <b>Did not request a password reset?</b>
     <p>If you did not request a password reset then do not click the link.</p>
