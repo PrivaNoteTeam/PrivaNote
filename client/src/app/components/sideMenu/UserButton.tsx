@@ -32,7 +32,7 @@ export function UserButton() {
 				</div>
 			:
 				<div className='text-gray-500 hover:text-gray-400'>
-					<LoginIcon onClick={handleClick} className='w-9' width={undefined} height={undefined} />
+					<LoginIcon onClick={handleClick} className='w-9 cursor-pointer' width={undefined} height={undefined} />
 				</div>
 			}
 		
