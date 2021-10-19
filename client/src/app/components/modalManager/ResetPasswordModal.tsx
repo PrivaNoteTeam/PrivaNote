@@ -5,8 +5,9 @@ import * as yup from 'yup';
 import { ModalLayout } from './Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { FormError } from '@types';
+import { FormError, ResetPasswordFormValues } from '@types';
 import { FormBanner } from './FormBanner';
+import { resetPassword } from '@shared/Api/resetPassword';
 
 const validationSchema = yup.object({
 	password: yup.string().required()
@@ -26,8 +27,12 @@ export function ResetPasswordModal() {
 	});
 
 	const submitHandler = useFormHandleSubmit(
-		async ({ password }: { password: string }) => {
-			console.log(password);
+		async ({ password }: ResetPasswordFormValues) => {
+			resetPassword({ password }).then((response) => {
+				if (response.success) {
+					modalManagerDispatch({ type: 'resetPasswordModal', resetPasswordModalVisible: false });
+				}
+			})
 		}
 	);
 

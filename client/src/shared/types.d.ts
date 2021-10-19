@@ -82,7 +82,7 @@ export interface ForgotPasswordFormValues {
 	email: string;
 }
 
-export interface resetPasswordFormValues {
+export interface ResetPasswordFormValues {
 	password: string;
 }
 
