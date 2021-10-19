@@ -10,6 +10,8 @@ import { EditorState, EditorAction } from '../shared/types';
 import { ModalManager } from './components/ModalManager';
 import { SideMenu } from './components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
+import { parseCodeFromUrl } from '@shared/utils/parseCodeFromUrl';
+import { verifyUser } from '@shared/Api/verifyUser';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -61,11 +63,14 @@ export function App() {
 
 		ipcRenderer.removeAllListeners('url-privanote');
 		ipcRenderer.on('url-privanote', (_, url) => {
-			console.log('INSIDE REACT ', url);
-			modalDispatch({
-				type: 'resetPasswordModal',
-				resetPasswordModalVisible: true
-			});
+			// parse code out of url
+			const code = parseCodeFromUrl(url, 'reset-password')
+			// if successful, render reset password
+			verifyUser({ verificationCode: code }).then((response) => {
+				if(response.user){
+					modalDispatch({ type: 'resetPasswordModal', resetPasswordModalVisible: true })
+				}
+			})
 		});
 
 		getUser().then(({ user }) => {
