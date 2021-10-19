@@ -55,7 +55,7 @@ export function App() {
 		ipcRenderer.on('exportNote', () => {
 			ipcRenderer.send('currentFileToExport', currentNote);
 		});
-		
+
 		getUser().then(({ user }) => {
 			if (user)
 				userDispatch({ type: 'login', user })
