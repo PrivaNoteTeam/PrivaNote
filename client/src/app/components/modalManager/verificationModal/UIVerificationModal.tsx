@@ -1,20 +1,27 @@
 import { useModalStore } from '@app/hooks';
 import { VerificationFormValues } from '@types';
 import React from 'react';
-import { DeepMap, DeepPartial, FieldError, UseFormRegister } from 'react-hook-form';
+import {
+	DeepMap,
+	DeepPartial,
+	FieldError,
+	UseFormRegister
+} from 'react-hook-form';
 import { ModalLayout } from '../Modal';
 import { TextField } from '../../TextField';
 
 interface Props {
-    register: UseFormRegister<VerificationFormValues>;
-    handleSubmit: (event: React.BaseSyntheticEvent | undefined) => Promise<void>
-    errors: DeepMap<DeepPartial<VerificationFormValues>, FieldError>
+	register: UseFormRegister<VerificationFormValues>;
+	handleSubmit: (
+		event: React.BaseSyntheticEvent | undefined
+	) => Promise<void>;
+	errors: DeepMap<DeepPartial<VerificationFormValues>, FieldError>;
 }
 
 export function UIVerificationModal({ register, errors, handleSubmit }: Props) {
-    const [, modalManagerDispatch] = useModalStore();
+	const [, modalManagerDispatch] = useModalStore();
 
-    return (
+	return (
 		<ModalLayout
 			close={() => {
 				modalManagerDispatch({

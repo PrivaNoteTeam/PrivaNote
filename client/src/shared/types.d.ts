@@ -54,7 +54,7 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 		| 'verificationModal'
 		| 'twoFactorAuthModal'
 		| 'forgotPasswordModal'
-		| 'resetPasswordModal'
+		| 'resetPasswordModal';
 }
 
 export interface EditorState {
@@ -78,12 +78,12 @@ export interface LoginFormValues {
 	password: string;
 }
 
-export interface ForgotPasswordFormValues{
+export interface ForgotPasswordFormValues {
 	email: string;
 }
 
-export interface resetPasswordFormValues{
-	password: string
+export interface resetPasswordFormValues {
+	password: string;
 }
 
 export interface VerificationFormValues {

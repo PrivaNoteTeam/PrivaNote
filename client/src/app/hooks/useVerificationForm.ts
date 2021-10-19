@@ -1,7 +1,7 @@
-import { useUserStore, useModalStore } from "@hooks";
+import { useUserStore, useModalStore } from '@hooks';
 import { useForm } from 'react-hook-form';
 import { VerificationFormValues } from '@types';
-import { verifyUser } from "@shared/Api/verifyUser";
+import { verifyUser } from '@shared/Api/verifyUser';
 
 export function useVerificationForm() {
 	const [, userDispatch] = useUserStore();
@@ -41,5 +41,5 @@ export function useVerificationForm() {
 		}
 	);
 
-	return { register, errors, handleSubmit }
+	return { register, errors, handleSubmit };
 }

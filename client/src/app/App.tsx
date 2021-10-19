@@ -5,6 +5,7 @@ import { getFileName } from '../shared/utils';
 import { useEffect } from 'react';
 import { useStore, useUserStore } from './hooks';
 import { EditorProvider } from './hooks/contexts/useEditorStore';
+import { useModalStore } from './hooks/contexts/useModalStore';
 import { EditorState, EditorAction } from '../shared/types';
 import { ModalManager } from './components/ModalManager';
 import { SideMenu } from './components/SideMenu';
@@ -24,6 +25,8 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 export function App() {
 	const [{ currentNote }, dispatch] = useStore();
 	const [, userDispatch] = useUserStore();
+	const [, modalDispatch] = useModalStore();
+
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
 
@@ -56,12 +59,19 @@ export function App() {
 			ipcRenderer.send('currentFileToExport', currentNote);
 		});
 
+		ipcRenderer.removeAllListeners('url-privanote');
+		ipcRenderer.on('url-privanote', (_, url) => {
+			console.log('INSIDE REACT ', url);
+			modalDispatch({
+				type: 'resetPasswordModal',
+				resetPasswordModalVisible: true
+			});
+		});
+
 		getUser().then(({ user }) => {
-			if (user)
-				userDispatch({ type: 'login', user })
+			if (user) userDispatch({ type: 'login', user });
 		});
 		// Log in user automatically
-		
 	}, [currentNote]);
 
 	return (

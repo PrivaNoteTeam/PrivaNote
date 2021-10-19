@@ -3,13 +3,13 @@ import React from 'react';
 import { UITwoFactorAuthModal } from './twoFactorAuthModal/UITwoFactorAuthModal';
 
 export function TwoFactorAuthModal() {
-    const { errors, handleSubmit, register } = useVerificationForm();
+	const { errors, handleSubmit, register } = useVerificationForm();
 
-    return (
-        <UITwoFactorAuthModal
-            errors={errors}
-            handleSubmit={handleSubmit}
-            register={register}
-        /> 
-    )
+	return (
+		<UITwoFactorAuthModal
+			errors={errors}
+			handleSubmit={handleSubmit}
+			register={register}
+		/>
+	);
 }
