@@ -15,6 +15,8 @@ import {
 	hasValidAuthCode,
 	deleteAuthCode
 } from '../database/twoFactorAuthenication';
+import { getUserByEmail } from '../database/getUserByEmail';
+import { sendForgotPasswordEmail } from '../services/sendForgotPasswordEmail';
 
 export const userController = {
 	verify: async (req: Request, res: Response) => {
@@ -126,5 +128,26 @@ export const userController = {
 		req.session.user = undefined;
 
 		res.status(200).send({ message: 'Logged out successfully' });
-	}
+	},
+
+	forgotPassword: async (req: Request, res: Response) => {
+		const email = req.body.email;
+
+		const user = await getUserByEmail(req.ctx!, email);
+
+		if (!user) {
+			res.status(200).json({
+				field: 'email',
+				message: 'no account by that email'
+			});
+
+			return;
+		}
+
+		sendForgotPasswordEmail(req.ctx!, user);
+
+		res.status(200).json({ success: true });
+	},
+
+	resetPassword: async (_: Request, __: Response) => {}
 };

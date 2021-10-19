@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FormError } from '@types';
 import { FormBanner } from './FormBanner';
+import { forgetPassword } from '@shared/Api/forgetPassword';
 
 const validationSchema = yup.object({
     email: yup.string().email('Invalid email').required()
@@ -16,19 +17,24 @@ export function ForgotPasswordModal() {
     const [, modalManagerDispatch] = useModalStore();
     const [formError] = useState<FormError | undefined>();
 
-    const { register, formState: {errors}, handleSubmit: useFormHandleSubmit} = useForm<{ email: string}>({
+    const { register, formState: {errors}, setError, handleSubmit: useFormHandleSubmit} = useForm<{ email: string}>({
         mode: 'onBlur',
         resolver: yupResolver(validationSchema)
     })
 
     const submitHandler = useFormHandleSubmit(
         async ({ email }: { email: string }) => {
-            console.log(email);
-            //temporary
-            modalManagerDispatch({
-                type: 'resetPasswordModal',
-                resetPasswordModalVisible: true
-            })
+            forgetPassword({ email })
+                .then((response) => {
+                    if (response.success) {
+                        modalManagerDispatch({
+                            type: 'resetPasswordModal',
+                            resetPasswordModalVisible: true
+                        })
+                    } else if (response.fieldError) {
+                        setError('email', { message: response.fieldError.message })
+                    }
+                })
         }
     )
 
