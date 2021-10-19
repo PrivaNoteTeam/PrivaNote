@@ -9,11 +9,21 @@ const handleReady = () => {
 
 app.on('ready', handleReady);
 
-let link: string;
-app.on('open-url',(event, data) => {
-	event.preventDefault();
-	link = data;
-});
-app.setAsDefaultProtocolClient('privanote')
+let deepLinkingUrl: any;
 
-export const getLink = () => link;
+if (process.platform === 'win32') {
+	deepLinkingUrl = process.argv.slice(1);
+}
+
+if (!app.isDefaultProtocolClient('privanote')) {
+	app.setAsDefaultProtocolClient('privanote');
+}
+
+app.on('will-finish-launching', () => {
+	app.on('open-url',(event, url) => {
+		event.preventDefault();
+		deepLinkingUrl = url;
+	});
+})
+
+export const getLink = () => deepLinkingUrl;
