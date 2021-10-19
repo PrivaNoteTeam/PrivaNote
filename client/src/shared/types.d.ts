@@ -78,6 +78,14 @@ export interface LoginFormValues {
 	password: string;
 }
 
+export interface ForgotPasswordFormValues{
+	email: string;
+}
+
+export interface resetPasswordFormValues{
+	password: string
+}
+
 export interface VerificationFormValues {
 	verificationCode: string;
 }
