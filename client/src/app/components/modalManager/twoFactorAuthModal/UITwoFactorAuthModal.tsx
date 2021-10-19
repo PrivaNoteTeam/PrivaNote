@@ -1,21 +1,31 @@
-
 import { useModalStore } from '@app/hooks';
 import { VerificationFormValues } from '@types';
 import React from 'react';
-import { DeepMap, DeepPartial, FieldError, UseFormRegister } from 'react-hook-form';
+import {
+	DeepMap,
+	DeepPartial,
+	FieldError,
+	UseFormRegister
+} from 'react-hook-form';
 import { ModalLayout } from '../Modal';
 import { TextField } from '../../TextField';
 
 interface Props {
-    register: UseFormRegister<VerificationFormValues>;
-    handleSubmit: (event: React.BaseSyntheticEvent | undefined) => Promise<void>
-    errors: DeepMap<DeepPartial<VerificationFormValues>, FieldError>
+	register: UseFormRegister<VerificationFormValues>;
+	handleSubmit: (
+		event: React.BaseSyntheticEvent | undefined
+	) => Promise<void>;
+	errors: DeepMap<DeepPartial<VerificationFormValues>, FieldError>;
 }
 
-export function UITwoFactorAuthModal({ register, errors, handleSubmit }: Props) {
-    const [, modalManagerDispatch] = useModalStore();
+export function UITwoFactorAuthModal({
+	register,
+	errors,
+	handleSubmit
+}: Props) {
+	const [, modalManagerDispatch] = useModalStore();
 
-    return (
+	return (
 		<ModalLayout
 			close={() => {
 				modalManagerDispatch({
@@ -27,14 +37,15 @@ export function UITwoFactorAuthModal({ register, errors, handleSubmit }: Props) 
 			<form onSubmit={handleSubmit} className='w-80 space-y-8'>
 				<div className='space-y-3'>
 					<h2 className='text-center text-2xl text-white select-none'>
-						Verify your identity 
+						Verify your identity
 					</h2>
 					<p className='text-gray-500 text-xs break-words text-center select-none'>
 						Put in the code which was{' '}
 						<span className='text-gray-400'>
 							sent to your email
 						</span>
-						. This code will give you access to your PrivaNote account.
+						. This code will give you access to your PrivaNote
+						account.
 					</p>
 				</div>
 				<div className='form-inner'>

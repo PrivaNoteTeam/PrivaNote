@@ -1,29 +1,20 @@
 import axios from 'axios';
-import { FieldError, resetPasswordFormValues } from '@types';
+import { ResetPasswordFormValues } from '@types';
 
-
-interface resetPasswordResponse{
-    success?: boolean;
-    fieldError?: FieldError;
+interface ResetPasswordResponse {
+	success?: boolean;
 }
 
-export async function resetPassword({password}: resetPasswordFormValues){
-
-    return new Promise<resetPasswordResponse>((resolve, reject) => {
-
-        axios
-
-        .post('http://localhost:8080/api/forgot-password',{password})
-        .then((response) => {
-            resolve(response.data as resetPasswordResponse);
-
-           
-        })
-
-        .catch((err) => {
-            console.error(err);
-            reject(err);
-        });
-    })
-    
+export async function resetPassword({ password }: ResetPasswordFormValues) {
+	return new Promise<ResetPasswordResponse>((resolve, reject) => {
+		axios
+			.post('http://localhost:8080/api/reset-password', { password })
+			.then((response) => {
+				resolve(response.data as ResetPasswordResponse);
+			})
+			.catch((err) => {
+				console.error(err);
+				reject(err);
+			});
+	});
 }

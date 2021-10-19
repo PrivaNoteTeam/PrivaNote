@@ -39,8 +39,11 @@ export function LoginModal() {
 	};
 
 	const handleForgotPasswordClick = () => {
-		modalManagerDispatch({ type: 'forgotPasswordModal', forgotPasswordModalVisible: true });
-	}
+		modalManagerDispatch({
+			type: 'forgotPasswordModal',
+			forgotPasswordModalVisible: true
+		});
+	};
 
 	const submitHandler = useFormHandleSubmit(
 		async ({ email, password }: LoginFormValues) => {

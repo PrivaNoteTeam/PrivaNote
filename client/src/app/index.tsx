@@ -96,7 +96,7 @@ function modalReducer(
 			return {
 				...initialModalState,
 				resetPasswordModalVisible: action.resetPasswordModalVisible!
-			}	
+			};
 		default:
 			console.error('Invalid action provided to modal manager reducer.');
 			return state;

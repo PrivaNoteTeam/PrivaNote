@@ -1,6 +1,6 @@
 import { app } from 'electron';
 import { registerIpcHandlers } from './ipc';
-import { createMainWindow  } from './windows';
+import { createMainWindow, getMainWindow } from './windows';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -22,11 +22,13 @@ if (!app.isDefaultProtocolClient('privanote')) {
 }
 
 app.on('will-finish-launching', () => {
-	app.on('open-url',(event, url) => {
+	app.on('open-url', (event, url) => {
 		event.preventDefault();
-		deepLinkingUrl = url;
+		console.log(url);
+		getMainWindow().webContents.send('url-privanote', url);
 
+		deepLinkingUrl = url;
 	});
-})
+});
 
 export const getLink = () => deepLinkingUrl;
