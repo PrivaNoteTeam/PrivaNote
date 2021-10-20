@@ -24,5 +24,12 @@ describe('generateCode service', () => {
         const result = await generateCode(ctx, user);
         
         expect(result.length).toBe(6);
+    });
+
+    test('generates a random "unique" code', async () => {
+        const firstResult = await generateCode(ctx, user);
+        const secondResult = await generateCode(ctx, user);
+
+        expect(firstResult).not.toMatch(secondResult);
     })
 });
