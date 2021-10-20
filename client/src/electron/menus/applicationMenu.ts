@@ -85,15 +85,10 @@ const template: MenuItemConstructorOptions[] = [
 	{
 		label: 'Edit',
 		submenu: [
-			{
-				label: 'Copy'
-			},
-			{
-				label: 'Pase'
-			},
-			{
-				label: 'Cut'
-			}
+			{ label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+			{ label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
+			{ label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+			{ type: 'separator' }
 		]
 	},
 	{

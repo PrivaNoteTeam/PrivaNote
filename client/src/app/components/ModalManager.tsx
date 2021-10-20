@@ -4,10 +4,22 @@ import { RegisterModal } from './modalManager/RegisterModal';
 import { CreateNotebookModal } from './CreateNotebookModal';
 import { ipcRenderer } from 'electron';
 import { useModalStore } from '../hooks';
+import { VerificiationModal } from './modalManager/VerificationModal';
+import { TwoFactorAuthModal } from './modalManager/TwoFactorAuthModal';
+import { ForgotPasswordModal } from './modalManager/ForgotPasswordModal';
+import { ResetPasswordModal } from './modalManager/ResetPasswordModal';
 
 export function ModalManager() {
 	const [
-		{ loginModalVisible, registerModalVisible, createNotebookModalVisible },
+		{
+			loginModalVisible,
+			registerModalVisible,
+			createNotebookModalVisible,
+			verificationModalVisible,
+			twoFactorAuthModalVisible,
+			forgotPasswordModalVisible,
+			resetPasswordModalVisible
+		},
 		modalManagerDispatch
 	] = useModalStore();
 
@@ -26,6 +38,14 @@ export function ModalManager() {
 		render = <RegisterModal />;
 	} else if (createNotebookModalVisible) {
 		render = <CreateNotebookModal />;
+	} else if (verificationModalVisible) {
+		render = <VerificiationModal />;
+	} else if (twoFactorAuthModalVisible) {
+		render = <TwoFactorAuthModal />;
+	} else if (forgotPasswordModalVisible) {
+		render = <ForgotPasswordModal />;
+	} else if (resetPasswordModalVisible) {
+		render = <ResetPasswordModal />;
 	}
 
 	return render;

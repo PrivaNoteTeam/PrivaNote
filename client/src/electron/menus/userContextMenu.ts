@@ -1,18 +1,22 @@
-import { MenuItemConstructorOptions, Menu } from 'electron';
+import { MenuItemConstructorOptions } from 'electron';
+import { logoutUser } from '@shared/api/logoutUser';
 
 const template: MenuItemConstructorOptions[] = [
-	{ label: 'johndoe@privanote.com' },
+	{
+		label: '',
+		id: 'user-email'
+	},
 	{ type: 'separator' },
 	{
 		label: 'Sign Out',
-		click(_, window) {
-			console.log('leet');
+		click: async (_, window) => {
 			if (!window) return;
-			window.webContents.send('signOut');
+			await logoutUser();
+			window.webContents.send('logout');
 		}
 	}
 ];
 
-const userContextMenu = Menu.buildFromTemplate(template);
+const userContextMenuTemplate = template;
 
-export { userContextMenu };
+export { userContextMenuTemplate };

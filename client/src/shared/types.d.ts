@@ -1,5 +1,4 @@
 import { Dispatch } from 'react';
-
 export interface FileSystemItem {
 	name: string;
 	path: string;
@@ -29,14 +28,33 @@ export interface AppAction extends AppState {
 	type: 'openNotebook' | 'openNote';
 }
 
+export interface UserState {
+	user?: User;
+}
+
+export interface UserAction extends UserState {
+	type: 'login' | 'logout';
+}
+
 export interface ModalManagerState {
 	loginModalVisible: boolean;
 	registerModalVisible: boolean;
 	createNotebookModalVisible: boolean;
+	verificationModalVisible: boolean;
+	twoFactorAuthModalVisible: boolean;
+	forgotPasswordModalVisible: boolean;
+	resetPasswordModalVisible: boolean;
 }
 
 export interface ModalManagerAction extends Partial<ModalManagerState> {
-	type: 'loginModal' | 'registerModal' | 'createNotebookModal';
+	type:
+		| 'loginModal'
+		| 'registerModal'
+		| 'createNotebookModal'
+		| 'verificationModal'
+		| 'twoFactorAuthModal'
+		| 'forgotPasswordModal'
+		| 'resetPasswordModal';
 }
 
 export interface EditorState {
@@ -47,4 +65,47 @@ export interface EditorState {
 
 export interface EditorAction extends EditorState {
 	type: 'primarySelect' | 'secondarySelect' | 'rename';
+}
+
+export interface RegisterFormValues {
+	email: string;
+	password: string;
+	confirmPassword: string;
+}
+
+export interface LoginFormValues {
+	email: string;
+	password: string;
+}
+
+export interface ForgotPasswordFormValues {
+	email: string;
+}
+
+export interface ResetPasswordFormValues {
+	password: string;
+}
+
+export interface VerificationFormValues {
+	verificationCode: string;
+}
+
+export interface FormError {
+	message: string;
+}
+
+export interface User {
+	userID: number;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+	verified: boolean;
+}
+
+export interface FormError {
+	message: string;
+}
+
+export interface FieldError extends FormError {
+	field: string;
 }
