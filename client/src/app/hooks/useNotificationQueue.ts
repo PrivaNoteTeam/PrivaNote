@@ -20,7 +20,17 @@ export function useNotificationQueue() {
 		setNotifications([...notifications, { ...notification, id }]);
 	};
 
-	const getNotifications = () => notifications;
+	const getNotifications = () => {
+		const notificationsWithoutId = notifications.map(
+			(trackedNotification) => {
+				const { id, ...notificationWithoutId } = trackedNotification;
+
+				return notificationWithoutId;
+			}
+		);
+
+		return notificationsWithoutId;
+	};
 
 	useEffect(() => {
 		setTimeout(() => {
