@@ -95,6 +95,7 @@ export function App() {
 				initialState={{ isRenaming: false }}
 				reducer={editorReducer}
 			>
+				{/* Place notification queue component here */}
 				<EditorPanel />
 			</EditorProvider>
 			<ModalManager />
