@@ -9,7 +9,6 @@ import { ModalManager } from '@components/ModalManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { verifyUser } from '@shared/Api/verifyUser';
-import { NotificationArea } from '@components/NotificationArea';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -87,16 +86,17 @@ export function App() {
 	}, [currentNote]);
 
 	return (
-		<div className='bg-gray-800 w-screen h-screen flex'>
-			<SideMenu />
-			<EditorProvider
-				initialState={{ isRenaming: false }}
-				reducer={editorReducer}
-			>
-				<NotificationArea />
-				<EditorPanel />
-			</EditorProvider>
-			<ModalManager />
-		</div>
+		<>
+			<div className='bg-gray-800 w-screen h-screen flex'>
+				<SideMenu />
+				<EditorProvider
+					initialState={{ isRenaming: false }}
+					reducer={editorReducer}
+				>
+					<EditorPanel />
+				</EditorProvider>
+				<ModalManager />
+			</div>
+		</>
 	);
 }

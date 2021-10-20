@@ -21,8 +21,13 @@ export function NotificationBanner({ message, style }: Props) {
 	}
 
 	return (
-		<div className={`${colors} flex border w-full p-1`}>
-			<p className='flex-grow' data-testid='notification-banner-p'>
+		<div
+			className={`${colors} w-full text-center backdrop-blur-md bg-opacity-50 border rounded-md p-1`}
+		>
+			<p
+				className='flex-grow text-white text-sm'
+				data-testid='notification-banner-p'
+			>
 				{message}
 			</p>
 		</div>

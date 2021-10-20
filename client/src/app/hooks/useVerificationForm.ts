@@ -2,12 +2,12 @@ import { useUserStore, useModalStore } from '@hooks';
 import { useForm } from 'react-hook-form';
 import { VerificationFormValues } from '@types';
 import { verifyUser } from '@shared/Api/verifyUser';
-import { useNotificationQueue } from './useNotificationQueue';
+import { useNotificationQueue } from '@hooks';
 
 export function useVerificationForm() {
 	const [, userDispatch] = useUserStore();
 	const [, modalManagerDispatch] = useModalStore();
-	const { notify } = useNotificationQueue();
+	const [, notify] = useNotificationQueue();
 
 	const {
 		register,

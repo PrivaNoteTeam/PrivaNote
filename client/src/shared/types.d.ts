@@ -109,3 +109,10 @@ export interface FormError {
 export interface FieldError extends FormError {
 	field: string;
 }
+
+export interface Notification {
+	message: string;
+	style: 'success' | 'neutral' | 'error';
+}
+
+export type NotificationState = Notification[];

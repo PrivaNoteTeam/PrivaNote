@@ -9,7 +9,12 @@ import {
 	UserState,
 	UserAction
 } from '@types';
-import { StoreProvider, ModalProvider, UserProvider } from './hooks/contexts';
+import {
+	StoreProvider,
+	ModalProvider,
+	UserProvider,
+	NotificationProvider
+} from '@hooks';
 import { App } from './App';
 
 const initialAppState: AppState = {};
@@ -106,12 +111,14 @@ function modalReducer(
 const tree = (
 	<StoreProvider initialState={initialAppState} reducer={storeReducer}>
 		<UserProvider initialState={initialUserState} reducer={userReducer}>
-			<ModalProvider
-				initialState={initialModalState}
-				reducer={modalReducer}
-			>
-				<App />
-			</ModalProvider>
+			<NotificationProvider>
+				<ModalProvider
+					initialState={initialModalState}
+					reducer={modalReducer}
+				>
+					<App />
+				</ModalProvider>
+			</NotificationProvider>
 		</UserProvider>
 	</StoreProvider>
 );
