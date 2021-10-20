@@ -29,7 +29,10 @@ export function UIBreadcrumb({
 	});
 
 	return (
-		<div className='bg-gray-900 pn-drop-shadow flex py-1 px-4'>
+		<div
+			className='bg-gray-900 pn-drop-shadow flex py-1 px-4'
+			data-testid='ui-breadcrumb'
+		>
 			{render}
 		</div>
 	);
