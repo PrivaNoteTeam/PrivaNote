@@ -9,13 +9,13 @@ module.exports = {
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/$1',
 		'@types': ['<rootDir>/src/shared/types.d.ts'],
-		'@app/*': ['<rootDir>/src/app/*'],
+		'@app(.*)$': ['<rootDir>/src/app/$1'],
 		'@hooks': ['<rootDir>/src/app/hooks/index.ts'],
-		'@components/*': ['<rootDir>/src/app/components/*'],
-		'@assets/*': ['<rootDir>/src/app/assets/*'],
-		'@shared/*': ['<rootDir>/src/shared/*'],
+		'@components(.*)$': ['<rootDir>/src/app/components/$1'],
+		'@assets(.*)$': ['<rootDir>/src/app/assets/$1'],
+		'@shared(.*)$': ['<rootDir>/src/shared/$1'],
 		'@utils': ['<rootDir>/src/shared/utils/index.ts'],
-		'@electron/*': ['<rootDir>/src/electron/*']
+		'@electron(.*)$': ['<rootDir>/src/electron/$1']
 	},
 	testMatch: [
 		'<rootDir>/**/*.test.(js|jsx|ts|tsx)',

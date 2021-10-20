@@ -8,7 +8,7 @@ describe('NotificationBanner component', () => {
 	test('renders without crashing', () => {
 		const props: NotificationBannerProps = {
 			message: 'testing notification banner',
-			type: 'neutral'
+			style: 'neutral'
 		};
 
 		const result = render(<NotificationBanner {...props} />);
@@ -19,7 +19,7 @@ describe('NotificationBanner component', () => {
 	test('renders text from message prop', async () => {
 		const props: NotificationBannerProps = {
 			message: 'testing notification banner',
-			type: 'neutral'
+			style: 'neutral'
 		};
 
 		const { getByTestId } = render(<NotificationBanner {...props} />);
@@ -32,9 +32,9 @@ describe('NotificationBanner component', () => {
 	test('renders notification in the correct color', () => {
 		const { container } = render(
 			<>
-				<NotificationBanner message='neutral' type='neutral' />
-				<NotificationBanner message='success' type='success' />
-				<NotificationBanner message='error' type='error' />
+				<NotificationBanner message='neutral' style='neutral' />
+				<NotificationBanner message='success' style='success' />
+				<NotificationBanner message='error' style='error' />
 			</>
 		);
 

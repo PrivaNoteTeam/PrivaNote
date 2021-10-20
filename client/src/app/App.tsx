@@ -1,17 +1,15 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
-import { EditorPanel } from './components/EditorPanel';
-import { getFileName } from '../shared/utils';
+import { EditorPanel } from '@components/EditorPanel';
+import { parseCodeFromUrl, getFileName } from '@utils';
 import { useEffect } from 'react';
-import { useStore, useUserStore } from './hooks';
-import { EditorProvider } from './hooks/contexts/useEditorStore';
-import { useModalStore } from './hooks/contexts/useModalStore';
-import { EditorState, EditorAction } from '../shared/types';
-import { ModalManager } from './components/ModalManager';
-import { SideMenu } from './components/SideMenu';
+import { useStore, useUserStore, useModalStore, EditorProvider } from '@hooks';
+import { EditorState, EditorAction } from '@types';
+import { ModalManager } from '@components/ModalManager';
+import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
-import { parseCodeFromUrl } from '@shared/utils/parseCodeFromUrl';
 import { verifyUser } from '@shared/Api/verifyUser';
+import { NotificationArea } from '@components/NotificationArea';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -95,7 +93,7 @@ export function App() {
 				initialState={{ isRenaming: false }}
 				reducer={editorReducer}
 			>
-				{/* Place notification queue component here */}
+				<NotificationArea />
 				<EditorPanel />
 			</EditorProvider>
 			<ModalManager />
