@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import CloseIcon from '@assets/icons/close.svg';
 
 interface Props {
 	message: string;
@@ -7,6 +8,7 @@ interface Props {
 
 export function NotificationBanner({ message, style }: Props) {
 	let colors: string;
+	const [hidden, setHidden] = useState<boolean>(false);
 
 	switch (style) {
 		case 'success':
@@ -20,16 +22,25 @@ export function NotificationBanner({ message, style }: Props) {
 			break;
 	}
 
+	const handleCloseClick = () => {
+		setHidden(true);
+	};
+
 	return (
-		<div
-			className={`${colors} w-full text-center backdrop-blur-md bg-opacity-50 border rounded-md p-1`}
-		>
-			<p
-				className='flex-grow text-white text-sm'
-				data-testid='notification-banner-p'
-			>
-				{message}
-			</p>
-		</div>
+		<>
+			{!hidden ? (
+				<div
+					className={`${colors} flex w-full text-center backdrop-blur-md bg-opacity-50 border rounded-md p-1`}
+				>
+					<p
+						className='flex-grow text-white text-sm'
+						data-testid='notification-banner-p'
+					>
+						{message}
+					</p>
+					<CloseIcon onClick={handleCloseClick} fill='#FFF' />
+				</div>
+			) : null}
+		</>
 	);
 }

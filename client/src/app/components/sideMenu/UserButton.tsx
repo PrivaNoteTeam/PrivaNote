@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import UserCircleIcon from '../../assets/icons/user-circle.svg';
 import LoginIcon from '@assets/icons/log-in.svg';
 import { ipcRenderer } from 'electron';
-import { useUserStore, useModalStore } from '@hooks';
+import { useUserStore, useModalStore, useNotificationQueue } from '@hooks';
 
 export function UserButton() {
 	const [{ loginModalVisible }, modalManagerDispatch] = useModalStore();
 	const [{ user }, userDispatch] = useUserStore();
+	const [, notify] = useNotificationQueue();
+
 	const handleClick = () => {
 		if (!user) {
 			modalManagerDispatch({
@@ -21,6 +23,10 @@ export function UserButton() {
 	useEffect(() => {
 		ipcRenderer.on('logout', () => {
 			userDispatch({ type: 'logout' });
+			notify({
+				message: 'Successfully signed out of your account',
+				style: 'success'
+			});
 		});
 	}, [user]);
 

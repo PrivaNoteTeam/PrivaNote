@@ -22,7 +22,7 @@ export const NotificationProvider = ({ children }: PropsWithChildren<{}>) => {
 		[notifications, notify]
 	);
 
-	const duration = 5000;
+	const duration = 10000;
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
