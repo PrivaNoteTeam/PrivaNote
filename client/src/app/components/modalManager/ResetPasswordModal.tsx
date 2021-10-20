@@ -30,9 +30,12 @@ export function ResetPasswordModal() {
 		async ({ password }: ResetPasswordFormValues) => {
 			resetPassword({ password }).then((response) => {
 				if (response.success) {
-					modalManagerDispatch({ type: 'resetPasswordModal', resetPasswordModalVisible: false });
+					modalManagerDispatch({
+						type: 'resetPasswordModal',
+						resetPasswordModalVisible: false
+					});
 				}
-			})
+			});
 		}
 	);
 

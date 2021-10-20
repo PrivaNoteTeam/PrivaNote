@@ -7,7 +7,15 @@ module.exports = {
 		'.(ts|tsx|jsx|js)?$': 'babel-jest'
 	},
 	moduleNameMapper: {
-		'^@/(.*)$': '<rootDir>/$1'
+		'^@/(.*)$': '<rootDir>/$1',
+		'@types': ['<rootDir>/src/shared/types.d.ts'],
+		'@app/*': ['<rootDir>/src/app/*'],
+		'@hooks': ['<rootDir>/src/app/hooks/index.ts'],
+		'@components/*': ['<rootDir>/src/app/components/*'],
+		'@assets/*': ['<rootDir>/src/app/assets/*'],
+		'@shared/*': ['<rootDir>/src/shared/*'],
+		'@utils': ['<rootDir>/src/shared/utils/index.ts'],
+		'@electron/*': ['<rootDir>/src/electron/*']
 	},
 	testMatch: [
 		'<rootDir>/**/*.test.(js|jsx|ts|tsx)',

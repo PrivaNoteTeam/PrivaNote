@@ -3,8 +3,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { UIBreadcrumb } from './UIBreadcrumb';
 import { useBreadcrumb } from './useBreadcrumb';
-import { StoreProvider } from '../../../../hooks/contexts';
-import { AppState } from '../../../../types';
+import { StoreProvider } from '@hooks';
+import { AppState } from '@types';
 
 type UIComponentProps = React.ComponentProps<typeof UIBreadcrumb>;
 
