@@ -12,11 +12,11 @@ export function useNotificationQueue() {
 	const [notifications, setNotifications] = useState<TrackedNotification[]>(
 		[]
 	);
+
 	const duration = 5000;
 
 	const notify = (notification: Notification) => {
 		const id = nanoid();
-
 		setNotifications([...notifications, { ...notification, id }]);
 	};
 
@@ -33,9 +33,12 @@ export function useNotificationQueue() {
 	};
 
 	useEffect(() => {
-		setTimeout(() => {
+		const timer = setTimeout(() => {
 			notifications.shift();
+			setNotifications(notifications);
 		}, duration);
+
+		return () => clearTimeout(timer);
 	}, [notifications]);
 
 	return { notify, getNotifications };
