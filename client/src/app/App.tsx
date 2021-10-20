@@ -64,17 +64,22 @@ export function App() {
 		ipcRenderer.removeAllListeners('url-privanote');
 		ipcRenderer.on('url-privanote', (_, url) => {
 			// parse code out of url
-			const code = parseCodeFromUrl(url, 'resetPassword')
+			const code = parseCodeFromUrl(url, 'resetPassword');
 			// if successful, render reset password
-			verifyUser({ verificationCode: code }).then((response) => {
-				console.log(code);
-				console.log(response);
-				if(response.user){
-					modalDispatch({ type: 'resetPasswordModal', resetPasswordModalVisible: true })
-				}
-			}).catch((err) => {
-				console.error(err);
-			})
+			verifyUser({ verificationCode: code })
+				.then((response) => {
+					console.log(code);
+					console.log(response);
+					if (response.user) {
+						modalDispatch({
+							type: 'resetPasswordModal',
+							resetPasswordModalVisible: true
+						});
+					}
+				})
+				.catch((err) => {
+					console.error(err);
+				});
 		});
 
 		getUser().then(({ user }) => {

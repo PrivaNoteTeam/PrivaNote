@@ -1,6 +1,6 @@
 import mock from 'mock-fs';
 import fs from 'fs';
-import { FileItem } from 'src/types';
+import { FileItem } from '@types';
 import { saveFile } from '../saveFile';
 
 describe.skip('saveFile utility function', () => {
