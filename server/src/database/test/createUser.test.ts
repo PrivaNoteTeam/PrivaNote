@@ -11,27 +11,29 @@ describe('createUser database operator', () => {
         ctx = mockCtx as unknown as Context;
     });
 
+    const sampleUserData: CreateUserData = {
+        email: 'john.doe@email.com',
+        password: 'Password123!'
+    }
+
     test.skip('creates a user', async () => {
-        const data: CreateUserData = {
-            email: 'john.doe@email.com',
-            password: 'Password123!'
-        }
-        
-        const result = await createUser(ctx, data);
+        const result = createUser(ctx, sampleUserData);
 
         expect(ctx.prisma.user.create).toHaveBeenCalled();
-        expect(result).resolves.toBeTruthy()
+        expect(result).resolves.toHaveProperty('email');
     });
 
     test('does not create a user which has an already taken email', async () => {
-        const data: CreateUserData = {
-            email: 'john.doe@email.com',
-            password: 'Password123'
-        }
+        await createUser(ctx, sampleUserData);
+        const result = createUser(ctx, sampleUserData);
 
-        await createUser(ctx, data);
-        const result = await createUser(ctx, data);
+        expect(result).resolves.toBeUndefined();
+    });
 
-        expect(result).toBeUndefined();
-    })
+    test('does not return password for security purposes', async () => {
+        const result = createUser(ctx, sampleUserData);
+
+       expect(result).resolves.not.toBeUndefined();
+       expect(result).resolves.not.toHaveProperty('password');
+    });
 })
