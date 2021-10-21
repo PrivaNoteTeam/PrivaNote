@@ -2,6 +2,8 @@ import { Context, MockContext, CreateUserData } from '../../types';
 import { createMockContext} from '../../mocks/createMockContext';
 import { createUser } from '../createUser';
 
+// These tests are passing as false positives - the functions are returning 'undefined'.
+
 describe('createUser database operator', () => {
     let ctx: Context;
     let mockCtx: MockContext;
