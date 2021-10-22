@@ -1,16 +1,13 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
-import { EditorPanel } from './components/EditorPanel';
-import { getFileName } from '../shared/utils';
+import { EditorPanel } from '@components/EditorPanel';
+import { parseCodeFromUrl, getFileName } from '@utils';
 import { useEffect } from 'react';
-import { useStore, useUserStore } from './hooks';
-import { EditorProvider } from './hooks/contexts/useEditorStore';
-import { useModalStore } from './hooks/contexts/useModalStore';
-import { EditorState, EditorAction } from '../shared/types';
-import { ModalManager } from './components/ModalManager';
-import { SideMenu } from './components/SideMenu';
+import { useStore, useUserStore, useModalStore, EditorProvider } from '@hooks';
+import { EditorState, EditorAction } from '@types';
+import { ModalManager } from '@components/ModalManager';
+import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
-import { parseCodeFromUrl } from '@shared/utils/parseCodeFromUrl';
 import { verifyUser } from '@shared/Api/verifyUser';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
@@ -89,15 +86,17 @@ export function App() {
 	}, [currentNote]);
 
 	return (
-		<div className='bg-gray-800 w-screen h-screen flex'>
-			<SideMenu />
-			<EditorProvider
-				initialState={{ isRenaming: false }}
-				reducer={editorReducer}
-			>
-				<EditorPanel />
-			</EditorProvider>
-			<ModalManager />
-		</div>
+		<>
+			<div className='bg-gray-800 w-screen h-screen flex'>
+				<SideMenu />
+				<EditorProvider
+					initialState={{ isRenaming: false }}
+					reducer={editorReducer}
+				>
+					<EditorPanel />
+				</EditorProvider>
+				<ModalManager />
+			</div>
+		</>
 	);
 }

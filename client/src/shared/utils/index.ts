@@ -13,3 +13,4 @@ export { isFile } from './fileSystem/isFile';
 export { renameExplorerItem } from './fileSystem/renameExplorerItem';
 export { saveFile } from './fileSystem/saveFile';
 export { useRelativePath } from './fileSystem/useRelativePath';
+export { parseCodeFromUrl } from './parseCodeFromUrl';
