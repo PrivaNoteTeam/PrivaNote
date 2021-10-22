@@ -33,17 +33,19 @@ export function UserButton() {
 	return (
 		<>
 			{user ? (
-				<div className='text-gray-500 hover:text-gray-400'>
+				<div className='text-gray-500 hover:text-gray-400 cursor-pointer'>
 					<UserCircleIcon
 						onClick={handleClick}
-						className='cursor-pointer'
+						className='cursor-pointer w-8'
+						width={undefined}
+						height={undefined}
 					/>
 				</div>
 			) : (
-				<div className='text-gray-500 hover:text-gray-400'>
+				<div className='text-gray-500 hover:text-gray-400 cursor-pointer'>
 					<LoginIcon
 						onClick={handleClick}
-						className='w-9 cursor-pointer'
+						className='w-8'
 						width={undefined}
 						height={undefined}
 					/>
