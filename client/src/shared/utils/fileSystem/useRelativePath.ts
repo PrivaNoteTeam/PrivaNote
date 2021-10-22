@@ -4,6 +4,12 @@
  */
 
 export const useRelativePath = (base: string, fullPath: string) => {
+	if (base === '' || fullPath === '') {
+		return () => {
+			throw new Error('base or fullPath is empty');
+		};
+	}
+
 	while (base.indexOf('/') != -1) {
 		base = base.replace('/', '');
 	}
