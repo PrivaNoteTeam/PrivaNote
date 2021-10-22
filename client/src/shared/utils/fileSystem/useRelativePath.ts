@@ -4,4 +4,4 @@
  */
 
 export const useRelativePath = (base: string, fullPath: string) =>
-	fullPath.substr(base.length + 1);
+	fullPath.substr(fullPath.indexOf(base));
