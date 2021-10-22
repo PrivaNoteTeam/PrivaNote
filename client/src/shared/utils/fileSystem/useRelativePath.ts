@@ -3,5 +3,10 @@
  * 	@param fullPath The absolute path of the file system item
  */
 
-export const useRelativePath = (base: string, fullPath: string) =>
-	fullPath.substr(fullPath.indexOf(base));
+export const useRelativePath = (base: string, fullPath: string) => {
+	while (base.indexOf('/') != -1) {
+		base = base.replace('/', '');
+	}
+
+	return fullPath.substr(fullPath.indexOf(base));
+};
