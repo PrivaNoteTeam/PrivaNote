@@ -9,7 +9,8 @@ import React, {
 import { PageManagerState, PageManagerAction } from '@types';
 
 const initialState: PageManagerState = {
-	cloudProviderPageVisible: false
+	cloudProviderPageVisible: false,
+	selectCloudProviderPageVisible: false
 };
 
 const reducer = (
@@ -22,7 +23,15 @@ const reducer = (
 
 			return {
 				...initialState,
-				cloudProviderPageVisible: action.cloudProviderPageVisible!
+				cloudProviderPageVisible: action.cloudProviderPageVisible
+			};
+		case 'selectCloudProviderPage':
+			if (action.selectCloudProviderPageVisible === undefined) break;
+
+			return {
+				...initialState,
+				selectCloudProviderPageVisible:
+					action.selectCloudProviderPageVisible
 			};
 		default:
 			break;

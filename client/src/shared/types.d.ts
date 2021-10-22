@@ -59,10 +59,11 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 
 export interface PageManagerState {
 	cloudProviderPageVisible: boolean;
+	selectCloudProviderPageVisible: boolean;
 }
 
 export interface PageManagerAction extends Partial<PageManagerState> {
-	type: 'cloudProviderPage';
+	type: 'cloudProviderPage' | 'selectCloudProviderPage';
 }
 
 export interface EditorState {
