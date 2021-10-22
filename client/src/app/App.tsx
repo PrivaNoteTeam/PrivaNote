@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useStore, useUserStore, useModalStore, EditorProvider } from '@hooks';
 import { EditorState, EditorAction } from '@types';
 import { ModalManager } from '@components/ModalManager';
+import { PageManager } from '@components/PageManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { verifyUser } from '@shared/Api/verifyUser';
@@ -95,6 +96,7 @@ export function App() {
 				>
 					<EditorPanel />
 				</EditorProvider>
+				<PageManager />
 				<ModalManager />
 			</div>
 		</>
