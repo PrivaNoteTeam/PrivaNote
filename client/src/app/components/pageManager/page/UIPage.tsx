@@ -11,7 +11,7 @@ export function UIPage({
 }: PropsWithChildren<Props>) {
 	return (
 		<div
-			className='absolute w-screen h-screen bg-opacity-30 backdrop-blur-3xl bg-black flex justify-center'
+			className='absolute w-screen h-screen backdrop-blur-3xl flex justify-center'
 			data-testid='page-bg-div'
 		>
 			<div className='relative p-4 w-full sm:w-3/4 md:1/2 md:max-w-screen-md h-full bg-gray-800 border-r border-l border-gray-700'>

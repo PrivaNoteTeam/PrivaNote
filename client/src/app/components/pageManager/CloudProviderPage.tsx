@@ -1,11 +1,18 @@
 import React from 'react';
-//import { useCloudProviderPage } from './cloudProviderPage/useCloudProviderPage';
+import { usePageStore } from '@hooks';
 import { UICloudProviderPage } from './cloudProviderPage/UICloudProviderPage';
 
-interface Props {
-	onClose: () => void;
-}
+export function CloudProviderPage() {
+	const [, pageDispatch] = usePageStore();
 
-export function CloudProviderPage({ onClose }: Props) {
-	return <UICloudProviderPage handleClose={onClose} />;
+	return (
+		<UICloudProviderPage
+			handleClose={() =>
+				pageDispatch({
+					type: 'cloudProviderPage',
+					cloudProviderPageVisible: false
+				})
+			}
+		/>
+	);
 }

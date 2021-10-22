@@ -57,6 +57,14 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 		| 'resetPasswordModal';
 }
 
+export interface PageManagerState {
+	cloudProviderPageVisible: boolean;
+}
+
+export interface PageManagerAction extends Partial<PageManagerState> {
+	type: 'cloudProviderPage';
+}
+
 export interface EditorState {
 	primarySelection?: FileSystemItem;
 	secondarySelection?: FileSystemItem;
