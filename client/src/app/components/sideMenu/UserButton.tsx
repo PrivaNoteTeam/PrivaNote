@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import UserCircleIcon from '../../assets/icons/user-circle.svg';
-import LoginIcon from '@assets/icons/log-in.svg';
+import LoginIcon from '@assets/icons/arrow-circle-right.svg';
 import { ipcRenderer } from 'electron';
 import { useUserStore, useModalStore, useNotificationQueue } from '@hooks';
 

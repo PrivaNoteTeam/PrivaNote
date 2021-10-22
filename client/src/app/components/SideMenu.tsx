@@ -8,8 +8,8 @@ export function SideMenu() {
 		<div className='flex flex-col-reverse bg-gray-700 p-3'>
 			<div className='space-y-reverse space-y-2 inline-flex flex-col-reverse cursor-pointer'>
 				<SettingsButton />
-				<CloudButton status='default' />
 				<UserButton />
+				<CloudButton status='default' />
 			</div>
 		</div>
 	);
