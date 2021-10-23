@@ -11,9 +11,12 @@ export function useBreadcrumb({ unsaved }: Args) {
 
 	let pathSegments: any;
 	try {
-		pathSegments = useRelativePath(notebook!, currentNote!.path);
-		if (pathSegments) {
-			pathSegments = pathSegments.split(/[\/\\]/);
+		// pathSegments = useRelativePath(notebook!, currentNote!.path);
+		pathSegments = useRelativePath('', '');
+		if (pathSegments instanceof String) {
+			pathSegments.split(/[\/\\]/);
+		} else {
+			throw pathSegments();
 		}
 	} catch (err) {
 		console.log(err);
