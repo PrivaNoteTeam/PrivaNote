@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function ProviderItem({ active = false, provider }: Props) {
-	const { logo, handleChangeProvider } = useProviderItem({
+	const { logo, handleChangeProvider, handleSetProvider } = useProviderItem({
 		active,
 		provider
 	});
@@ -20,6 +20,10 @@ export function ProviderItem({ active = false, provider }: Props) {
 			onChangeProvider={handleChangeProvider!}
 		/>
 	) : (
-		<UIProviderItem provider={provider} logo={logo} />
+		<UIProviderItem
+			provider={provider}
+			handleSetProvider={handleSetProvider}
+			logo={logo}
+		/>
 	);
 }

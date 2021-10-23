@@ -15,6 +15,7 @@ export interface PrivaNoteConfig {
 	fontSize: number;
 	tabWidth: number;
 	columns: number;
+	connectedProviders: string[];
 }
 
 // Reducer Types

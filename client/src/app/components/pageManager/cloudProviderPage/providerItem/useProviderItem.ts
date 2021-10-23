@@ -14,13 +14,14 @@ export function useProviderItem({ active, provider }: Args) {
 
 	return {
 		logo: getLogo(provider),
-		...getHandlers(pageDispatch, active)
+		...getHandlers(pageDispatch, active, provider)
 	};
 }
 
 function getHandlers(
 	pageDispatch: React.Dispatch<PageManagerAction>,
-	active: boolean
+	active: boolean,
+	provider: string
 ) {
 	return active
 		? {
@@ -33,7 +34,14 @@ function getHandlers(
 				}
 		  }
 		: {
-				handleSetProvider: () => {}
+				handleSetProvider: () => {
+					let result = confirm(
+						'Are you sure you want to set up ' + provider + '?'
+					);
+					if (result) {
+						console.log(provider);
+					}
+				}
 		  };
 }
 

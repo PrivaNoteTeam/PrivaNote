@@ -4,9 +4,10 @@ import ShieldCheck from '@assets/icons/shield-check-f.svg';
 interface Props {
 	provider: 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 	logo: string;
+	handleSetProvider?: () => void;
 }
 
-export function UIProviderItem({ logo, provider }: Props) {
+export function UIProviderItem({ logo, provider, handleSetProvider }: Props) {
 	return (
 		<div className='flex justify-between border border-gray-700 rounded-md p-4'>
 			<div className='flex space-x-4 align-baseline'>
@@ -49,7 +50,10 @@ export function UIProviderItem({ logo, provider }: Props) {
 				</div>
 			</div>
 			<div role='list' className='flex flex-col space-y-3'>
-				<button className='pn-button bg-blue-500 border-blue-500 bg-opacity-50 hover:border-blue-400 text-sm'>
+				<button
+					onClick={handleSetProvider}
+					className='pn-button bg-blue-500 border-blue-500 bg-opacity-50 hover:border-blue-400 text-sm'
+				>
 					Setup
 				</button>
 			</div>
