@@ -1,12 +1,15 @@
 import React from 'react';
 import { ProviderItem } from './ProviderItem';
 import { Page } from '../Page';
+import { getConfig } from '@utils';
+import { useStore } from '@hooks';
 
 interface Props {
 	handleClose: () => void;
 }
 
 export function UICloudProviderPage({ handleClose }: Props) {
+	const [{ notebook }] = useStore();
 	const placeholder = (
 		<div className='text-gray-500 text-sm flex flex-col space-y-1 w-2/3'>
 			<p className='font-semibold text-gray-400'>
@@ -30,7 +33,16 @@ export function UICloudProviderPage({ handleClose }: Props) {
 		</div>
 	);
 
-	const hasProvider = true;
+	const providers = getConfig(notebook!)?.connectedProviders;
+
+	const renderProviders = providers?.map((p) => {
+		return (
+			<ProviderItem
+				provider={p as 'Google Drive' | 'OneDrive' | 'PrivaNote Vault'}
+				active
+			/>
+		);
+	});
 
 	return (
 		<Page onClose={handleClose}>
@@ -40,11 +52,7 @@ export function UICloudProviderPage({ handleClose }: Props) {
 						Cloud Storage Provider
 					</h1>
 				</div>
-				{hasProvider ? (
-					<ProviderItem provider='Google Drive' active />
-				) : (
-					placeholder
-				)}
+				{renderProviders?.length != 0 ? renderProviders : placeholder}
 			</div>
 		</Page>
 	);

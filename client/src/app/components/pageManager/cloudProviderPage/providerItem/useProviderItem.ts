@@ -1,8 +1,9 @@
-import { usePageStore } from '@hooks';
+import { usePageStore, useStore } from '@hooks';
 import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
 import { PageManagerAction } from '@types';
+import { updateConfig } from '@shared/utils/updateConfig';
 
 interface Args {
 	active: boolean;
@@ -11,17 +12,19 @@ interface Args {
 
 export function useProviderItem({ active, provider }: Args) {
 	const [, pageDispatch] = usePageStore();
+	const [{ notebook }] = useStore();
 
 	return {
 		logo: getLogo(provider),
-		...getHandlers(pageDispatch, active, provider)
+		...getHandlers(pageDispatch, active, provider, notebook!) // notebook could be null
 	};
 }
 
 function getHandlers(
 	pageDispatch: React.Dispatch<PageManagerAction>,
 	active: boolean,
-	provider: string
+	provider: string,
+	notebook: string
 ) {
 	return active
 		? {
@@ -39,7 +42,9 @@ function getHandlers(
 						'Are you sure you want to set up ' + provider + '?'
 					);
 					if (result) {
-						console.log(provider);
+						updateConfig(notebook, {
+							connectedProviders: [provider]
+						});
 					}
 				}
 		  };
