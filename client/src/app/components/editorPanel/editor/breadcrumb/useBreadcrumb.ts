@@ -11,8 +11,7 @@ export function useBreadcrumb({ unsaved }: Args) {
 
 	let pathSegments: any;
 	try {
-		// pathSegments = useRelativePath(notebook!, currentNote!.path);
-		pathSegments = useRelativePath('', '');
+		pathSegments = useRelativePath(notebook!, currentNote!.path);
 		if (pathSegments instanceof String) {
 			pathSegments.split(/[\/\\]/);
 		} else {
