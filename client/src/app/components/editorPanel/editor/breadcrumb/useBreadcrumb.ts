@@ -9,9 +9,15 @@ export function useBreadcrumb({ unsaved }: Args) {
 	const [{ notebook, currentNote }] = useStore();
 	const [, editorDispatch] = useEditorStore();
 
-	const pathSegments = useRelativePath(notebook!, currentNote!.path).split(
-		/[\/\\]/
-	);
+	let pathSegments: any;
+	try {
+		pathSegments = useRelativePath(notebook!, currentNote!.path);
+		if (pathSegments) {
+			pathSegments = pathSegments.split(/[\/\\]/);
+		}
+	} catch (err) {
+		console.log(err);
+	}
 
 	const applyDirectoryClickHandler = (part: string, index: number) => {
 		return () => {
