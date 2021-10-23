@@ -10,9 +10,8 @@ export const useRelativePath = (base: string, fullPath: string) => {
 		};
 	}
 
-	while (base.indexOf('/') != -1) {
-		base = base.replace('/', '');
-	}
+	base = base.slice(-1) === '/' ? base.substr(0, base.length - 1) : base;
+	base = base.split('/').pop()!;
 
 	return fullPath.substr(fullPath.indexOf(base));
 };
