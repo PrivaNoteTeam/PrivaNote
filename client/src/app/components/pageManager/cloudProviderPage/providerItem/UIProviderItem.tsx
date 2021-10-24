@@ -63,13 +63,16 @@ export function UIProviderItem({
 			<div role='list' className='flex flex-col justify-center'>
 				{!active ? (
 					<button
-						onClick={active ? handleDisconnect : handleConnect}
+						onClick={handleConnect}
 						className='pn-button bg-blue-500 border-blue-500 bg-opacity-50 hover:border-blue-400 text-sm'
 					>
 						Connect
 					</button>
 				) : (
-					<button className='pn-button bg-red-500 border-red-500 bg-opacity-50 hover:border-red-400 text-sm'>
+					<button
+						onClick={handleDisconnect}
+						className='pn-button bg-red-500 border-red-500 bg-opacity-50 hover:border-red-400 text-sm'
+					>
 						Disconnect
 					</button>
 				)}

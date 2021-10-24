@@ -3,7 +3,7 @@ import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
 import { PageManagerAction } from '@types';
-import { updateConfig } from '@shared/utils/updateConfig';
+import { updateConfig } from '@utils';
 
 interface Args {
 	active: boolean;
@@ -28,7 +28,17 @@ function getHandlers(
 ) {
 	return active
 		? {
-				handleDisconnect: () => {},
+				handleDisconnect: () => {
+					let result = confirm(
+						`Are you sure you want to disconnect ${provider}?`
+					);
+
+					if (result) {
+						updateConfig(notebook, {
+							remove: ['connectedProviders']
+						});
+					}
+				},
 				handleChangeProvider: () => {
 					pageDispatch({
 						type: 'selectCloudProviderPage',
@@ -43,7 +53,9 @@ function getHandlers(
 					);
 					if (result) {
 						updateConfig(notebook, {
-							connectedProviders: [provider]
+							add: {
+								connectedProviders: [provider]
+							}
 						});
 					}
 				}
