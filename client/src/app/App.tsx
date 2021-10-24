@@ -3,7 +3,13 @@ import { ipcRenderer } from 'electron';
 import { EditorPanel } from '@components/EditorPanel';
 import { parseCodeFromUrl, getFileName } from '@utils';
 import { useEffect } from 'react';
-import { useStore, useUserStore, useModalStore, EditorProvider } from '@hooks';
+import {
+	useStore,
+	useUserStore,
+	useModalStore,
+	EditorProvider,
+	useConfig
+} from '@hooks';
 import { EditorState, EditorAction } from '@types';
 import { ModalManager } from '@components/ModalManager';
 import { PageManager } from '@components/PageManager';
@@ -26,6 +32,7 @@ export function App() {
 	const [{ currentNote }, dispatch] = useStore();
 	const [, userDispatch] = useUserStore();
 	const [, modalDispatch] = useModalStore();
+	const [, configDispatch] = useConfig();
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNotebook');
@@ -50,6 +57,11 @@ export function App() {
 				dispatch({
 					type: 'openNotebook',
 					notebook: location
+				});
+
+				configDispatch({
+					type: 'LOAD',
+					payload: location
 				});
 			}
 		);

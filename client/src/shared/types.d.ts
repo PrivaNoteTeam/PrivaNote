@@ -1,4 +1,6 @@
 import { Dispatch } from 'react';
+import { PayloadAction } from 'typesafe-actions';
+
 export interface FileSystemItem {
 	name: string;
 	path: string;
@@ -15,11 +17,24 @@ export interface PrivaNoteConfig {
 	fontSize: number;
 	tabWidth: number;
 	columns: number;
-	connectedProviders: string[];
+	connectedProviders: Provider[];
 }
 
-// Reducer Types
+export type Provider = string;
 
+// New Refactored Reducer Types
+export type Action<K, V = void> = V extends void
+	? { type: K }
+	: { type: K } & V;
+
+type ConfigDispatch = Dispatch<
+	| PayloadAction<'INIT', string>
+	| PayloadAction<'LOAD', string>
+	| PayloadAction<'ADD_PROVIDER', string>
+	| PayloadAction<'REMOVE_PROVIDER', string>
+>;
+
+// Reducer Types
 export interface AppState {
 	notebook?: string;
 	currentNote?: FileItem;

@@ -1,16 +1,16 @@
 import React from 'react';
 import { ProviderItem } from './ProviderItem';
 import { Page } from '../Page';
-import { getConfig } from '@utils';
-import { usePageStore, useStore } from '@hooks';
+import { useConfig, usePageStore } from '@hooks';
 
 interface Props {
 	handleClose: () => void;
 }
 
 export function UICloudProviderPage({ handleClose }: Props) {
-	const [{ notebook }] = useStore();
 	const [, pageDispatch] = usePageStore();
+	const [config] = useConfig();
+
 	const placeholder = (
 		<div className='text-gray-500 text-sm flex flex-col space-y-1 w-2/3'>
 			<p className='font-semibold text-gray-400'>
@@ -34,7 +34,7 @@ export function UICloudProviderPage({ handleClose }: Props) {
 		</div>
 	);
 
-	const providers = getConfig(notebook!)?.connectedProviders;
+	const providers = config?.connectedProviders || [];
 
 	const renderProviders = providers?.map((p) => {
 		return (

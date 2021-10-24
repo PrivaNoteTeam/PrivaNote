@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Page } from './Page';
-import { usePageStore, useStore } from '@hooks';
+import { usePageStore, useConfig } from '@hooks';
 import { ProviderItem } from './cloudProviderPage/ProviderItem';
-import { getConfig } from '@utils';
 
 export function SelectCloudProviderPage() {
 	const [, pageDispatch] = usePageStore();
-	const [{ notebook }] = useStore();
-	const providers = getConfig(notebook!)!.connectedProviders;
+	const [config] = useConfig();
+	const providers = config?.connectedProviders || [];
 
 	const allProviders = ['PrivaNote Vault', 'Google Drive', 'OneDrive'];
 	const otherProviders = allProviders.filter((p) => !providers.includes(p));
-
-	useEffect(() => {}, [providers]);
 
 	return (
 		<Page

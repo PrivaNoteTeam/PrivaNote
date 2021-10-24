@@ -7,3 +7,4 @@ export {
 	useNotificationQueue,
 	NotificationProvider
 } from './useNotificationQueue';
+export { useConfig, ConfigProvider } from './useConfig';
