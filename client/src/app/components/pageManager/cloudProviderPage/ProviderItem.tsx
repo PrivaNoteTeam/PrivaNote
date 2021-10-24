@@ -1,5 +1,4 @@
 import React from 'react';
-import { UIProviderItemActive } from './providerItem/UIProviderItemActive';
 import { useProviderItem } from './providerItem/useProviderItem';
 import { UIProviderItem } from './providerItem/UIProviderItem';
 interface Props {
@@ -8,22 +7,27 @@ interface Props {
 }
 
 export function ProviderItem({ active = false, provider }: Props) {
-	const { logo, handleChangeProvider, handleSetProvider } = useProviderItem({
+	const { logo, handleConnect, handleDisconnect } = useProviderItem({
 		active,
 		provider
 	});
 
-	return active ? (
-		<UIProviderItemActive
-			provider={provider}
-			logo={logo}
-			onChangeProvider={handleChangeProvider!}
-		/>
-	) : (
-		<UIProviderItem
-			provider={provider}
-			handleSetProvider={handleSetProvider}
-			logo={logo}
-		/>
+	return (
+		<>
+			{active ? (
+				<UIProviderItem
+					provider={provider}
+					logo={logo}
+					handleDisconnect={handleDisconnect}
+					active
+				/>
+			) : (
+				<UIProviderItem
+					provider={provider}
+					logo={logo}
+					handleConnect={handleConnect}
+				/>
+			)}
+		</>
 	);
 }

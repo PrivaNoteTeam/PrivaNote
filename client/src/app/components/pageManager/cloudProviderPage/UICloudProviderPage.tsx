@@ -2,7 +2,7 @@ import React from 'react';
 import { ProviderItem } from './ProviderItem';
 import { Page } from '../Page';
 import { getConfig } from '@utils';
-import { useStore } from '@hooks';
+import { usePageStore, useStore } from '@hooks';
 
 interface Props {
 	handleClose: () => void;
@@ -10,6 +10,7 @@ interface Props {
 
 export function UICloudProviderPage({ handleClose }: Props) {
 	const [{ notebook }] = useStore();
+	const [, pageDispatch] = usePageStore();
 	const placeholder = (
 		<div className='text-gray-500 text-sm flex flex-col space-y-1 w-2/3'>
 			<p className='font-semibold text-gray-400'>
@@ -53,6 +54,19 @@ export function UICloudProviderPage({ handleClose }: Props) {
 					</h1>
 				</div>
 				{renderProviders?.length != 0 ? renderProviders : placeholder}
+				<div className='flex justify-end'>
+					<button
+						onClick={() => {
+							pageDispatch({
+								type: 'selectCloudProviderPage',
+								selectCloudProviderPageVisible: true
+							});
+						}}
+						className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
+					>
+						See providers
+					</button>
+				</div>
 			</div>
 		</Page>
 	);

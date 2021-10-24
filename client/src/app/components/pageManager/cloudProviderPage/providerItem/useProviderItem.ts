@@ -28,7 +28,7 @@ function getHandlers(
 ) {
 	return active
 		? {
-				handleDeleteData: () => {},
+				handleDisconnect: () => {},
 				handleChangeProvider: () => {
 					pageDispatch({
 						type: 'selectCloudProviderPage',
@@ -37,7 +37,7 @@ function getHandlers(
 				}
 		  }
 		: {
-				handleSetProvider: () => {
+				handleConnect: () => {
 					let result = confirm(
 						'Are you sure you want to set up ' + provider + '?'
 					);

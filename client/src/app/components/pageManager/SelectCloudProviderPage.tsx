@@ -1,10 +1,16 @@
 import React from 'react';
 import { Page } from './Page';
-import { usePageStore } from '@hooks';
+import { usePageStore, useStore } from '@hooks';
 import { ProviderItem } from './cloudProviderPage/ProviderItem';
+import { getConfig } from '@utils';
 
 export function SelectCloudProviderPage() {
 	const [, pageDispatch] = usePageStore();
+	const [{ notebook }] = useStore();
+	const providers = getConfig(notebook!)!.connectedProviders;
+	const allProviders = ['PrivaNote Vault', 'Google Drive', 'OneDrive'];
+	const otherProviders = allProviders.filter((p) => !providers.includes(p));
+
 	return (
 		<Page
 			onClose={() =>
@@ -26,9 +32,22 @@ export function SelectCloudProviderPage() {
 					</p>
 				</div>
 				<div role='listbox' className='flex flex-col space-y-4'>
-					<ProviderItem provider='PrivaNote Vault' />
-					<ProviderItem provider='Google Drive' />
-					<ProviderItem provider='OneDrive' />
+					{otherProviders.map((p) => (
+						<ProviderItem provider={p as unknown as any} />
+					))}
+				</div>
+				<div>
+					<h2 className='text-white mb-2 text-xl select-none'>
+						Connected providers
+					</h2>
+					<div role='listbox' className='flex flex-col space-y-4'>
+						{providers.map((p) => (
+							<ProviderItem
+								provider={p as unknown as any}
+								active
+							/>
+						))}
+					</div>
 				</div>
 				<div className='flex justify-end'>
 					<button

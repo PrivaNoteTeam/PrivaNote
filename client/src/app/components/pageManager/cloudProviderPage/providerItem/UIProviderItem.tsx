@@ -4,12 +4,23 @@ import ShieldCheck from '@assets/icons/shield-check-f.svg';
 interface Props {
 	provider: 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 	logo: string;
-	handleSetProvider?: () => void;
+	handleConnect?: () => void;
+	handleDisconnect?: () => void;
+	active?: boolean;
 }
 
-export function UIProviderItem({ logo, provider, handleSetProvider }: Props) {
+export function UIProviderItem({
+	logo,
+	provider,
+	handleConnect,
+	handleDisconnect,
+	active = false
+}: Props) {
 	return (
-		<div className='flex justify-between border border-gray-700 rounded-md p-4'>
+		<div
+			key={provider}
+			className='flex justify-between border border-gray-700 rounded-md p-4'
+		>
 			<div className='flex space-x-4 align-baseline'>
 				<div className='h-16 flex-shrink-0'>
 					<img
@@ -49,13 +60,19 @@ export function UIProviderItem({ logo, provider, handleSetProvider }: Props) {
 					)}
 				</div>
 			</div>
-			<div role='list' className='flex flex-col space-y-3'>
-				<button
-					onClick={handleSetProvider}
-					className='pn-button bg-blue-500 border-blue-500 bg-opacity-50 hover:border-blue-400 text-sm'
-				>
-					Setup
-				</button>
+			<div role='list' className='flex flex-col justify-center'>
+				{!active ? (
+					<button
+						onClick={active ? handleDisconnect : handleConnect}
+						className='pn-button bg-blue-500 border-blue-500 bg-opacity-50 hover:border-blue-400 text-sm'
+					>
+						Connect
+					</button>
+				) : (
+					<button className='pn-button bg-red-500 border-red-500 bg-opacity-50 hover:border-red-400 text-sm'>
+						Disconnect
+					</button>
+				)}
 			</div>
 		</div>
 	);
