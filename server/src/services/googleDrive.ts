@@ -20,3 +20,14 @@ export const getAuthUrl = () => {
         scope
     });
 }
+
+export const getToken = async (code: string) => {
+    try {    
+        const token = await oAuth2Client.getToken(code);
+
+        return token;
+    } catch (err) {
+        console.log('Error retrieving access token for Google Drive', err);
+        return;
+    }
+}
