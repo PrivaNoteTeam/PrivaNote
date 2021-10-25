@@ -25,7 +25,6 @@ if (!app.isDefaultProtocolClient('privanote')) {
 app.on('will-finish-launching', () => {
 	app.on('open-url', (event, url) => {
 		event.preventDefault();
-		console.log(url);
 
 		const urlObject = new URL(url);
 
@@ -33,9 +32,7 @@ app.on('will-finish-launching', () => {
 			getMainWindow().webContents.send('url-privanote', url);
 		} else if (url.startsWith('privanote://google-drive/auth')) {
 			const token = urlObject.searchParams.get('token');
-			console.log(JSON.stringify(token));
-			token &&
-				getMainWindow().webContents.send('google-drive-auth', token);
+			getMainWindow().webContents.send('google-drive-auth', token);
 		}
 
 		getMainWindow().webContents.send('url-privanote', url);
