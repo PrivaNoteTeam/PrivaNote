@@ -23,7 +23,9 @@ export const getAuthUrl = () => {
 
 export const getToken = async (code: string) => {
     try {    
-        const token = await oAuth2Client.getToken(code);
+        const response = await oAuth2Client.getToken(code);
+
+        const token = response.tokens.access_token;
 
         return token;
     } catch (err) {
