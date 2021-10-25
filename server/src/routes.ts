@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { userController } from './controllers';
+import { providerController } from './controllers';
 
 const router = Router();
 
@@ -16,5 +17,7 @@ router.get('/user', userController.user);
 router.post('/forgot-password', userController.forgotPassword);
 
 router.post('/reset-password', userController.resetPassword);
+
+router.get('/google-drive/get-auth-url', providerController.googleGetAuthUrl);
 
 export { router };
