@@ -22,7 +22,8 @@ export interface PrivaNoteConfig {
 
 export type Provider = {
 	name: string;
-	token?: string;
+	accessToken?: string;
+	idToken?: string;
 };
 
 // New Refactored Reducer Types
@@ -35,10 +36,14 @@ type ConfigDispatch = Dispatch<
 	| PayloadAction<'LOAD', string>
 	| PayloadAction<
 			'ADD_PROVIDER',
-			{ providerName: string; path: string; token?: string }
+			{
+				providerName: string;
+				path: string;
+				accessToken?: string;
+				idToken?: string;
+			}
 	  >
 	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
-	| PayloadAction<'AUTH_GOOGLE', { token: string; path: string }>
 >;
 
 // Reducer Types

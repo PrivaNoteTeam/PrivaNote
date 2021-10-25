@@ -32,8 +32,15 @@ app.on('will-finish-launching', () => {
 		if (url.startsWith('privanote://reset-password')) {
 			mainWindow.webContents.send('url-privanote', url);
 		} else if (url.startsWith('privanote://google-drive/auth')) {
-			const token = urlObject.searchParams.get('token');
-			mainWindow.webContents.send('googleDriveAuth', token);
+			const accessToken = urlObject.searchParams.get('accessToken');
+			const idToken = urlObject.searchParams.get('idToken');
+			console.log(idToken);
+
+			mainWindow.webContents.send(
+				'googleDriveAuth',
+				accessToken,
+				idToken
+			);
 		}
 
 		deepLinkingUrl = url;

@@ -54,20 +54,22 @@ export function useIpcListeners() {
 			ipcRenderer.send('currentFileToExport', currentNote);
 		});
 
-		createListener('googleDriveAuth', (_, token: string) => {
-			console.log('running here');
-			console.log(notebook);
-			if (!notebook) return;
+		createListener(
+			'googleDriveAuth',
+			(_, accessToken: string, idToken: string) => {
+				if (!notebook) return;
 
-			configDispatch({
-				type: 'ADD_PROVIDER',
-				payload: {
-					providerName: 'Google Drive',
-					path: notebook,
-					token
-				}
-			});
-		});
+				configDispatch({
+					type: 'ADD_PROVIDER',
+					payload: {
+						providerName: 'Google Drive',
+						path: notebook,
+						accessToken,
+						idToken
+					}
+				});
+			}
+		);
 
 		createListener('url-privanote', (_, url) => {
 			// parse code out of url

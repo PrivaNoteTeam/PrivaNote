@@ -7,10 +7,11 @@ export function SelectCloudProviderPage() {
 	const [, pageDispatch] = usePageStore();
 	const [config] = useConfig();
 	const providers = config?.connectedProviders || [];
+	const configProviderNames = providers.map((p) => p.name);
 
 	const allProviders = ['PrivaNote Vault', 'Google Drive', 'OneDrive'];
 	const otherProviders = allProviders.filter((ap) => {
-		return providers.filter((p) => p.name !== ap);
+		return !configProviderNames.includes(ap);
 	});
 
 	return (

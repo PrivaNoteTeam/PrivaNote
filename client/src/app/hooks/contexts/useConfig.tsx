@@ -17,14 +17,11 @@ const actions = {
 	addProvider: createAction('ADD_PROVIDER')<{
 		providerName: string;
 		path: string;
-		token?: string;
+		accessToken?: string;
+		idToken?: string;
 	}>(),
 	removeProvider: createAction('REMOVE_PROVIDER')<{
 		providerName: string;
-		path: string;
-	}>(),
-	authenticateGoogle: createAction('AUTHENTICATE_GOOGLE')<{
-		token: string;
 		path: string;
 	}>()
 };
@@ -64,7 +61,8 @@ const reducer = (
 					...state!.connectedProviders,
 					{
 						name: action.payload.providerName,
-						token: action.payload.token
+						accessToken: action.payload.accessToken,
+						idToken: action.payload.idToken
 					}
 				]
 			};
@@ -97,8 +95,6 @@ const reducer = (
 			);
 
 			return removeProviderState as PrivaNoteConfig;
-		case getType(actions.authenticateGoogle):
-
 		default:
 			return defaultGuard(state, action as never);
 	}

@@ -25,11 +25,11 @@ export const getToken = async (code: string) => {
     try {    
         const response = await oAuth2Client.getToken(code);
 
-        const token = response.tokens.access_token;
+        const { access_token: accessToken, id_token: idToken } = response.tokens;
 
-        return token;
+        return { accessToken, idToken };
     } catch (err) {
         console.log('Error retrieving access token for Google Drive', err);
-        return;
+        return {};
     }
 }

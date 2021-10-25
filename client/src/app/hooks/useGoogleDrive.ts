@@ -7,9 +7,9 @@ export function useGoogleDrive() {
 	const [config] = useConfig();
 
 	const verify = useCallback(
-		async (client: OAuth2Client, token: string) => {
+		async (client: OAuth2Client, idToken: string) => {
 			const ticket = await client.verifyIdToken({
-				idToken: token,
+				idToken,
 				audience: credentials.web.client_id
 			});
 
@@ -29,26 +29,10 @@ export function useGoogleDrive() {
 
 		const client = new OAuth2Client(credentials.web.client_id);
 
-		verify(client, provider.token!).then((payload) => {
+		verify(client, provider.idToken!).then((payload) => {
 			console.log(payload?.given_name);
 			console.log(payload?.family_name);
 			console.log('verified');
 		});
 	}, [config]);
 }
-/*const provider = config.connectedProviders.find((p) => {
-            return p.name === 'Google Drive'
-        }) as Provider;
-        /*
-        client.verifyIdToken({
-            idToken: provider.token!,
-            audience: clientId
-        })
-            .then((ticket) => {
-                const payload = ticket.getPayload();
-                console.log(payload?.given_name);
-            })
-            .catch((err) => console.error(err));
-    }, [client, clientId, config])   
-
-   }} */
