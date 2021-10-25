@@ -4,6 +4,7 @@ import { getFileSystemItems } from '@utils';
 import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
 import { Placeholder } from './Placeholder';
+import { NotificationArea } from '../NotificationArea';
 
 interface Props {
 	fileExplorerVisible: boolean;
@@ -17,16 +18,22 @@ export function UIEditorPanel({ fileExplorerVisible }: Props) {
 			{fileExplorerVisible && (
 				<FileExplorer items={getFileSystemItems(notebook)} />
 			)}
+			<div className='relative flex-grow flex flex-col'>
+				<NotificationArea />
 
-			{currentNote ? (
-				<Editor />
-			) : (
-				<Placeholder text='Create or open a note to continue' />
-			)}
+				{currentNote ? (
+					<Editor />
+				) : (
+					<Placeholder text='Create or open a note to continue' />
+				)}
+			</div>
 		</>
 	) : (
 		<>
-			<Placeholder text='Open a notebook to continue' />
+			<div className='relative flex-grow flex flex-col'>
+				<NotificationArea />
+				<Placeholder text='Open a notebook to continue' />
+			</div>
 		</>
 	);
 }

@@ -1,4 +1,6 @@
 import { Dispatch } from 'react';
+import { PayloadAction } from 'typesafe-actions';
+
 export interface FileSystemItem {
 	name: string;
 	path: string;
@@ -15,10 +17,36 @@ export interface PrivaNoteConfig {
 	fontSize: number;
 	tabWidth: number;
 	columns: number;
+	connectedProviders: Provider[];
 }
 
-// Reducer Types
+export type Provider = {
+	name: string;
+	accessToken?: string;
+	idToken?: string;
+};
 
+// New Refactored Reducer Types
+export type Action<K, V = void> = V extends void
+	? { type: K }
+	: { type: K } & V;
+
+type ConfigDispatch = Dispatch<
+	| PayloadAction<'INIT', string>
+	| PayloadAction<'LOAD', string>
+	| PayloadAction<
+			'ADD_PROVIDER',
+			{
+				providerName: string;
+				path: string;
+				accessToken?: string;
+				idToken?: string;
+			}
+	  >
+	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
+>;
+
+// Reducer Types
 export interface AppState {
 	notebook?: string;
 	currentNote?: FileItem;
@@ -55,6 +83,15 @@ export interface ModalManagerAction extends Partial<ModalManagerState> {
 		| 'twoFactorAuthModal'
 		| 'forgotPasswordModal'
 		| 'resetPasswordModal';
+}
+
+export interface PageManagerState {
+	cloudProviderPageVisible: boolean;
+	selectCloudProviderPageVisible: boolean;
+}
+
+export interface PageManagerAction extends Partial<PageManagerState> {
+	type: 'cloudProviderPage' | 'selectCloudProviderPage';
 }
 
 export interface EditorState {
@@ -109,3 +146,10 @@ export interface FormError {
 export interface FieldError extends FormError {
 	field: string;
 }
+
+export interface Notification {
+	message: string;
+	style: 'success' | 'neutral' | 'error';
+}
+
+export type NotificationState = Notification[];
