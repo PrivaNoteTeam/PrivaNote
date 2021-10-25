@@ -10,17 +10,17 @@ import React, {
 	PropsWithChildren
 } from 'react';
 import fs from 'fs';
+import { getGoogleAuth } from '@shared/api/getGoogleAuth';
 
 const actions = {
 	init: createAction('INIT')<string>(),
 	load: createAction('LOAD')<string>(),
 	addProvider:
 		createAction('ADD_PROVIDER')<{ providerName: string; path: string }>(),
-	removeProvider:
-		createAction('REMOVE_PROVIDER')<{
-			providerName: string;
-			path: string;
-		}>(),
+	removeProvider: createAction('REMOVE_PROVIDER')<{
+		providerName: string;
+		path: string;
+	}>(),
 	authenticateGoogle: createAction('AUTHENTICATE_GOOGLE')<{
 		token: string;
 		path: string;
@@ -55,6 +55,8 @@ const reducer = (
 			) {
 				return state;
 			}
+
+			getGoogleAuth();
 
 			const addProviderState = {
 				...state,
