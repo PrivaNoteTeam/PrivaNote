@@ -10,7 +10,7 @@ const createListener = (channel: string, callback: (...args: any) => void) => {
 };
 
 export function useIpcListeners() {
-	const [{ currentNote }, dispatch] = useStore();
+	const [{ currentNote, notebook }, dispatch] = useStore();
 	const [, modalDispatch] = useModalStore();
 	const [, configDispatch] = useConfig();
 
@@ -55,8 +55,14 @@ export function useIpcListeners() {
 		});
 
 		createListener('google-drive-auth', (_, token: string) => {
-			console.log('in handler');
 			console.log(token);
+
+			if (!notebook) return;
+
+			configDispatch({
+				type: 'AUTH_GOOGLE',
+				payload: { token, path: notebook }
+			});
 		});
 
 		createListener('url-privanote', (_, url) => {

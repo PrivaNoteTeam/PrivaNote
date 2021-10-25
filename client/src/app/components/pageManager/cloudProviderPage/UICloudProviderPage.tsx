@@ -39,7 +39,9 @@ export function UICloudProviderPage({ handleClose }: Props) {
 	const renderProviders = providers?.map((p) => {
 		return (
 			<ProviderItem
-				provider={p as 'Google Drive' | 'OneDrive' | 'PrivaNote Vault'}
+				provider={
+					p.name as 'Google Drive' | 'OneDrive' | 'PrivaNote Vault'
+				}
 				active
 			/>
 		);

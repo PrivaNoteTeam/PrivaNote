@@ -30,20 +30,20 @@ function getHandlers(
 	pageDispatch: React.Dispatch<PageManagerAction>,
 	configDispatch: ConfigDispatch,
 	active: boolean,
-	provider: string,
+	providerName: string,
 	notebook: string
 ) {
 	return active
 		? {
 				handleDisconnect: () => {
 					let result = confirm(
-						`Are you sure you want to disconnect ${provider}?`
+						`Are you sure you want to disconnect ${providerName}?`
 					);
 
 					result &&
 						configDispatch({
 							type: 'REMOVE_PROVIDER',
-							payload: { provider, path: notebook }
+							payload: { providerName, path: notebook }
 						});
 				},
 				handleChangeProvider: () => {
@@ -56,13 +56,13 @@ function getHandlers(
 		: {
 				handleConnect: () => {
 					let result = confirm(
-						'Are you sure you want to set up ' + provider + '?'
+						'Are you sure you want to set up ' + providerName + '?'
 					);
 
 					result &&
 						configDispatch({
 							type: 'ADD_PROVIDER',
-							payload: { provider, path: notebook }
+							payload: { providerName, path: notebook }
 						});
 				}
 		  };

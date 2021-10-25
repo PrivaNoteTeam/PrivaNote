@@ -27,15 +27,14 @@ app.on('will-finish-launching', () => {
 		event.preventDefault();
 
 		const urlObject = new URL(url);
+		const mainWindow = getMainWindow();
 
 		if (url.startsWith('privanote://reset-password')) {
-			getMainWindow().webContents.send('url-privanote', url);
+			mainWindow.webContents.send('url-privanote', url);
 		} else if (url.startsWith('privanote://google-drive/auth')) {
 			const token = urlObject.searchParams.get('token');
-			getMainWindow().webContents.send('google-drive-auth', token);
+			mainWindow.webContents.send('google-drive-auth', token);
 		}
-
-		getMainWindow().webContents.send('url-privanote', url);
 
 		deepLinkingUrl = url;
 	});
