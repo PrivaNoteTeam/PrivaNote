@@ -66,17 +66,7 @@ function getHandlers(
 
 					switch (providerName as SupportedProvider) {
 						case 'Google Drive':
-							getGoogleAuth().then((authUrl) => {
-								console.log(authUrl);
-								/*configDispatch({
-										type: 'ADD_PROVIDER',
-										payload: {
-											providerName: 'Google Drive',
-											path: notebook,
-											token: token as string
-										}
-									})*/
-							});
+							getGoogleAuth();
 							break;
 						default:
 							configDispatch({

@@ -54,14 +54,18 @@ export function useIpcListeners() {
 			ipcRenderer.send('currentFileToExport', currentNote);
 		});
 
-		createListener('google-drive-auth', (_, token: string) => {
-			console.log(token);
-
+		createListener('googleDriveAuth', (_, token: string) => {
+			console.log('running here');
+			console.log(notebook);
 			if (!notebook) return;
 
 			configDispatch({
-				type: 'AUTH_GOOGLE',
-				payload: { token, path: notebook }
+				type: 'ADD_PROVIDER',
+				payload: {
+					providerName: 'Google Drive',
+					path: notebook,
+					token
+				}
 			});
 		});
 
@@ -84,5 +88,5 @@ export function useIpcListeners() {
 					console.error(err);
 				});
 		});
-	}, [currentNote]);
+	}, [currentNote, notebook]);
 }

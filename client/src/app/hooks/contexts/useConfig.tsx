@@ -14,12 +14,11 @@ import fs from 'fs';
 const actions = {
 	init: createAction('INIT')<string>(),
 	load: createAction('LOAD')<string>(),
-	addProvider:
-		createAction('ADD_PROVIDER')<{
-			providerName: string;
-			path: string;
-			token?: string;
-		}>(),
+	addProvider: createAction('ADD_PROVIDER')<{
+		providerName: string;
+		path: string;
+		token?: string;
+	}>(),
 	removeProvider: createAction('REMOVE_PROVIDER')<{
 		providerName: string;
 		path: string;

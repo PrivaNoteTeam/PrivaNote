@@ -33,7 +33,7 @@ app.on('will-finish-launching', () => {
 			mainWindow.webContents.send('url-privanote', url);
 		} else if (url.startsWith('privanote://google-drive/auth')) {
 			const token = urlObject.searchParams.get('token');
-			mainWindow.webContents.send('google-drive-auth', token);
+			mainWindow.webContents.send('googleDriveAuth', token);
 		}
 
 		deepLinkingUrl = url;
