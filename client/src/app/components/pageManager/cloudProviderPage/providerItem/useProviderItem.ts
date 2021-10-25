@@ -1,4 +1,4 @@
-import { useConfig, usePageStore } from '@hooks';
+import { useConfig, usePageStore, useStore } from '@hooks';
 import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
@@ -12,10 +12,17 @@ interface Args {
 export function useProviderItem({ active, provider }: Args) {
 	const [, pageDispatch] = usePageStore();
 	const [, configDispatch] = useConfig();
+	const [{ notebook }] = useStore();
 
 	return {
 		logo: getLogo(provider),
-		...getHandlers(pageDispatch, configDispatch, active, provider) // notebook could be null
+		...getHandlers(
+			pageDispatch,
+			configDispatch,
+			active,
+			provider,
+			notebook!
+		) // notebook could be null
 	};
 }
 
@@ -23,7 +30,8 @@ function getHandlers(
 	pageDispatch: React.Dispatch<PageManagerAction>,
 	configDispatch: ConfigDispatch,
 	active: boolean,
-	provider: string
+	provider: string,
+	notebook: string
 ) {
 	return active
 		? {
@@ -35,7 +43,7 @@ function getHandlers(
 					result &&
 						configDispatch({
 							type: 'REMOVE_PROVIDER',
-							payload: provider
+							payload: { provider, path: notebook }
 						});
 				},
 				handleChangeProvider: () => {
@@ -54,7 +62,7 @@ function getHandlers(
 					result &&
 						configDispatch({
 							type: 'ADD_PROVIDER',
-							payload: provider
+							payload: { provider, path: notebook }
 						});
 				}
 		  };

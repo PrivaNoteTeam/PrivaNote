@@ -9,12 +9,15 @@ import React, {
 	createContext,
 	PropsWithChildren
 } from 'react';
+import fs from 'fs';
 
 const actions = {
 	init: createAction('INIT')<string>(),
 	load: createAction('LOAD')<string>(),
-	addProvider: createAction('ADD_PROVIDER')<Provider>(),
-	removeProvider: createAction('REMOVE_PROVIDER')<Provider>()
+	addProvider:
+		createAction('ADD_PROVIDER')<{ provider: Provider; path: string }>(),
+	removeProvider:
+		createAction('REMOVE_PROVIDER')<{ provider: Provider; path: string }>()
 };
 
 function defaultGuard<S>(state: S | undefined, _: never) {
@@ -36,32 +39,44 @@ const reducer = (
 
 			return defaultConfig;
 		case getType(actions.load):
-			console.log('LOAD');
-			console.log(action.payload);
 			return getConfig(action.payload) as PrivaNoteConfig;
 		case getType(actions.addProvider):
-			if (state!.connectedProviders.includes(action.payload)) {
+			if (state!.connectedProviders.includes(action.payload.provider)) {
 				return state;
 			}
 
-			return {
+			const addProviderState = {
 				...state,
 				connectedProviders: [
 					...state!.connectedProviders,
-					action.payload
+					action.payload.provider
 				]
-			} as PrivaNoteConfig;
+			};
+
+			fs.writeFileSync(
+				action.payload.path + '/.privanote/app.json',
+				JSON.stringify(addProviderState)
+			);
+
+			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
-			if (!state!.connectedProviders.includes(action.payload)) {
+			if (!state!.connectedProviders.includes(action.payload.provider)) {
 				return state;
 			}
 
-			return {
+			const removeProviderState = {
 				...state,
 				connectedProviders: state!.connectedProviders.filter(
-					(p) => p !== action.payload
+					(p) => p !== action.payload.provider
 				)
-			} as PrivaNoteConfig;
+			};
+
+			fs.writeFileSync(
+				action.payload.path + '/.privanote/app.json',
+				JSON.stringify(removeProviderState)
+			);
+
+			return removeProviderState as PrivaNoteConfig;
 		default:
 			return defaultGuard(state, action);
 	}

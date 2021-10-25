@@ -30,8 +30,8 @@ export type Action<K, V = void> = V extends void
 type ConfigDispatch = Dispatch<
 	| PayloadAction<'INIT', string>
 	| PayloadAction<'LOAD', string>
-	| PayloadAction<'ADD_PROVIDER', string>
-	| PayloadAction<'REMOVE_PROVIDER', string>
+	| PayloadAction<'ADD_PROVIDER', { provider: string; path: string }>
+	| PayloadAction<'REMOVE_PROVIDER', { provider: string; path: string }>
 >;
 
 // Reducer Types
