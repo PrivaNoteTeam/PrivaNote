@@ -1,21 +1,14 @@
 import React from 'react';
-import { ipcRenderer } from 'electron';
 import { EditorPanel } from '@components/EditorPanel';
-import { parseCodeFromUrl, getFileName } from '@utils';
 import { useEffect } from 'react';
-import {
-	useStore,
-	useUserStore,
-	useModalStore,
-	EditorProvider,
-	useConfig
-} from '@hooks';
+import { useStore, useUserStore, EditorProvider } from '@hooks';
 import { EditorState, EditorAction } from '@types';
 import { ModalManager } from '@components/ModalManager';
 import { PageManager } from '@components/PageManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
-import { verifyUser } from '@shared/Api/verifyUser';
+import { useIpcListeners } from './hooks/useIpcListeners';
+import { useGoogleDrive } from './hooks/useGoogleDrive';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -29,74 +22,17 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 };
 
 export function App() {
-	const [{ currentNote }, dispatch] = useStore();
+	const [{ currentNote, notebook }] = useStore();
 	const [, userDispatch] = useUserStore();
-	const [, modalDispatch] = useModalStore();
-	const [, configDispatch] = useConfig();
+
+	useIpcListeners();
+	useGoogleDrive();
 
 	useEffect(() => {
-		ipcRenderer.removeAllListeners('createNotebook');
-
-		ipcRenderer.removeAllListeners('openNotebook');
-		ipcRenderer.on(
-			'openNotebook',
-			(_, location: string, valid: boolean) => {
-				if (!valid) {
-					alert(
-						`"${getFileName(location)}" is not a valid notebook.`
-					);
-
-					return;
-				}
-
-				dispatch({
-					type: 'openNote',
-					currentNote: undefined
-				});
-
-				dispatch({
-					type: 'openNotebook',
-					notebook: location
-				});
-
-				configDispatch({
-					type: 'LOAD',
-					payload: location
-				});
-			}
-		);
-
-		ipcRenderer.removeAllListeners('exportNote');
-		ipcRenderer.on('exportNote', () => {
-			ipcRenderer.send('currentFileToExport', currentNote);
-		});
-
-		ipcRenderer.removeAllListeners('url-privanote');
-		ipcRenderer.on('url-privanote', (_, url) => {
-			// parse code out of url
-			const code = parseCodeFromUrl(url, 'resetPassword');
-			// if successful, render reset password
-			verifyUser({ verificationCode: code })
-				.then((response) => {
-					console.log(code);
-					console.log(response);
-					if (response.user) {
-						modalDispatch({
-							type: 'resetPasswordModal',
-							resetPasswordModalVisible: true
-						});
-					}
-				})
-				.catch((err) => {
-					console.error(err);
-				});
-		});
-
 		getUser().then(({ user }) => {
 			if (user) userDispatch({ type: 'login', user });
 		});
-		// Log in user automatically
-	}, [currentNote]);
+	}, [currentNote, notebook]);
 
 	return (
 		<>

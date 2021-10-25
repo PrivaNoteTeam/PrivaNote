@@ -3,10 +3,13 @@ import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
 import { PageManagerAction, ConfigDispatch } from '@types';
+import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+
+type SupportedProvider = 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 
 interface Args {
 	active: boolean;
-	provider: 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
+	provider: SupportedProvider;
 }
 
 export function useProviderItem({ active, provider }: Args) {
@@ -30,20 +33,20 @@ function getHandlers(
 	pageDispatch: React.Dispatch<PageManagerAction>,
 	configDispatch: ConfigDispatch,
 	active: boolean,
-	provider: string,
+	providerName: string,
 	notebook: string
 ) {
 	return active
 		? {
 				handleDisconnect: () => {
 					let result = confirm(
-						`Are you sure you want to disconnect ${provider}?`
+						`Are you sure you want to disconnect ${providerName}?`
 					);
 
 					result &&
 						configDispatch({
 							type: 'REMOVE_PROVIDER',
-							payload: { provider, path: notebook }
+							payload: { providerName, path: notebook }
 						});
 				},
 				handleChangeProvider: () => {
@@ -56,19 +59,29 @@ function getHandlers(
 		: {
 				handleConnect: () => {
 					let result = confirm(
-						'Are you sure you want to set up ' + provider + '?'
+						'Are you sure you want to set up ' + providerName + '?'
 					);
 
-					result &&
-						configDispatch({
-							type: 'ADD_PROVIDER',
-							payload: { provider, path: notebook }
-						});
+					if (!result) return;
+
+					switch (providerName as SupportedProvider) {
+						case 'Google Drive':
+							getGoogleAuth();
+							break;
+						default:
+							configDispatch({
+								type: 'ADD_PROVIDER',
+								payload: {
+									providerName,
+									path: notebook
+								}
+							});
+					}
 				}
 		  };
 }
 
-function getLogo(provider: 'Google Drive' | 'OneDrive' | 'PrivaNote Vault') {
+function getLogo(provider: SupportedProvider) {
 	let logo: string;
 
 	switch (provider) {

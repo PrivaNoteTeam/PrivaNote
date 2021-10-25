@@ -7,9 +7,12 @@ export function SelectCloudProviderPage() {
 	const [, pageDispatch] = usePageStore();
 	const [config] = useConfig();
 	const providers = config?.connectedProviders || [];
+	const configProviderNames = providers.map((p) => p.name);
 
 	const allProviders = ['PrivaNote Vault', 'Google Drive', 'OneDrive'];
-	const otherProviders = allProviders.filter((p) => !providers.includes(p));
+	const otherProviders = allProviders.filter((ap) => {
+		return !configProviderNames.includes(ap);
+	});
 
 	return (
 		<Page
@@ -44,7 +47,7 @@ export function SelectCloudProviderPage() {
 						<div role='listbox' className='flex flex-col space-y-4'>
 							{providers.map((p) => (
 								<ProviderItem
-									provider={p as unknown as any}
+									provider={p.name as unknown as any}
 									active
 								/>
 							))}

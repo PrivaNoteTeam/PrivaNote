@@ -20,7 +20,11 @@ export interface PrivaNoteConfig {
 	connectedProviders: Provider[];
 }
 
-export type Provider = string;
+export type Provider = {
+	name: string;
+	accessToken?: string;
+	idToken?: string;
+};
 
 // New Refactored Reducer Types
 export type Action<K, V = void> = V extends void
@@ -30,8 +34,16 @@ export type Action<K, V = void> = V extends void
 type ConfigDispatch = Dispatch<
 	| PayloadAction<'INIT', string>
 	| PayloadAction<'LOAD', string>
-	| PayloadAction<'ADD_PROVIDER', { provider: string; path: string }>
-	| PayloadAction<'REMOVE_PROVIDER', { provider: string; path: string }>
+	| PayloadAction<
+			'ADD_PROVIDER',
+			{
+				providerName: string;
+				path: string;
+				accessToken?: string;
+				idToken?: string;
+			}
+	  >
+	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
 >;
 
 // Reducer Types

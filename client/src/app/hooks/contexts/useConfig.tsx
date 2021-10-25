@@ -1,4 +1,4 @@
-import { PrivaNoteConfig, Provider } from '@types';
+import { PrivaNoteConfig } from '@types';
 import { ActionType, getType, createAction } from 'typesafe-actions';
 import { defaultConfig, getConfig } from '@shared/utils';
 import { ConfigDispatch } from '@types';
@@ -14,10 +14,16 @@ import fs from 'fs';
 const actions = {
 	init: createAction('INIT')<string>(),
 	load: createAction('LOAD')<string>(),
-	addProvider:
-		createAction('ADD_PROVIDER')<{ provider: Provider; path: string }>(),
-	removeProvider:
-		createAction('REMOVE_PROVIDER')<{ provider: Provider; path: string }>()
+	addProvider: createAction('ADD_PROVIDER')<{
+		providerName: string;
+		path: string;
+		accessToken?: string;
+		idToken?: string;
+	}>(),
+	removeProvider: createAction('REMOVE_PROVIDER')<{
+		providerName: string;
+		path: string;
+	}>()
 };
 
 function defaultGuard<S>(state: S | undefined, _: never) {
@@ -41,7 +47,11 @@ const reducer = (
 		case getType(actions.load):
 			return getConfig(action.payload) as PrivaNoteConfig;
 		case getType(actions.addProvider):
-			if (state!.connectedProviders.includes(action.payload.provider)) {
+			if (
+				state!.connectedProviders.find((p) => {
+					return p.name === action.payload.providerName;
+				})
+			) {
 				return state;
 			}
 
@@ -49,7 +59,11 @@ const reducer = (
 				...state,
 				connectedProviders: [
 					...state!.connectedProviders,
-					action.payload.provider
+					{
+						name: action.payload.providerName,
+						accessToken: action.payload.accessToken,
+						idToken: action.payload.idToken
+					}
 				]
 			};
 
@@ -60,14 +74,18 @@ const reducer = (
 
 			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
-			if (!state!.connectedProviders.includes(action.payload.provider)) {
+			if (
+				!state!.connectedProviders.find((p) => {
+					return p.name === action.payload.providerName;
+				})
+			) {
 				return state;
 			}
 
 			const removeProviderState = {
 				...state,
 				connectedProviders: state!.connectedProviders.filter(
-					(p) => p !== action.payload.provider
+					(p) => p.name !== action.payload.providerName
 				)
 			};
 
@@ -78,7 +96,7 @@ const reducer = (
 
 			return removeProviderState as PrivaNoteConfig;
 		default:
-			return defaultGuard(state, action);
+			return defaultGuard(state, action as never);
 	}
 };
 
