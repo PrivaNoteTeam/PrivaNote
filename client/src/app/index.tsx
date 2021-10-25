@@ -12,7 +12,9 @@ import {
 import {
 	StoreProvider,
 	ModalProvider,
+	PageProvider,
 	UserProvider,
+	ConfigProvider,
 	NotificationProvider
 } from '@hooks';
 import { App } from './App';
@@ -116,7 +118,11 @@ const tree = (
 					initialState={initialModalState}
 					reducer={modalReducer}
 				>
-					<App />
+					<PageProvider>
+						<ConfigProvider>
+							<App />
+						</ConfigProvider>
+					</PageProvider>
 				</ModalProvider>
 			</NotificationProvider>
 		</UserProvider>

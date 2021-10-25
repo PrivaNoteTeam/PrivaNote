@@ -7,5 +7,6 @@ export const defaultConfig: PrivaNoteConfig = {
 	fontFamily: 'ui-sans-serif',
 	fontSize: 14,
 	tabWidth: 4,
-	columns: 72
+	columns: 72,
+	connectedProviders: []
 };
