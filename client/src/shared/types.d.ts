@@ -33,7 +33,10 @@ export type Action<K, V = void> = V extends void
 type ConfigDispatch = Dispatch<
 	| PayloadAction<'INIT', string>
 	| PayloadAction<'LOAD', string>
-	| PayloadAction<'ADD_PROVIDER', { providerName: string; path: string }>
+	| PayloadAction<
+			'ADD_PROVIDER',
+			{ providerName: string; path: string; token?: string }
+	  >
 	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
 	| PayloadAction<'AUTH_GOOGLE', { token: string; path: string }>
 >;

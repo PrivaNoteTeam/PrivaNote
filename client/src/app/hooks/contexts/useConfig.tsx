@@ -10,13 +10,16 @@ import React, {
 	PropsWithChildren
 } from 'react';
 import fs from 'fs';
-import { getGoogleAuth } from '@shared/api/getGoogleAuth';
 
 const actions = {
 	init: createAction('INIT')<string>(),
 	load: createAction('LOAD')<string>(),
 	addProvider:
-		createAction('ADD_PROVIDER')<{ providerName: string; path: string }>(),
+		createAction('ADD_PROVIDER')<{
+			providerName: string;
+			path: string;
+			token?: string;
+		}>(),
 	removeProvider: createAction('REMOVE_PROVIDER')<{
 		providerName: string;
 		path: string;
@@ -56,14 +59,13 @@ const reducer = (
 				return state;
 			}
 
-			getGoogleAuth();
-
 			const addProviderState = {
 				...state,
 				connectedProviders: [
 					...state!.connectedProviders,
 					{
-						name: action.payload.providerName
+						name: action.payload.providerName,
+						token: action.payload.token
 					}
 				]
 			};
