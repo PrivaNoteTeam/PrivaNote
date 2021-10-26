@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useEditorStore, useStore } from '../../../../hooks';
+import { useEditorStore, useStore } from '../../../hooks';
 import { ipcRenderer } from 'electron';
 import { FileSystemItem } from '@types';
 import {
 	renameExplorerItem,
 	getFileSystemItems
-} from '../../../../../shared/utils';
+} from '../../../../shared/utils';
 
 interface Args {
 	item: FileSystemItem;

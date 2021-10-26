@@ -1,43 +1,25 @@
 import React from 'react';
 import { useStore } from '@hooks';
-import { getFileSystemItems } from '@utils';
-import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
-import { Placeholder } from './Placeholder';
+import { Placeholder } from '../Placeholder';
 import { NotificationArea } from '../NotificationArea';
 import { Preview } from './Preview';
 
-interface Props {
-	fileExplorerVisible: boolean;
-}
+export function UIEditorPanel() {
+	const [{ currentNote }] = useStore();
 
-export function UIEditorPanel({ fileExplorerVisible }: Props) {
-	const [{ notebook, currentNote }] = useStore();
+	return (
+		<div className='relative flex-grow flex flex-col'>
+			<NotificationArea />
 
-	return notebook ? (
-		<>
-			{fileExplorerVisible && (
-				<FileExplorer items={getFileSystemItems(notebook)} />
+			{currentNote ? (
+				<div className='flex h-full'>
+					<Editor />
+					<Preview />
+				</div>
+			) : (
+				<Placeholder text='Create or open a note to continue' />
 			)}
-			<div className='relative flex-grow flex flex-col'>
-				<NotificationArea />
-
-				{currentNote ? (
-					<div className='flex h-full'>
-						<Editor />
-						<Preview />
-					</div>
-				) : (
-					<Placeholder text='Create or open a note to continue' />
-				)}
-			</div>
-		</>
-	) : (
-		<>
-			<div className='relative flex-grow flex flex-col'>
-				<NotificationArea />
-				<Placeholder text='Open a notebook to continue' />
-			</div>
-		</>
+		</div>
 	);
 }

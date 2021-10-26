@@ -1,7 +1,6 @@
 import React from 'react';
 import { FileSystemItem } from '@types';
 import { UIFileExplorer } from './fileExplorer/UIFileExplorer';
-
 import { useFileExplorer } from './fileExplorer/useFileExplorer';
 
 interface Props {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useEditorStore, useStore } from '../../../../hooks';
+import { useEditorStore, useStore } from '../../../hooks';
 import { ipcRenderer } from 'electron';
-import { FileSystemItem } from '../../../../../shared/types';
-import { renameExplorerItem } from '../../../../../shared/utils';
+import { FileSystemItem } from '../../../../shared/types';
+import { renameExplorerItem } from '../../../../shared/utils';
 
 interface Args {
 	item: FileSystemItem;

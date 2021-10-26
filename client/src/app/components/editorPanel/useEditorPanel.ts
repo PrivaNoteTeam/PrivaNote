@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import {
@@ -15,7 +15,6 @@ export function useEditorPanel() {
 		{ primarySelection, secondarySelection, isRenaming },
 		editorDispatch
 	] = useEditorStore();
-	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
@@ -33,12 +32,12 @@ export function useEditorPanel() {
 			});
 		});
 
-		ipcRenderer.removeAllListeners('toggleFileExplorer');
-		ipcRenderer.on('toggleFileExplorer', () => {
-			if (!notebook) return;
+		//ipcRenderer.removeAllListeners('toggleFileExplorer');
+		//ipcRenderer.on('toggleFileExplorer', () => {
+		//if (!notebook) return;
 
-			setFileExplorerVisible(!fileExplorerVisible);
-		});
+		//setFileExplorerVisible(!fileExplorerVisible);
+		//});
 
 		ipcRenderer.removeAllListeners('renameExplorerItem');
 		ipcRenderer.on('renameExplorerItem', () => {
@@ -68,13 +67,12 @@ export function useEditorPanel() {
 				});
 			});
 		});
-	}, [notebook, primarySelection, secondarySelection, fileExplorerVisible]);
+	}, [notebook, primarySelection, secondarySelection]);
 
 	return {
 		primarySelection,
 		secondarySelection,
 		isRenaming,
-		fileExplorerVisible,
 		editorDispatch
 	};
 }

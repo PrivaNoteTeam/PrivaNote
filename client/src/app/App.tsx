@@ -9,6 +9,10 @@ import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { useIpcListeners } from './hooks/useIpcListeners';
 import { useGoogleDrive } from './hooks/useGoogleDrive';
+import { FileExplorer } from './components/FileExplorer';
+import { getFileSystemItems } from '@shared/utils';
+import { Placeholder } from './components/Placeholder';
+import { NotificationArea } from './components/NotificationArea';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -42,7 +46,19 @@ export function App() {
 					initialState={{ isRenaming: false }}
 					reducer={editorReducer}
 				>
-					<EditorPanel />
+					{notebook ? (
+						<>
+							<FileExplorer
+								items={getFileSystemItems(notebook)}
+							/>
+							<EditorPanel />
+						</>
+					) : (
+						<div className='relative flex-grow flex flex-col'>
+							<NotificationArea />
+							<Placeholder text='Open a notebook to continue' />
+						</div>
+					)}
 				</EditorProvider>
 				<PageManager />
 				<ModalManager />
