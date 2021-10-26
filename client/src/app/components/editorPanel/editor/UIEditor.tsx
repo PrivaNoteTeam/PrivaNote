@@ -66,6 +66,8 @@ export function UIEditor({ unsaved }: Props) {
 							quickSuggestions: false,
 							renderLineHighlight: 'none',
 							cursorBlinking: 'blink',
+							hideCursorInOverviewRuler: true,
+							overviewRulerBorder: false,
 							scrollbar: {
 								vertical: 'hidden'
 							}
