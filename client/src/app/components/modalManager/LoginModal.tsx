@@ -31,6 +31,7 @@ export function LoginModal() {
 	});
 
 	const handleClick = () => {
+		console.log(history.location);
 		history.push('/register');
 	};
 
@@ -107,20 +108,18 @@ export function LoginModal() {
 						/>
 						<div className='flex justify-between items-center'>
 							<div className='flex flex-col text-sm space-y-1'>
-								<a
-									href='#'
+								<p
 									onClick={handleForgotPasswordClick}
 									className='text-blue-500 hover:underline cursor-pointer'
 								>
 									Forgot password?
-								</a>
-								<a
-									href='#'
+								</p>
+								<p
 									onClick={handleClick}
 									className='text-blue-500 hover:underline cursor-pointer'
 								>
 									Create new account
-								</a>
+								</p>
 							</div>
 							<input
 								type='submit'

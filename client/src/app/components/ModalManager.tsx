@@ -17,13 +17,29 @@ export function ModalManager() {
 
 	return (
 		<>
-			<Route path='/notebook/create' component={CreateNotebookModal} />
-			<Route path='/login' component={LoginModal} />
-			<Route path='/register' component={RegisterModal} />
-			<Route path='/forgot-password' component={ForgotPasswordModal} />
-			<Route path='/reset-password' component={ResetPasswordModal} />
-			<Route path='/verification' component={VerificiationModal} />
-			<Route path='/2fa' component={TwoFactorAuthModal} />
+			<Route
+				path='/notebook/create'
+				children={<CreateNotebookModal />}
+				exact
+			/>
+			<Route path='/login' children={<LoginModal />} exact />
+			<Route path='/register' children={<RegisterModal />} exact />
+			<Route
+				path='/forgot-password'
+				children={<ForgotPasswordModal />}
+				exact
+			/>
+			<Route
+				path='/reset-password'
+				children={<ResetPasswordModal />}
+				exact
+			/>
+			<Route
+				path='/verification'
+				children={<VerificiationModal />}
+				exact
+			/>
+			<Route path='/2fa' children={<TwoFactorAuthModal />} exact />
 		</>
 	);
 }

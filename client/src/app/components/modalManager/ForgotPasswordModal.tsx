@@ -45,7 +45,7 @@ export function ForgotPasswordModal() {
 	};
 
 	return (
-		<ModalLayout close={() => history.push('/forgot-password')}>
+		<ModalLayout close={() => history.push('/')}>
 			{!responseSuccess ? (
 				<form onSubmit={submitHandler} className='w-80 space-y-8'>
 					<div className='space-y-3'>
