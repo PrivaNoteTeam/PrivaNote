@@ -1,19 +1,17 @@
 import React from 'react';
 import CloudIcon from '@assets/icons/cloud.svg';
-import { usePageStore } from '@hooks';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
 	status: 'default' | 'error' | 'synced' | 'syncing';
 }
 
 export function CloudButton({}: Props) {
-	const [, pageDispatch] = usePageStore();
-	const handleClick = () =>
-		pageDispatch({
-			type: 'cloudProviderPage',
-			cloudProviderPageVisible: true
-		});
+	let history = useHistory();
 
+	const handleClick = () => {
+		history.push('/cloudprovider');
+	};
 	return (
 		<div className='text-gray-500 hover:text-gray-400 cursor-pointer'>
 			<CloudIcon

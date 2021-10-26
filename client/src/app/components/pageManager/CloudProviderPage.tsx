@@ -1,18 +1,9 @@
 import React from 'react';
-import { usePageStore } from '@hooks';
 import { UICloudProviderPage } from './cloudProviderPage/UICloudProviderPage';
+import { useHistory } from 'react-router-dom';
 
 export function CloudProviderPage() {
-	const [, pageDispatch] = usePageStore();
+	let history = useHistory();
 
-	return (
-		<UICloudProviderPage
-			handleClose={() =>
-				pageDispatch({
-					type: 'cloudProviderPage',
-					cloudProviderPageVisible: false
-				})
-			}
-		/>
-	);
+	return <UICloudProviderPage handleClose={() => history.push('/')} />;
 }

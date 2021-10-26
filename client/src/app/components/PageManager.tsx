@@ -1,19 +1,16 @@
 import React from 'react';
-import { usePageStore } from '@hooks';
 import { CloudProviderPage } from './pageManager/cloudProviderPage';
 import { SelectCloudProviderPage } from './pageManager/selectCloudProviderPage';
+import { Route } from 'react-router';
 
 export function PageManager() {
-	const [{ cloudProviderPageVisible, selectCloudProviderPageVisible }] =
-		usePageStore();
-
-	let render: JSX.Element | null = null;
-
-	if (cloudProviderPageVisible) {
-		render = <CloudProviderPage />;
-	} else if (selectCloudProviderPageVisible) {
-		render = <SelectCloudProviderPage />;
-	}
-
-	return render;
+	return (
+		<>
+			<Route path='/cloudprovider' children={<CloudProviderPage />} />
+			<Route
+				path='/cloudprovider/select'
+				children={<SelectCloudProviderPage />}
+			/>
+		</>
+	);
 }

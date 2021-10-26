@@ -1,9 +1,10 @@
-import { useConfig, usePageStore, useStore } from '@hooks';
+import { useConfig, useStore } from '@hooks';
 import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
-import { PageManagerAction, ConfigDispatch } from '@types';
+import { ConfigDispatch } from '@types';
 import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+import { useHistory } from 'react-router-dom';
 
 type SupportedProvider = 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 
@@ -13,24 +14,18 @@ interface Args {
 }
 
 export function useProviderItem({ active, provider }: Args) {
-	const [, pageDispatch] = usePageStore();
 	const [, configDispatch] = useConfig();
 	const [{ notebook }] = useStore();
+	let history = useHistory();
 
 	return {
 		logo: getLogo(provider),
-		...getHandlers(
-			pageDispatch,
-			configDispatch,
-			active,
-			provider,
-			notebook!
-		) // notebook could be null
+		...getHandlers(history, configDispatch, active, provider, notebook!) // notebook could be null
 	};
 }
 
 function getHandlers(
-	pageDispatch: React.Dispatch<PageManagerAction>,
+	history: any,
 	configDispatch: ConfigDispatch,
 	active: boolean,
 	providerName: string,
@@ -50,10 +45,7 @@ function getHandlers(
 						});
 				},
 				handleChangeProvider: () => {
-					pageDispatch({
-						type: 'selectCloudProviderPage',
-						selectCloudProviderPageVisible: true
-					});
+					history.push('/cloudprovider/select');
 				}
 		  }
 		: {

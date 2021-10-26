@@ -2,19 +2,17 @@ import React, { useEffect } from 'react';
 import UserCircleIcon from '../../assets/icons/user-circle.svg';
 import LoginIcon from '@assets/icons/arrow-circle-right.svg';
 import { ipcRenderer } from 'electron';
-import { useUserStore, useModalStore, useNotificationQueue } from '@hooks';
+import { useUserStore, useNotificationQueue } from '@hooks';
+import { useHistory } from 'react-router';
 
 export function UserButton() {
-	const [{ loginModalVisible }, modalManagerDispatch] = useModalStore();
 	const [{ user }, userDispatch] = useUserStore();
 	const [, notify] = useNotificationQueue();
+	let history = useHistory();
 
 	const handleClick = () => {
 		if (!user) {
-			modalManagerDispatch({
-				type: 'loginModal',
-				loginModalVisible: !loginModalVisible
-			});
+			history.push('/login');
 		} else {
 			ipcRenderer.send('openUserContextMenu', user);
 		}
@@ -54,15 +52,3 @@ export function UserButton() {
 		</>
 	);
 }
-
-/*
-
-		{ user ? (
-			<div className='text-gray-500 hover:text-gray-400'>	
-				<UserCircleIcon className='cursor-pointer' onClick={handleClick} /> 
-			</div>)
-		:
-			<div></div>
-		}
-	);
-*/

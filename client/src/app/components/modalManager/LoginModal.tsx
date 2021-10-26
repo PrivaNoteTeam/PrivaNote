@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
-import { useModalStore } from '../../hooks';
 import { LoginFormValues } from '@types';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,6 +9,7 @@ import { loginUser } from '@shared/api/loginUser';
 import { FormBanner } from './FormBanner';
 import { FormError } from '@types';
 import { AxiosError } from 'axios';
+import { useHistory } from 'react-router';
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required(),
@@ -17,8 +17,8 @@ const validationSchema = yup.object({
 });
 
 export function LoginModal() {
-	const [, modalManagerDispatch] = useModalStore();
 	const [formError, setFormError] = useState<FormError | undefined>();
+	let history = useHistory();
 
 	const {
 		register,
@@ -31,18 +31,11 @@ export function LoginModal() {
 	});
 
 	const handleClick = () => {
-		modalManagerDispatch({ type: 'loginModal', loginModalVisible: false });
-		modalManagerDispatch({
-			type: 'registerModal',
-			registerModalVisible: true
-		});
+		history.push('/register');
 	};
 
 	const handleForgotPasswordClick = () => {
-		modalManagerDispatch({
-			type: 'forgotPasswordModal',
-			forgotPasswordModalVisible: true
-		});
+		history.push('/forgot-password');
 	};
 
 	const submitHandler = useFormHandleSubmit(
@@ -63,10 +56,7 @@ export function LoginModal() {
 					} else if (response.formError) {
 						setFormError(response.formError);
 					} else if (response.success) {
-						modalManagerDispatch({
-							type: 'twoFactorAuthModal',
-							twoFactorAuthModalVisible: true
-						});
+						history.push('/2fa');
 					} else {
 						setFormError(unknownError);
 					}
@@ -83,14 +73,7 @@ export function LoginModal() {
 	);
 
 	return (
-		<ModalLayout
-			close={() =>
-				modalManagerDispatch({
-					type: 'loginModal',
-					loginModalVisible: false
-				})
-			}
-		>
+		<ModalLayout close={() => history.push('/')}>
 			<form onSubmit={submitHandler} className='w-80 space-y-8'>
 				<div className='space-y-3'>
 					<h2 className='text-center text-2xl text-white select-none'>

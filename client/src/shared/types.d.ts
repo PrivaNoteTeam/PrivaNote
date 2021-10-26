@@ -64,36 +64,6 @@ export interface UserAction extends UserState {
 	type: 'login' | 'logout';
 }
 
-export interface ModalManagerState {
-	loginModalVisible: boolean;
-	registerModalVisible: boolean;
-	createNotebookModalVisible: boolean;
-	verificationModalVisible: boolean;
-	twoFactorAuthModalVisible: boolean;
-	forgotPasswordModalVisible: boolean;
-	resetPasswordModalVisible: boolean;
-}
-
-export interface ModalManagerAction extends Partial<ModalManagerState> {
-	type:
-		| 'loginModal'
-		| 'registerModal'
-		| 'createNotebookModal'
-		| 'verificationModal'
-		| 'twoFactorAuthModal'
-		| 'forgotPasswordModal'
-		| 'resetPasswordModal';
-}
-
-export interface PageManagerState {
-	cloudProviderPageVisible: boolean;
-	selectCloudProviderPageVisible: boolean;
-}
-
-export interface PageManagerAction extends Partial<PageManagerState> {
-	type: 'cloudProviderPage' | 'selectCloudProviderPage';
-}
-
 export interface EditorState {
 	primarySelection?: FileSystemItem;
 	secondarySelection?: FileSystemItem;
