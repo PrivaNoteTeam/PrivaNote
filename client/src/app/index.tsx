@@ -12,11 +12,11 @@ import {
 import {
 	StoreProvider,
 	ModalProvider,
-	PageProvider,
 	UserProvider,
 	ConfigProvider,
 	NotificationProvider
 } from '@hooks';
+import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 
 const initialAppState: AppState = {};
@@ -111,22 +111,22 @@ function modalReducer(
 }
 
 const tree = (
-	<StoreProvider initialState={initialAppState} reducer={storeReducer}>
-		<UserProvider initialState={initialUserState} reducer={userReducer}>
-			<NotificationProvider>
-				<ModalProvider
-					initialState={initialModalState}
-					reducer={modalReducer}
-				>
-					<PageProvider>
+	<HashRouter>
+		<StoreProvider initialState={initialAppState} reducer={storeReducer}>
+			<UserProvider initialState={initialUserState} reducer={userReducer}>
+				<NotificationProvider>
+					<ModalProvider
+						initialState={initialModalState}
+						reducer={modalReducer}
+					>
 						<ConfigProvider>
 							<App />
 						</ConfigProvider>
-					</PageProvider>
-				</ModalProvider>
-			</NotificationProvider>
-		</UserProvider>
-	</StoreProvider>
+					</ModalProvider>
+				</NotificationProvider>
+			</UserProvider>
+		</StoreProvider>
+	</HashRouter>
 );
 
 ReactDOM.render(tree, document.getElementById('app'));
