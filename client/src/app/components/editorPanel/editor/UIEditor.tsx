@@ -1,13 +1,13 @@
 import React from 'react';
 import { Breadcrumb } from './Breadcrumb';
 //import Markdown from 'markdown-to-jsx'; // for the useEditor business logic, gets HTML from markdown
-import MonicoEditor, { loader, Monaco } from '@monaco-editor/react';
+import MonicoEditor, { loader, Monaco, OnChange } from '@monaco-editor/react';
 import path from 'path';
 
 interface Props {
 	unsaved: boolean;
 	text: string;
-	handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	handleChange: OnChange;
 }
 
 function ensureFirstBackSlash(str: string) {
@@ -19,7 +19,7 @@ function uriFromPath(_path: string) {
 	return encodeURI('file://' + ensureFirstBackSlash(pathName));
 }
 
-export function UIEditor({ unsaved }: Props) {
+export function UIEditor({ unsaved, text, handleChange }: Props) {
 	//const monaco = useMonaco();
 
 	loader.config({
@@ -53,7 +53,8 @@ export function UIEditor({ unsaved }: Props) {
 				<div className='w-full h-full bg-transparent outline-none border-none font-mono p8 resize-none'>
 					<MonicoEditor
 						defaultLanguage='markdown'
-						defaultValue='# Hello world'
+						value={text}
+						onChange={handleChange}
 						options={{
 							padding: { top: 16 },
 							lineNumbers: 'off',
@@ -66,6 +67,7 @@ export function UIEditor({ unsaved }: Props) {
 							quickSuggestions: false,
 							renderLineHighlight: 'none',
 							cursorBlinking: 'blink',
+							links: false,
 							hideCursorInOverviewRuler: true,
 							overviewRulerBorder: false,
 							scrollbar: {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import { saveFile } from '@utils';
+import { OnChange } from '@monaco-editor/react';
 import fs from 'fs';
 
 export function useEditor() {
@@ -12,10 +13,12 @@ export function useEditor() {
 
 	const autoSave = true; // ADD TO SETTINGS
 
-	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setText(event.target.value);
+	const handleChange: OnChange = (value, _) => {
+		if (!value) return;
+
+		setText(value);
 		if (autoSave) {
-			saveFile(currentNote!, event.target.value);
+			saveFile(currentNote!, value);
 		} else {
 			setUnsaved(true);
 		}
