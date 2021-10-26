@@ -5,6 +5,7 @@ import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
 import { Placeholder } from './Placeholder';
 import { NotificationArea } from '../NotificationArea';
+import { Preview } from './Preview';
 
 interface Props {
 	fileExplorerVisible: boolean;
@@ -22,7 +23,10 @@ export function UIEditorPanel({ fileExplorerVisible }: Props) {
 				<NotificationArea />
 
 				{currentNote ? (
-					<Editor />
+					<div className='flex h-full'>
+						<Editor />
+						<Preview />
+					</div>
 				) : (
 					<Placeholder text='Create or open a note to continue' />
 				)}
