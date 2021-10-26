@@ -6,6 +6,7 @@ import { Note } from './Note';
 import { getFileName } from '@shared/utils';
 import PlusIcon from '@assets/icons/plus.svg';
 import FolderOpenIcon from '@assets/icons/folder-open.svg';
+import { Attachment } from './Attachment';
 
 interface Props {
 	items: FileSystemItem[];
@@ -64,6 +65,15 @@ export function UIFileExplorer({
 						/>
 					);
 				})}
+				<Attachment
+					item={{
+						name: 'attachment.md',
+						path: '',
+						type: 'note'
+					}}
+					renameText={renameText}
+					setRenameText={setRenameText}
+				/>
 			</div>
 		</div>
 	);
