@@ -2,7 +2,8 @@ import { verifyUser } from '@shared/Api/verifyUser';
 import { getFileName, parseCodeFromUrl } from '@shared/utils';
 import { ipcRenderer } from 'electron';
 import { useEffect } from 'react';
-import { useConfig, useModalStore, useStore } from '.';
+import { useHistory } from 'react-router';
+import { useConfig, useStore } from '.';
 
 const createListener = (channel: string, callback: (...args: any) => void) => {
 	ipcRenderer.removeAllListeners(channel);
@@ -11,15 +12,12 @@ const createListener = (channel: string, callback: (...args: any) => void) => {
 
 export function useIpcListeners() {
 	const [{ currentNote, notebook }, dispatch] = useStore();
-	const [, modalDispatch] = useModalStore();
 	const [, configDispatch] = useConfig();
+	let history = useHistory();
 
 	useEffect(() => {
 		createListener('createNotebook', () => {
-			modalDispatch({
-				type: 'createNotebookModal',
-				createNotebookModalVisible: true
-			});
+			history.push('/notebook/create');
 		});
 
 		createListener(
@@ -80,10 +78,7 @@ export function useIpcListeners() {
 					console.log(code);
 					console.log(response);
 					if (response.user) {
-						modalDispatch({
-							type: 'resetPasswordModal',
-							resetPasswordModalVisible: true
-						});
+						history.push('/reset-password');
 					}
 				})
 				.catch((err) => {

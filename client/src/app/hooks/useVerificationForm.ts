@@ -1,13 +1,14 @@
-import { useUserStore, useModalStore } from '@hooks';
+import { useUserStore } from '@hooks';
 import { useForm } from 'react-hook-form';
 import { VerificationFormValues } from '@types';
 import { verifyUser } from '@shared/Api/verifyUser';
 import { useNotificationQueue } from '@hooks';
+import { useHistory } from 'react-router';
 
 export function useVerificationForm() {
 	const [, userDispatch] = useUserStore();
-	const [, modalManagerDispatch] = useModalStore();
 	const [, notify] = useNotificationQueue();
+	let history = useHistory();
 
 	const {
 		register,
@@ -41,10 +42,7 @@ export function useVerificationForm() {
 				});
 			}
 
-			modalManagerDispatch({
-				type: 'verificationModal',
-				verificationModalVisible: false
-			});
+			history.push('/');
 		}
 	);
 

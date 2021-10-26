@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TextField } from '../TextField';
-import { useModalStore } from '@hooks';
 import * as yup from 'yup';
 import { ModalLayout } from './Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,15 +7,16 @@ import { useForm } from 'react-hook-form';
 import { FormError } from '@types';
 import { FormBanner } from './FormBanner';
 import { forgetPassword } from '@shared/Api/forgetPassword';
+import { useHistory } from 'react-router';
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required()
 });
 
 export function ForgotPasswordModal() {
-	const [, modalManagerDispatch] = useModalStore();
 	const [formError] = useState<FormError | undefined>();
 	const [responseSuccess, setResponseSuccess] = useState<boolean>(false);
+	let history = useHistory();
 
 	const {
 		register,
@@ -41,21 +41,11 @@ export function ForgotPasswordModal() {
 	);
 
 	const handleCancelClick = () => {
-		modalManagerDispatch({
-			type: 'loginModal',
-			loginModalVisible: true
-		});
+		history.push('/login');
 	};
 
 	return (
-		<ModalLayout
-			close={() =>
-				modalManagerDispatch({
-					type: 'forgotPasswordModal',
-					forgotPasswordModalVisible: false
-				})
-			}
-		>
+		<ModalLayout close={() => history.push('/forgot-password')}>
 			{!responseSuccess ? (
 				<form onSubmit={submitHandler} className='w-80 space-y-8'>
 					<div className='space-y-3'>
@@ -114,12 +104,7 @@ export function ForgotPasswordModal() {
 					</div>
 					<div className='flex justify-end items-center space-x-2'>
 						<button
-							onClick={() =>
-								modalManagerDispatch({
-									type: 'forgotPasswordModal',
-									forgotPasswordModalVisible: false
-								})
-							}
+							onClick={() => history.push('/')}
 							className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
 						>
 							Ok
