@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import { saveFile } from '@utils';
 import { OnChange } from '@monaco-editor/react';
 import fs from 'fs';
 
-export function useEditor() {
+interface Args {
+	text: string;
+	setText: Dispatch<string>;
+}
+
+export function useEditor({ text, setText }: Args) {
 	const [{ currentNote }] = useStore();
-	const [text, setText] = useState<string>('');
 	const [unsaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
 

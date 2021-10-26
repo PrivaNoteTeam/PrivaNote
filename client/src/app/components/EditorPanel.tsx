@@ -3,7 +3,7 @@ import { useEditorPanel } from './editorPanel/useEditorPanel';
 import { UIEditorPanel } from './editorPanel/UIEditorPanel';
 
 export function EditorPanel() {
-	useEditorPanel();
+	const { text, setText } = useEditorPanel();
 
-	return <UIEditorPanel />;
+	return <UIEditorPanel text={text} setText={setText} />;
 }

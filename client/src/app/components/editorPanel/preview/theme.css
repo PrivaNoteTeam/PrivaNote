@@ -1,0 +1,39 @@
+#wrapper h1 {
+	@apply text-5xl mb-2;
+}
+
+#wrapper h2 {
+	@apply text-4xl;
+}
+
+#wrapper h3 {
+	@apply text-3xl;
+}
+
+#wrapper h4 {
+	@apply text-2xl;
+}
+
+#wrapper h5 {
+	@apply text-xl;
+}
+
+#wrapper h6 {
+	@apply text-lg;
+}
+
+#wrapper ul {
+	@apply list-inside list-disc;
+}
+
+#wrapper img {
+	@apply rounded-xl;
+}
+
+#wrapper a {
+	@apply text-blue-500 hover:underline;
+}
+
+#wrapper > p > code {
+	@apply inline-block bg-gray-800 border border-gray-700 rounded-md p-0.5 m-0.5 text-sm font-mono;
+}

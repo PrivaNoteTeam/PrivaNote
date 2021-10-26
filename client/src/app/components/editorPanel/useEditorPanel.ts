@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import {
@@ -15,6 +15,7 @@ export function useEditorPanel() {
 		{ primarySelection, secondarySelection, isRenaming },
 		editorDispatch
 	] = useEditorStore();
+	const [text, setText] = useState('');
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
@@ -73,6 +74,8 @@ export function useEditorPanel() {
 		primarySelection,
 		secondarySelection,
 		isRenaming,
-		editorDispatch
+		editorDispatch,
+		text,
+		setText
 	};
 }
