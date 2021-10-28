@@ -1,4 +1,5 @@
 import React from 'react';
+import { UINode } from './node/UINode';
 import { useNode } from './node/useNode';
 import { FileSystemItem } from '@types';
 import DirectoryIcon from '@assets/icons/folder-f.svg';
@@ -10,8 +11,9 @@ interface Props {
 	depth?: number;
 }
 
-export function Node({ item }: Props) {
-	const {} = useNode({ item });
+export function Node({ item, depth = 0 }: Props) {
+	const { opened, foldable, primarySelected, secondarySelected, children } =
+		useNode({ item });
 
 	let icon: JSX.Element;
 	const iconStyle = {
@@ -31,7 +33,16 @@ export function Node({ item }: Props) {
 			break;
 	}
 
-	console.log(icon);
-
-	return <></>;
+	return (
+		<UINode
+			children={children}
+			icon={icon}
+			depth={depth}
+			name={item.name}
+			foldable={foldable}
+			opened={opened}
+			primarySelected={primarySelected}
+			secondarySelected={secondarySelected}
+		/>
+	);
 }

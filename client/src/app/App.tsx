@@ -17,11 +17,11 @@ import { NotificationArea } from './components/NotificationArea';
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
 		case 'primarySelect':
-			return { ...state, primarySelection: action.primarySelection };
+			return { ...state, primarySelection: action.primarySelection! };
 		case 'secondarySelect':
-			return { ...state, secondarySelection: action.secondarySelection };
+			return { ...state, secondarySelection: action.secondarySelection! };
 		case 'rename':
-			return { ...state, isRenaming: action.isRenaming };
+			return { ...state, isRenaming: action.isRenaming! };
 	}
 };
 

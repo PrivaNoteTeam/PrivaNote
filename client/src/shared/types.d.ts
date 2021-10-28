@@ -72,7 +72,7 @@ export interface EditorState {
 	isRenaming: boolean;
 }
 
-export interface EditorAction extends EditorState {
+export interface EditorAction extends Partial<EditorState> {
 	type: 'primarySelect' | 'secondarySelect' | 'rename';
 }
 
