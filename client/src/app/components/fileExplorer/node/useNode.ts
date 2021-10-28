@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEditorStore, useStore } from '@hooks';
 import { getFileSystemItems } from '@utils';
 import { FileSystemItem } from '@types';
+import { ipcRenderer } from 'electron';
 
 interface Args {
 	item: FileSystemItem;
@@ -50,12 +51,24 @@ export function useNode({ item }: Args) {
 		if (foldable) setOpened(!opened);
 	};
 
+	const handleContextMenu = () => {
+		ipcRenderer.send('openExplorerFileContextMenu');
+
+		editorDispatch({
+			type: 'secondarySelect',
+			secondarySelection: item
+		});
+
+		// set rename text?
+	};
+
 	return {
 		children,
 		opened,
 		foldable,
 		primarySelected,
 		secondarySelected,
-		handleClick
+		handleClick,
+		handleContextMenu
 	};
 }

@@ -18,7 +18,8 @@ export function Node({ item, depth = 0 }: Props) {
 		primarySelected,
 		secondarySelected,
 		children,
-		handleClick
+		handleClick,
+		handleContextMenu
 	} = useNode({ item });
 
 	let icon: JSX.Element;
@@ -50,6 +51,7 @@ export function Node({ item, depth = 0 }: Props) {
 			primarySelected={primarySelected}
 			secondarySelected={secondarySelected}
 			onClick={handleClick}
+			onContextMenu={handleContextMenu}
 		/>
 	);
 }

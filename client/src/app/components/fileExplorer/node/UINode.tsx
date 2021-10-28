@@ -14,6 +14,7 @@ interface Props {
 	icon: JSX.Element;
 	children: FileSystemItem[];
 	onClick: () => void;
+	onContextMenu: () => void;
 }
 
 export function UINode({
@@ -25,7 +26,8 @@ export function UINode({
 	secondarySelected = false,
 	icon,
 	children,
-	onClick
+	onClick,
+	onContextMenu
 }: Props) {
 	let selectionStyle = '';
 
@@ -50,6 +52,7 @@ export function UINode({
 		<div>
 			<div
 				onClick={onClick}
+				onContextMenu={onContextMenu}
 				className={`flex items-center py-0.5 select-none cursor-pointer align-bottom ${selectionStyle}`}
 				style={{ paddingLeft: `${depth + 2}rem` }}
 			>
