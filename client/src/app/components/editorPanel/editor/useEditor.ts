@@ -11,7 +11,7 @@ interface Args {
 }
 
 export function useEditor({ text, setText }: Args) {
-	const [{ currentNote }] = useStore();
+	const [{ currentFile }] = useStore();
 	const [unsaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
 
@@ -22,26 +22,26 @@ export function useEditor({ text, setText }: Args) {
 
 		setText(value);
 		if (autoSave) {
-			saveFile(currentNote!, value);
+			saveFile(currentFile!, value);
 		} else {
 			setUnsaved(true);
 		}
 	};
 
 	if (manualSave) {
-		saveFile(currentNote!, text);
+		saveFile(currentFile!, text);
 		setUnsaved(false);
 		setManualSave(false);
 	}
 
 	useEffect(() => {
-		let buffer = fs.readFileSync(currentNote!.path);
+		let buffer = fs.readFileSync(currentFile!.path);
 		setText(buffer.toString());
 
 		ipcRenderer.on('saveNote', () => {
 			setManualSave(true);
 		});
-	}, [currentNote]);
+	}, [currentFile]);
 
 	return { unsaved, text, handleChange };
 }

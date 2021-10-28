@@ -11,7 +11,7 @@ interface Args {
 }
 
 export function useNote({ item, renameText, setRenameText }: Args) {
-	const [{ currentNote }, dispatch] = useStore();
+	const [{ currentFile }, dispatch] = useStore();
 	const [{ secondarySelection, isRenaming }, editorDispatch] =
 		useEditorStore();
 	const handleClick = () => {
@@ -33,7 +33,7 @@ export function useNote({ item, renameText, setRenameText }: Args) {
 
 		dispatch({
 			type: 'openNote',
-			currentNote: {
+			currentFile: {
 				name: item.name,
 				path: item.path
 			}
@@ -72,10 +72,10 @@ export function useNote({ item, renameText, setRenameText }: Args) {
 					isRenaming
 				});
 
-				if (item.path == currentNote?.path) {
+				if (item.path == currentFile?.path) {
 					dispatch({
 						type: 'openNote',
-						currentNote: renamedItem
+						currentFile: renamedItem
 					});
 				}
 			});

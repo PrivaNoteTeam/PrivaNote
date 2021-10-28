@@ -11,13 +11,13 @@ interface Props {
 }
 
 export function UIEditorPanel({ text, setText }: Props) {
-	const [{ currentNote }] = useStore();
+	const [{ currentFile }] = useStore();
 
 	return (
 		<div className='relative flex-grow flex flex-col'>
 			<NotificationArea />
 
-			{currentNote ? (
+			{currentFile ? (
 				<div className='flex h-full'>
 					<Editor text={text} setText={setText} />
 					<Preview text={text} />

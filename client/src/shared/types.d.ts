@@ -51,7 +51,7 @@ type ConfigDispatch = Dispatch<
 // Reducer Types
 export interface AppState {
 	notebook?: string;
-	currentNote?: FileItem;
+	currentFile?: FileItem;
 }
 
 export interface AppAction extends AppState {

@@ -8,7 +8,7 @@ import {
 } from '@utils';
 
 export function useFileExplorer() {
-	const [{ notebook, currentNote }, dispatch] = useStore();
+	const [{ notebook, currentFile }, dispatch] = useStore();
 	const [
 		{ primarySelection, secondarySelection, isRenaming },
 		editorDispatch
@@ -23,7 +23,7 @@ export function useFileExplorer() {
 
 		dispatch({
 			type: 'openNote',
-			currentNote: newFile
+			currentFile: newFile
 		});
 	};
 
@@ -69,10 +69,10 @@ export function useFileExplorer() {
 						isRenaming
 					});
 
-					if (secondarySelection?.path == currentNote?.path) {
+					if (secondarySelection?.path == currentFile?.path) {
 						dispatch({
 							type: 'openNote',
-							currentNote: renamedItem
+							currentFile: renamedItem
 						});
 					}
 				})

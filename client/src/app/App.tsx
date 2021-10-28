@@ -26,7 +26,7 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 };
 
 export function App() {
-	const [{ currentNote, notebook }] = useStore();
+	const [{ currentFile, notebook }] = useStore();
 	const [, userDispatch] = useUserStore();
 
 	useIpcListeners();
@@ -36,7 +36,7 @@ export function App() {
 		getUser().then(({ user }) => {
 			if (user) userDispatch({ type: 'login', user });
 		});
-	}, [currentNote, notebook]);
+	}, [currentFile, notebook]);
 
 	return (
 		<>

@@ -14,7 +14,7 @@ interface Args {
 }
 
 export function useDirectory({ item, renameText, setRenameText }: Args) {
-	const [{ currentNote }, dispatch] = useStore();
+	const [{ currentFile }, dispatch] = useStore();
 	const [{ secondarySelection, isRenaming }, editorDispatch] =
 		useEditorStore();
 	const [isOpened, setIsOpened] = useState(false);
@@ -76,10 +76,10 @@ export function useDirectory({ item, renameText, setRenameText }: Args) {
 						isRenaming
 					});
 
-					if (item.path == currentNote?.path) {
+					if (item.path == currentFile?.path) {
 						dispatch({
 							type: 'openNote',
-							currentNote: renamedItem
+							currentFile: renamedItem
 						});
 					}
 				})

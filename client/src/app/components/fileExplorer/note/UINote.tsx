@@ -27,7 +27,7 @@ export function UINote({
 	handleRenameFocus,
 	handleRenameKeyDown
 }: Props) {
-	const [{ currentNote }] = useStore();
+	const [{ currentFile }] = useStore();
 	const [{ primarySelection, secondarySelection, isRenaming }] =
 		useEditorStore();
 
@@ -60,7 +60,7 @@ export function UINote({
 		displayItem = (
 			<p
 				className={`${
-					currentNote?.path === item.path
+					currentFile?.path === item.path
 						? 'text-white'
 						: 'text-gray-300'
 				} text-sm`}

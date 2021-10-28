@@ -6,10 +6,10 @@ interface Args {
 }
 
 export function useBreadcrumb({ unsaved }: Args) {
-	const [{ notebook, currentNote }] = useStore();
+	const [{ notebook, currentFile }] = useStore();
 	const [, editorDispatch] = useEditorStore();
 
-	const pathSegments = useRelativePath(notebook!, currentNote!.path).split(
+	const pathSegments = useRelativePath(notebook!, currentFile!.path).split(
 		/[\/\\]/
 	);
 
@@ -36,7 +36,7 @@ export function useBreadcrumb({ unsaved }: Args) {
 		let text = segment;
 
 		if (index === pathSegments.length - 1) {
-			text = unsaved ? currentNote!.name.concat('*') : currentNote!.name;
+			text = unsaved ? currentFile!.name.concat('*') : currentFile!.name;
 		}
 
 		return text;

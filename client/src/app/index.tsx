@@ -23,7 +23,7 @@ const storeReducer = (state: AppState, action: AppAction) => {
 		case 'openNote':
 			return {
 				...state,
-				currentNote: action.currentNote
+				currentNote: action.currentFile
 			};
 		default:
 			throw new Error('An unknown action has been sent to the store.');

@@ -1,5 +1,12 @@
-interface Args {}
+//import { useStore } from "@hooks";
+import { FileSystemItem } from '@types';
 
-export function useNode({}: Args) {
+interface Args {
+	item: FileSystemItem;
+}
+
+export function useNode({ item }: Args) {
+	//const [{ currentFile }, dispatch] = useStore();
+	console.log(item);
 	return {};
 }

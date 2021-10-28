@@ -10,7 +10,7 @@ import {
 import { useEditorStore } from '@hooks';
 
 export function useEditorPanel() {
-	const [{ notebook, currentNote }, dispatch] = useStore();
+	const [{ notebook, currentFile }, dispatch] = useStore();
 	const [
 		{ primarySelection, secondarySelection, isRenaming },
 		editorDispatch
@@ -29,7 +29,7 @@ export function useEditorPanel() {
 
 			dispatch({
 				type: 'openNote',
-				currentNote: newFile
+				currentFile: newFile
 			});
 		});
 
@@ -52,12 +52,12 @@ export function useEditorPanel() {
 		ipcRenderer.on('deleteExplorerItem', () => {
 			deleteExplorerItem(secondarySelection?.path).then(() => {
 				if (
-					currentNote?.path === secondarySelection?.path ||
-					!fileExist(currentNote?.path)
+					currentFile?.path === secondarySelection?.path ||
+					!fileExist(currentFile?.path)
 				) {
 					dispatch({
 						type: 'openNote',
-						currentNote: undefined
+						currentFile: undefined
 					});
 				}
 
