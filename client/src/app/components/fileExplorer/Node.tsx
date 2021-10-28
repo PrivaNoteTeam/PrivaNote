@@ -12,8 +12,14 @@ interface Props {
 }
 
 export function Node({ item, depth = 0 }: Props) {
-	const { opened, foldable, primarySelected, secondarySelected, children } =
-		useNode({ item });
+	const {
+		opened,
+		foldable,
+		primarySelected,
+		secondarySelected,
+		children,
+		handleClick
+	} = useNode({ item });
 
 	let icon: JSX.Element;
 	const iconStyle = {
@@ -43,6 +49,7 @@ export function Node({ item, depth = 0 }: Props) {
 			opened={opened}
 			primarySelected={primarySelected}
 			secondarySelected={secondarySelected}
+			onClick={handleClick}
 		/>
 	);
 }

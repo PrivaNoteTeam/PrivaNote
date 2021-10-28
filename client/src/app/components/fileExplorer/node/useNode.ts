@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useEditorStore, useStore } from '@hooks';
 import { getFileSystemItems } from '@utils';
 import { FileSystemItem } from '@types';
@@ -7,17 +8,15 @@ interface Args {
 }
 
 export function useNode({ item }: Args) {
+	const [opened, setOpened] = useState(false);
 	const [{}, dispatch] = useStore();
 	const [{ primarySelection, secondarySelection }, editorDispatch] =
 		useEditorStore();
 
-	const opened = primarySelection?.path === item.path;
-
-	let children: FileSystemItem[] = opened
-		? getFileSystemItems(item.path)
-		: [];
-
 	const foldable = item.type === 'directory';
+
+	let children: FileSystemItem[] =
+		foldable && opened ? getFileSystemItems(item.path) : [];
 
 	const primarySelected = primarySelection?.path === item.path;
 	const secondarySelected = secondarySelection?.path === item.path;
@@ -38,6 +37,7 @@ export function useNode({ item }: Args) {
 		});
 
 		if (item.type === 'note') {
+			console.log('opening ' + item.name);
 			dispatch({
 				type: 'openNote',
 				currentFile: {
@@ -46,6 +46,8 @@ export function useNode({ item }: Args) {
 				}
 			});
 		}
+
+		if (foldable) setOpened(!opened);
 	};
 
 	return {

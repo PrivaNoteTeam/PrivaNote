@@ -36,6 +36,7 @@ export function useEditor({ text, setText }: Args) {
 
 	useEffect(() => {
 		let buffer = fs.readFileSync(currentFile!.path);
+		console.log(currentFile);
 		setText(buffer.toString());
 
 		ipcRenderer.on('saveNote', () => {
