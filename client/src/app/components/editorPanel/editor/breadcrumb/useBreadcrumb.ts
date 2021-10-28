@@ -26,8 +26,7 @@ export function useBreadcrumb({ unsaved }: Args) {
 					name: part,
 					path,
 					type: isFile(path) ? 'note' : 'directory'
-				},
-				isRenaming: false // this is NOT supposed to be here. Delete ASAP
+				}
 			});
 		};
 	};

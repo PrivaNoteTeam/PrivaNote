@@ -11,10 +11,8 @@ import { useEditorStore } from '@hooks';
 
 export function useEditorPanel() {
 	const [{ notebook, currentFile }, dispatch] = useStore();
-	const [
-		{ primarySelection, secondarySelection, isRenaming },
-		editorDispatch
-	] = useEditorStore();
+	const [{ primarySelection, secondarySelection }, editorDispatch] =
+		useEditorStore();
 	const [text, setText] = useState('');
 
 	useEffect(() => {
@@ -39,14 +37,14 @@ export function useEditorPanel() {
 
 		//setFileExplorerVisible(!fileExplorerVisible);
 		//});
-
+		/*
 		ipcRenderer.removeAllListeners('renameExplorerItem');
 		ipcRenderer.on('renameExplorerItem', () => {
 			editorDispatch({
 				type: 'rename',
 				isRenaming: true
 			});
-		});
+		});*/
 
 		ipcRenderer.removeAllListeners('deleteExplorerItem');
 		ipcRenderer.on('deleteExplorerItem', () => {
@@ -63,8 +61,7 @@ export function useEditorPanel() {
 
 				editorDispatch({
 					type: 'secondarySelect',
-					secondarySelection: undefined,
-					isRenaming // find a way to not need this
+					secondarySelection: undefined
 				});
 			});
 		});
@@ -73,7 +70,6 @@ export function useEditorPanel() {
 	return {
 		primarySelection,
 		secondarySelection,
-		isRenaming,
 		editorDispatch,
 		text,
 		setText

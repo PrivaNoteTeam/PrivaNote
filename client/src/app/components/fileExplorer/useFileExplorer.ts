@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
 import { useEditorStore, useStore } from '@hooks';
-import {
-	createFile,
-	getParentDirectory,
-	createDirectory,
-	renameExplorerItem
-} from '@utils';
+import { createFile, getParentDirectory, createDirectory } from '@utils';
 
 export function useFileExplorer() {
-	const [{ notebook, currentFile }, dispatch] = useStore();
-	const [
-		{ primarySelection, secondarySelection, isRenaming },
-		editorDispatch
-	] = useEditorStore();
+	const [{ notebook }, dispatch] = useStore();
+	const [{ primarySelection }, editorDispatch] = useEditorStore();
 	const [renameText, setRenameText] = useState('');
 
 	const handleAddFileClick = () => {
@@ -35,8 +27,7 @@ export function useFileExplorer() {
 
 		editorDispatch({
 			type: 'primarySelect',
-			primarySelection: newDirectory,
-			isRenaming
+			primarySelection: newDirectory
 		});
 	};
 
@@ -45,16 +36,14 @@ export function useFileExplorer() {
 
 		editorDispatch({
 			type: 'primarySelect',
-			primarySelection: undefined,
-			isRenaming
+			primarySelection: undefined
 		});
 
 		editorDispatch({
 			type: 'secondarySelect',
-			secondarySelection: undefined,
-			isRenaming
+			secondarySelection: undefined
 		});
-
+		/*
 		if (isRenaming) {
 			renameExplorerItem(secondarySelection?.path!, renameText)
 				.then((renamedItem) => {
@@ -66,7 +55,6 @@ export function useFileExplorer() {
 					editorDispatch({
 						type: 'secondarySelect',
 						secondarySelection: undefined,
-						isRenaming
 					});
 
 					if (secondarySelection?.path == currentFile?.path) {
@@ -79,7 +67,7 @@ export function useFileExplorer() {
 				.catch((error) => {
 					console.log(error);
 				});
-		}
+		}*/
 	};
 
 	return {

@@ -69,11 +69,10 @@ export interface UserAction extends UserState {
 export interface EditorState {
 	primarySelection?: FileSystemItem;
 	secondarySelection?: FileSystemItem;
-	isRenaming: boolean;
 }
 
 export interface EditorAction extends Partial<EditorState> {
-	type: 'primarySelect' | 'secondarySelect' | 'rename';
+	type: 'primarySelect' | 'secondarySelect';
 }
 
 export interface RegisterFormValues {

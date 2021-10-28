@@ -31,6 +31,7 @@ export function useRenameField({ name, path, setRenaming }: Args) {
 				type: 'secondarySelect',
 				secondarySelection: undefined
 			});
+			setText(name);
 		}
 	};
 

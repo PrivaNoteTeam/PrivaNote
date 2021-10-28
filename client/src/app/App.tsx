@@ -20,8 +20,6 @@ export const editorReducer = (state: EditorState, action: EditorAction) => {
 			return { ...state, primarySelection: action.primarySelection! };
 		case 'secondarySelect':
 			return { ...state, secondarySelection: action.secondarySelection! };
-		case 'rename':
-			return { ...state, isRenaming: action.isRenaming! };
 	}
 };
 
@@ -42,10 +40,7 @@ export function App() {
 		<>
 			<div className='bg-gray-800 w-screen h-screen flex'>
 				<SideMenu />
-				<EditorProvider
-					initialState={{ isRenaming: false }}
-					reducer={editorReducer}
-				>
+				<EditorProvider initialState={{}} reducer={editorReducer}>
 					{notebook ? (
 						<>
 							<FileExplorer
