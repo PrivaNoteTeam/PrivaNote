@@ -24,6 +24,9 @@ module.exports = [
 		output: {
 			path: __dirname + '/dist',
 			filename: 'electron.js'
+		},
+		externals: {
+			fsevents: require('fsevents')
 		}
 	},
 	{
@@ -66,6 +69,10 @@ module.exports = [
 				{
 					test: /\.svg/,
 					use: ['@svgr/webpack']
+				},
+				{
+					test: /.node$/,
+					loader: 'node-loader'
 				}
 			]
 		},
@@ -84,6 +91,9 @@ module.exports = [
 			new HtmlWebpackInlineSVGPlugin({
 				runPreEmit: true
 			})
-		]
+		],
+		externals: {
+			fsevents: require('fsevents')
+		}
 	}
 ];

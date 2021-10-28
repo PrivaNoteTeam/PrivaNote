@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import { useEditorStore, useStore } from '@hooks';
-import { createFile, getParentDirectory, createDirectory } from '@utils';
+import React, { useEffect } from 'react';
+import { useEditorStore, useStore, useForceUpdate } from '@hooks';
+import {
+	createFile,
+	getParentDirectory,
+	createDirectory,
+	getFileSystemItems,
+	watchDirectory
+} from '@utils';
 
 export function useFileExplorer() {
 	const [{ notebook }, dispatch] = useStore();
 	const [{ primarySelection }, editorDispatch] = useEditorStore();
-	const [renameText, setRenameText] = useState('');
+	const forceUpdate = useForceUpdate();
+
+	const items = notebook ? getFileSystemItems(notebook) : [];
+
+	useEffect(() => {
+		if (!notebook) return;
+
+		watchDirectory(notebook, () => forceUpdate());
+	}, [notebook]);
 
 	const handleAddFileClick = () => {
 		const newFilePath = primarySelection
@@ -43,38 +57,12 @@ export function useFileExplorer() {
 			type: 'secondarySelect',
 			secondarySelection: undefined
 		});
-		/*
-		if (isRenaming) {
-			renameExplorerItem(secondarySelection?.path!, renameText)
-				.then((renamedItem) => {
-					editorDispatch({
-						type: 'rename',
-						isRenaming: false
-					});
-
-					editorDispatch({
-						type: 'secondarySelect',
-						secondarySelection: undefined,
-					});
-
-					if (secondarySelection?.path == currentFile?.path) {
-						dispatch({
-							type: 'openNote',
-							currentFile: renamedItem
-						});
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		}*/
 	};
 
 	return {
+		items,
 		handleAddFileClick,
 		handleAddDirectoryClick,
-		handleOuterClick,
-		renameText,
-		setRenameText
+		handleOuterClick
 	};
 }

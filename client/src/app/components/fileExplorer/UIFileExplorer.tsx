@@ -11,8 +11,6 @@ interface Props {
 	handleAddFileClick: () => void;
 	handleAddDirectoryClick: () => void;
 	handleOuterClick: (event: React.MouseEvent<HTMLDivElement>) => void;
-	renameText: string;
-	setRenameText: React.Dispatch<string>;
 }
 
 export function UIFileExplorer({

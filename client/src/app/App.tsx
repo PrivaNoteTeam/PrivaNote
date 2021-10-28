@@ -10,7 +10,6 @@ import { getUser } from '@shared/Api/getUser';
 import { useIpcListeners } from './hooks/useIpcListeners';
 import { useGoogleDrive } from './hooks/useGoogleDrive';
 import { FileExplorer } from './components/FileExplorer';
-import { getFileSystemItems } from '@shared/utils';
 import { Placeholder } from './components/Placeholder';
 import { NotificationArea } from './components/NotificationArea';
 
@@ -43,9 +42,7 @@ export function App() {
 				<EditorProvider initialState={{}} reducer={editorReducer}>
 					{notebook ? (
 						<>
-							<FileExplorer
-								items={getFileSystemItems(notebook)}
-							/>
+							<FileExplorer />
 							<EditorPanel />
 						</>
 					) : (

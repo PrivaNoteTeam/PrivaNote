@@ -15,3 +15,4 @@ export { saveFile } from './fileSystem/saveFile';
 export { useRelativePath } from './fileSystem/useRelativePath';
 export { parseCodeFromUrl } from './parseCodeFromUrl';
 export { updateConfig } from './updateConfig';
+export { watchDirectory } from './fileSystem/watchDirectory';
