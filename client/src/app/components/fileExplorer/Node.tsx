@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { useNode } from './node/useNode';
 import { FileSystemItem } from '@types';
 import DirectoryIcon from '@assets/icons/folder-f.svg';
@@ -30,6 +30,8 @@ export function Node({ item }: Props) {
 			icon = <AttachmentIcon {...iconStyle} />;
 			break;
 	}
+
+	console.log(icon);
 
 	return <></>;
 }
