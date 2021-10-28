@@ -19,7 +19,9 @@ export function Node({ item, depth = 0 }: Props) {
 		secondarySelected,
 		children,
 		handleClick,
-		handleContextMenu
+		handleContextMenu,
+		renaming,
+		setRenaming
 	} = useNode({ item });
 
 	let icon: JSX.Element;
@@ -42,6 +44,7 @@ export function Node({ item, depth = 0 }: Props) {
 
 	return (
 		<UINode
+			path={item.path}
 			children={children}
 			icon={icon}
 			depth={depth}
@@ -52,6 +55,8 @@ export function Node({ item, depth = 0 }: Props) {
 			secondarySelected={secondarySelected}
 			onClick={handleClick}
 			onContextMenu={handleContextMenu}
+			renaming={renaming}
+			setRenaming={setRenaming}
 		/>
 	);
 }

@@ -3,9 +3,11 @@ import { Node } from '../Node';
 import ChevronDownIcon from '@assets/icons/chevron-down.svg';
 import ChevronRightIcon from '@assets/icons/chevron-right.svg';
 import { FileSystemItem } from '@types';
+import { RenameField } from './RenameField';
 
 interface Props {
 	name: string;
+	path: string;
 	depth: number;
 	foldable?: boolean;
 	opened?: boolean;
@@ -15,10 +17,13 @@ interface Props {
 	children: FileSystemItem[];
 	onClick: () => void;
 	onContextMenu: () => void;
+	renaming: boolean;
+	setRenaming: React.Dispatch<boolean>;
 }
 
 export function UINode({
 	name,
+	path,
 	depth = 0,
 	foldable = false,
 	opened = false,
@@ -27,7 +32,9 @@ export function UINode({
 	icon,
 	children,
 	onClick,
-	onContextMenu
+	onContextMenu,
+	renaming,
+	setRenaming
 }: Props) {
 	let selectionStyle = '';
 
@@ -58,7 +65,15 @@ export function UINode({
 			>
 				{chevronIcon}
 				{icon}
-				<p className='text-gray-300 text-sm'>{name}</p>
+				{renaming ? (
+					<RenameField
+						name={name}
+						path={path}
+						setRenaming={setRenaming}
+					/>
+				) : (
+					<p className='text-gray-300 text-sm'>{name}</p>
+				)}
 			</div>
 			<div className='relative'>
 				<div

@@ -10,6 +10,7 @@ interface Args {
 
 export function useNode({ item }: Args) {
 	const [opened, setOpened] = useState(false);
+	const [renaming, setRenaming] = useState(false);
 	const [{}, dispatch] = useStore();
 	const [{ primarySelection, secondarySelection }, editorDispatch] =
 		useEditorStore();
@@ -38,7 +39,6 @@ export function useNode({ item }: Args) {
 		});
 
 		if (item.type === 'note') {
-			console.log('opening ' + item.name);
 			dispatch({
 				type: 'openNote',
 				currentFile: {
@@ -59,7 +59,13 @@ export function useNode({ item }: Args) {
 			secondarySelection: item
 		});
 
-		// set rename text?
+		console.log('context menu');
+
+		ipcRenderer.removeAllListeners('renameExplorerItem');
+		ipcRenderer.on('renameExplorerItem', () => {
+			console.log('renaming');
+			setRenaming(true);
+		});
 	};
 
 	return {
@@ -69,6 +75,8 @@ export function useNode({ item }: Args) {
 		primarySelected,
 		secondarySelected,
 		handleClick,
-		handleContextMenu
+		handleContextMenu,
+		renaming,
+		setRenaming
 	};
 }
