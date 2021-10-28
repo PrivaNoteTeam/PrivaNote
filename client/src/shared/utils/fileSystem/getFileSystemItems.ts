@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { FileSystemItem } from '../../types';
+import { FileSystemItem, FileSystemItemType } from '../../types';
 
 /** Gets the immediate files and directories of the supplied path
  * @param path The absolute path of the targetted directory
@@ -9,19 +9,23 @@ export const getFileSystemItems = (path: string): FileSystemItem[] => {
 	const itemNames = fs.readdirSync(path);
 
 	return itemNames
-		.filter(
-			(name) =>
-				(fs.statSync(`${path}/${name}`).isDirectory() ||
-					name.endsWith('.md')) &&
-				!name.startsWith('.')
-		)
+		.filter((name) => !name.startsWith('.'))
 		.map((name) => {
 			const data = fs.statSync(`${path}/${name}`);
+
+			let type: FileSystemItemType;
+			if (data.isDirectory()) {
+				type = 'directory';
+			} else if (name.endsWith('.md')) {
+				type = 'note';
+			} else {
+				type = 'attachment';
+			}
 
 			return {
 				name,
 				path: `${path}/${name}`,
-				type: data.isDirectory() ? 'directory' : 'note'
+				type
 			};
 		})
 		.sort((a, b) => {

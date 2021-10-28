@@ -1,12 +1,12 @@
 import { Dispatch } from 'react';
 import { PayloadAction } from 'typesafe-actions';
 
-export type FileSystemItemTypes = 'note' | 'directory' | 'attachment';
+export type FileSystemItemType = 'note' | 'directory' | 'attachment';
 
 export interface FileSystemItem {
 	name: string;
 	path: string;
-	type: FileSystemItemTypes;
+	type: FileSystemItemType;
 }
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
