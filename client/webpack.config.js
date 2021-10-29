@@ -25,9 +25,6 @@ module.exports = [
 		output: {
 			path: __dirname + '/dist',
 			filename: 'electron.js'
-		},
-		externals: {
-			fsevents: require('fsevents')
 		}
 	},
 	{
@@ -92,9 +89,6 @@ module.exports = [
 			new HtmlWebpackInlineSVGPlugin({
 				runPreEmit: true
 			})
-		],
-		externals: {
-			fsevents: process.platform === 'darwin' && require('fsevents')
-		}
+		]
 	}
 ];

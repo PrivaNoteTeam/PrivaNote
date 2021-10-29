@@ -1,5 +1,5 @@
-import chokidar from 'chokidar';
+import watch from 'node-watch';
 
 export const watchDirectory = (path: string, cb: () => any) => {
-	chokidar.watch(path).on('all', cb);
+	watch(path, { recursive: true }, cb);
 };
