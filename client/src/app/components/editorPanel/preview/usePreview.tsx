@@ -55,8 +55,8 @@ export function usePreview(text: string) {
 								token.text
 							}</p>
 						</div>
-						<div class='flex flex-col space-y-0.5 items-center text-xs'>
-							<p class='bg-gray-800 p-0.5 rounded-md text-gray-900 font-bold uppercase text-center'>
+						<div class='flex flex-col space-y-1 items-center text-xs'>
+							<p class='bg-gray-700 p-1 rounded-md text-gray-900 font-bold uppercase text-center'>
 								${fileExt}
 							</p>
 							<p class='text-gray-500 hover:no-underline no-underline'>
