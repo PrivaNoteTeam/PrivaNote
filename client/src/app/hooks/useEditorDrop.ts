@@ -21,11 +21,9 @@ export function useEditorDrop() {
 	const drop = (files: any[], cursorPosition: [x: number, y: number]) => {
 		files.forEach((file: File) => {
 			const copyPath = `${currentFileParentPath}/${file.name}`;
-			fs.copyFileSync(file.path, copyPath);
-
-			if (callbackRef.current) {
+			fs.copyFile(file.path, copyPath, () => {});
+			if (callbackRef.current)
 				callbackRef.current(copyPath, cursorPosition);
-			}
 		});
 	};
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb } from './Breadcrumb';
-import MonicoEditor, { loader, Monaco, OnChange } from '@monaco-editor/react';
+import MonicoEditor, { loader, OnChange, OnMount } from '@monaco-editor/react';
 import path from 'path';
 import { Dropzone } from './Dropzone';
 import { useEditorDrop } from '@hooks';
@@ -31,7 +31,7 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 		}
 	});
 
-	const handleMount = (_: any, monaco: Monaco) => {
+	const handleMount: OnMount = (event, monaco) => {
 		monaco.editor.defineTheme('Default', {
 			base: 'vs-dark',
 			colors: { 'editor.background': '#11182700' },
@@ -47,7 +47,19 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 		monaco.editor.setTheme('Default');
 
 		init((path: string, cursorPosition: [number, number]) => {
-			console.log(path, cursorPosition);
+			console.log('run', path);
+			const target = event.getTargetAtClientPoint(
+				cursorPosition[0],
+				cursorPosition[1]
+			);
+
+			if (!target) return;
+
+			event.setPosition(target.position!);
+			const textToInsert = `[file_name]{${path}}`;
+			event.trigger('keyboard', 'type', { text: textToInsert });
+
+			console.log(target);
 		});
 	};
 
