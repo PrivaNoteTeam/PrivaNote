@@ -30,8 +30,12 @@
 	@apply rounded-xl;
 }
 
-#wrapper a {
+#wrapper a:not(.attachment-link) {
 	@apply text-blue-500 hover:underline;
+}
+
+#wrapper .attachment-link a {
+	@apply hover:no-underline text-gray-400;
 }
 
 #wrapper > p > code {
