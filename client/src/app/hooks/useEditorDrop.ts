@@ -8,7 +8,7 @@ type CallbackFunction = (
 ) => void;
 
 export function useEditorDrop() {
-	const [{ currentFile }] = useStore();
+	const [{ currentFile, notebook }] = useStore();
 	const currentFileParentPath = currentFile!.path.substring(
 		0,
 		currentFile!.path.lastIndexOf('/')
@@ -22,8 +22,13 @@ export function useEditorDrop() {
 		files.forEach((file: File) => {
 			const copyPath = `${currentFileParentPath}/${file.name}`;
 			fs.copyFile(file.path, copyPath, () => {});
+
+			const copyPathRelative = copyPath.substring(
+				notebook!.lastIndexOf('/') + 1
+			);
+
 			if (callbackRef.current)
-				callbackRef.current(copyPath, cursorPosition);
+				callbackRef.current(copyPathRelative, cursorPosition);
 		});
 	};
 
