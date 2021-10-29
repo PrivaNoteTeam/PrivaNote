@@ -1,8 +1,8 @@
 import React from 'react';
 import { Breadcrumb } from './Breadcrumb';
-//import Markdown from 'markdown-to-jsx'; // for the useEditor business logic, gets HTML from markdown
 import MonicoEditor, { loader, Monaco, OnChange } from '@monaco-editor/react';
 import path from 'path';
+import { Dropzone } from './Dropzone';
 
 interface Props {
 	unsaved: boolean;
@@ -20,8 +20,6 @@ function uriFromPath(_path: string) {
 }
 
 export function UIEditor({ unsaved, text, handleChange }: Props) {
-	//const monaco = useMonaco();
-
 	loader.config({
 		paths: {
 			vs: uriFromPath(
@@ -49,33 +47,38 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
 			<Breadcrumb unsaved={unsaved} />
-			<div className='overflow-auto flex-grow w-full'>
-				<div className='w-full h-full bg-transparent outline-none border-none font-mono p8 resize-none'>
-					<MonicoEditor
-						defaultLanguage='markdown'
-						value={text}
-						onChange={handleChange}
-						options={{
-							padding: { top: 16 },
-							lineNumbers: 'off',
-							fontSize: 14,
-							smoothScrolling: true,
-							contextmenu: false,
-							minimap: { enabled: false },
-							wordWrap: 'on',
-							selectionHighlight: false,
-							quickSuggestions: false,
-							renderLineHighlight: 'none',
-							cursorBlinking: 'blink',
-							links: false,
-							hideCursorInOverviewRuler: true,
-							overviewRulerBorder: false,
-							scrollbar: {
-								vertical: 'hidden'
-							}
-						}}
-						onMount={handleMount}
-					/>
+			<div
+				className='overflow-auto flex-grow w-full'
+				onDragCapture={() => console.log('dragging')}
+			>
+				<div className='relative w-full h-full bg-transparent outline-none border-none font-mono p8 resize-none'>
+					<Dropzone>
+						<MonicoEditor
+							defaultLanguage='markdown'
+							value={text}
+							onChange={handleChange}
+							options={{
+								padding: { top: 16 },
+								lineNumbers: 'off',
+								fontSize: 14,
+								smoothScrolling: true,
+								contextmenu: false,
+								minimap: { enabled: false },
+								wordWrap: 'on',
+								selectionHighlight: false,
+								quickSuggestions: false,
+								renderLineHighlight: 'none',
+								cursorBlinking: 'blink',
+								links: false,
+								hideCursorInOverviewRuler: true,
+								overviewRulerBorder: false,
+								scrollbar: {
+									vertical: 'hidden'
+								}
+							}}
+							onMount={handleMount}
+						/>
+					</Dropzone>
 				</div>
 			</div>
 		</div>
