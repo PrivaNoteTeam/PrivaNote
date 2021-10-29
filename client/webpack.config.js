@@ -94,7 +94,7 @@ module.exports = [
 			})
 		],
 		externals: {
-			fsevents: require('fsevents') || undefined
+			fsevents: process.platform === 'darwin' && require('fsevents')
 		}
 	}
 ];
