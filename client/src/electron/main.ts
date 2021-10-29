@@ -2,6 +2,9 @@ import { app } from 'electron';
 import { registerIpcHandlers } from './ipc';
 import { createMainWindow, getMainWindow } from './windows';
 import { URL } from 'url';
+import installExtension, {
+	REACT_DEVELOPER_TOOLS
+} from 'electron-devtools-installer';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -11,6 +14,14 @@ const handleReady = () => {
 app.requestSingleInstanceLock();
 
 app.on('ready', handleReady);
+
+app.whenReady().then(() => {
+	installExtension(REACT_DEVELOPER_TOOLS, {
+		loadExtensionOptions: { allowFileAccess: true }
+	})
+		.then((name) => console.log(`Added Extension: ${name}`))
+		.catch((err) => console.log(`An error occured: ${err}`));
+});
 
 let deepLinkingUrl: any;
 
