@@ -86,10 +86,7 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 	return (
 		<div className='bg-gray-900 flex-grow flex flex-col'>
 			<Breadcrumb unsaved={unsaved} />
-			<div
-				className='overflow-auto flex-grow w-full'
-				onDragCapture={() => console.log('dragging')}
-			>
+			<div className='overflow-auto flex-grow w-full'>
 				<div className='relative w-full h-full bg-transparent outline-none border-none font-mono p8 resize-none'>
 					<Dropzone onDrop={handleDrop}>
 						<MonicoEditor
