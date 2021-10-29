@@ -1,4 +1,3 @@
-import { useEditorDrop } from '@hooks';
 import React, { PropsWithChildren, DragEvent, useCallback } from 'react';
 import { useDropzone, DropzoneOptions, DropEvent } from 'react-dropzone';
 
@@ -6,14 +5,18 @@ type OnDrop = DropzoneOptions['onDrop'];
 
 interface Props {
 	className?: string;
+	onDrop: (files: any[], cursorPosition: [number, number]) => void;
 }
 
-export function Dropzone({ className, children }: PropsWithChildren<Props>) {
-	const { drop } = useEditorDrop();
+export function Dropzone({
+	className,
+	children,
+	onDrop: handleDrop
+}: PropsWithChildren<Props>) {
 	const onDrop: OnDrop = useCallback((acceptedFiles, _, event: DropEvent) => {
 		// not type safe: need to discriminate DragEvent from DropEvent
 		let dragEvent = event as DragEvent;
-		drop(acceptedFiles, [dragEvent.pageX, dragEvent.pageY]);
+		handleDrop(acceptedFiles, [dragEvent.pageX, dragEvent.pageY]);
 	}, []);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({

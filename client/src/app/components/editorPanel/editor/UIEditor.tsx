@@ -8,6 +8,7 @@ interface Props {
 	unsaved: boolean;
 	text: string;
 	handleChange: OnChange;
+	handleDrop: (files: any[], cursorPosition: [number, number]) => void;
 }
 
 function ensureFirstBackSlash(str: string) {
@@ -19,7 +20,7 @@ function uriFromPath(_path: string) {
 	return encodeURI('file://' + ensureFirstBackSlash(pathName));
 }
 
-export function UIEditor({ unsaved, text, handleChange }: Props) {
+export function UIEditor({ unsaved, text, handleChange, handleDrop }: Props) {
 	loader.config({
 		paths: {
 			vs: uriFromPath(
@@ -52,7 +53,7 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 				onDragCapture={() => console.log('dragging')}
 			>
 				<div className='relative w-full h-full bg-transparent outline-none border-none font-mono p8 resize-none'>
-					<Dropzone>
+					<Dropzone onDrop={handleDrop}>
 						<MonicoEditor
 							defaultLanguage='markdown'
 							value={text}

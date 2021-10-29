@@ -8,9 +8,14 @@ interface Props {
 }
 
 export function Editor({ text, setText }: Props) {
-	const { unsaved, handleChange } = useEditor({ text, setText });
+	const { unsaved, handleChange, handleDrop } = useEditor({ text, setText });
 
 	return (
-		<UIEditor unsaved={unsaved} text={text} handleChange={handleChange} />
+		<UIEditor
+			unsaved={unsaved}
+			text={text}
+			handleChange={handleChange}
+			handleDrop={handleDrop}
+		/>
 	);
 }
