@@ -43,20 +43,26 @@ export function usePreview(text: string) {
 		renderer(token: any) {
 			let baseUrlParent = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
 			const fileUrl = path.join(baseUrlParent, token.link);
+			const fileExt = fileUrl.substring(fileUrl.lastIndexOf('.') + 1);
 			const found = fileExist(fileUrl);
 
 			const render = found
 				? `
-					<a href=${fileUrl} download class='attachment-link flex justify-between hover:no-underline no-underline'>
-						<div class='flex space-x-3'>
-							${renderToString(<AttachmentIcon fill='#9CA3AF' />)}	
-							<p class='text-sm text-gray-400 hover:no-underline no-underline'>${
+					<a href=${fileUrl} download class='attachment-link flex justify-between hover:no-underline no-underline items-center'>
+						<div class='flex space-x-3 items-center'>
+							${renderToString(<AttachmentIcon fill='#6B7280' />)}	
+							<p class='text-sm uppercase font-semibold text-gray-500 hover:no-underline no-underline'>${
 								token.text
 							}</p>
 						</div>
-						<p class='text-sm text-gray-400 hover:no-underline no-underline'>${getFileSize(
-							fileUrl
-						)} kB</p>
+						<div class='flex flex-col space-y-0.5 items-center text-xs'>
+							<p class='bg-gray-800 p-0.5 rounded-md text-gray-900 font-bold uppercase text-center'>
+								${fileExt}
+							</p>
+							<p class='text-gray-500 hover:no-underline no-underline'>
+								${getFileSize(fileUrl)} KB
+							</p>
+						</div>
 					</a>
 					`
 				: `
@@ -66,11 +72,11 @@ export function usePreview(text: string) {
 					</div>
 				`;
 
-			return `<div class='border-4 ${
+			return `<div class='border-2 ${
 				found
 					? 'border-gray-800 hover:border-gray-700'
 					: 'border-red-400 hover:border-red-500'
-			} p-4 my-2 cursor-pointer rounded-md min-w-min w-4/6 mr-auto'>
+			} p-2 my-2 cursor-pointer rounded-md min-w-min w-4/6 mr-auto'>
 					${render}
 				</div>`;
 		},
