@@ -3,12 +3,12 @@ import { Breadcrumb } from './Breadcrumb';
 import MonicoEditor, { loader, Monaco, OnChange } from '@monaco-editor/react';
 import path from 'path';
 import { Dropzone } from './Dropzone';
+import { useEditorDrop } from '@hooks';
 
 interface Props {
 	unsaved: boolean;
 	text: string;
 	handleChange: OnChange;
-	handleDrop: (files: any[], cursorPosition: [number, number]) => void;
 }
 
 function ensureFirstBackSlash(str: string) {
@@ -20,7 +20,9 @@ function uriFromPath(_path: string) {
 	return encodeURI('file://' + ensureFirstBackSlash(pathName));
 }
 
-export function UIEditor({ unsaved, text, handleChange, handleDrop }: Props) {
+export function UIEditor({ unsaved, text, handleChange }: Props) {
+	const { drop: handleDrop, init } = useEditorDrop();
+
 	loader.config({
 		paths: {
 			vs: uriFromPath(
@@ -43,6 +45,10 @@ export function UIEditor({ unsaved, text, handleChange, handleDrop }: Props) {
 		});
 
 		monaco.editor.setTheme('Default');
+
+		init((path: string, cursorPosition: [number, number]) => {
+			console.log(path, cursorPosition);
+		});
 	};
 
 	return (

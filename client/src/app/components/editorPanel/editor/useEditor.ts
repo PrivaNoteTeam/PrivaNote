@@ -1,5 +1,5 @@
 import { Dispatch, useEffect, useState } from 'react';
-import { useEditorDrop, useStore } from '@hooks';
+import { useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import { saveFile } from '@utils';
 import { OnChange } from '@monaco-editor/react';
@@ -14,7 +14,6 @@ export function useEditor({ text, setText }: Args) {
 	const [{ currentFile }] = useStore();
 	const [unsaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
-	const { drop: handleDrop } = useEditorDrop();
 
 	const autoSave = true; // ADD TO SETTINGS
 
@@ -45,5 +44,5 @@ export function useEditor({ text, setText }: Args) {
 		});
 	}, [currentFile]);
 
-	return { unsaved, text, handleChange, handleDrop };
+	return { unsaved, text, handleChange };
 }

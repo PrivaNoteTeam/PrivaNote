@@ -1,25 +1,37 @@
 import fs from 'fs';
 import { useStore } from '@hooks';
+import { useRef } from 'react';
+
+type CallbackFunction = (
+	path: string,
+	cursorPosition: [number, number]
+) => void;
 
 export function useEditorDrop() {
 	const [{ currentFile }] = useStore();
-
 	const currentFileParentPath = currentFile!.path.substring(
 		0,
 		currentFile!.path.lastIndexOf('/')
 	);
 
-	const drop = (files: any[], cursorPosition: [x: number, y: number]) => {
-		console.log(cursorPosition);
+	const callbackRef = useRef<CallbackFunction>((_, __) => {
+		return;
+	});
 
+	const drop = (files: any[], cursorPosition: [x: number, y: number]) => {
 		files.forEach((file: File) => {
-			fs.copyFileSync(file.path, `${currentFileParentPath}/${file.name}`);
+			const copyPath = `${currentFileParentPath}/${file.name}`;
+			fs.copyFileSync(file.path, copyPath);
+
+			if (callbackRef.current) {
+				callbackRef.current(copyPath, cursorPosition);
+			}
 		});
 	};
 
-	const insert = (text: string, cursorPosition: [x: number, y: number]) => {
-		console.log(text, cursorPosition);
+	const init = (cb: CallbackFunction) => {
+		callbackRef.current = cb;
 	};
 
-	return { drop, insert };
+	return { drop, init };
 }
