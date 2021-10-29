@@ -56,10 +56,30 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 			if (!target) return;
 
 			event.setPosition(target.position!);
-			const textToInsert = `[file_name]{${path}}`;
-			event.trigger('keyboard', 'type', { text: textToInsert });
 
-			console.log(target);
+			const fileName = path.substring(
+				path.lastIndexOf('/') + 1,
+				path.lastIndexOf('.')
+			);
+
+			const line = event.getPosition();
+			const range = new monaco.Range(
+				line!.lineNumber,
+				1,
+				line!.lineNumber,
+				1
+			);
+
+			var id = { major: 1, minor: 1 };
+			const textToInsert = `\n[${fileName}]{${path}}\n`;
+			const op = {
+				identifier: id,
+				range,
+				text: textToInsert,
+				forceMoveMarkers: true
+			};
+
+			event.executeEdits('', [op]);
 		});
 	};
 
