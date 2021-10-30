@@ -100,7 +100,7 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 								smoothScrolling: true,
 								contextmenu: false,
 								minimap: { enabled: false },
-								wordWrap: 'on',
+								wordWrap: 'off',
 								selectionHighlight: false,
 								quickSuggestions: false,
 								renderLineHighlight: 'none',
