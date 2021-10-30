@@ -6,9 +6,11 @@
 </div>
 
 ## About
-Due to the concern regarding mainstream note-taking apps brought up in the background, the need for a note-taking app that provides the end-users with full security and privacy exists. 
+Threre is a need for a note-taking app that provides the end-users with full security and privacy. 
 
 PrivaNote’s primary focus is on ensuring that its user’s data are secure and private. It also ensures that users who are currently using existing mainstream note-taking apps are able to easily transition to PrivaNote by implementing a simple UI/UX, as well as flexibility in terms of file support. 
+
+![Early Preview](https://i.imgur.com/JADxLG1.png)
 
 ## How to install for development
 1. Clone and open the repository to your machine
