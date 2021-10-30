@@ -15,7 +15,7 @@ export function UIEditorPanel({ text, setText }: Props) {
 	const [{ currentFile }] = useStore();
 
 	return (
-		<div className='relative flex-grow flex flex-col'>
+		<div className='relative flex-grow flex flex-col h-full w-full'>
 			<NotificationArea />
 
 			{currentFile ? (

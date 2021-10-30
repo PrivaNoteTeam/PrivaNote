@@ -12,6 +12,7 @@ import { useGoogleDrive } from './hooks/useGoogleDrive';
 import { FileExplorer } from './components/FileExplorer';
 import { Placeholder } from './components/Placeholder';
 import { NotificationArea } from './components/NotificationArea';
+import { SplitPane } from 'react-collapse-pane';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -41,10 +42,14 @@ export function App() {
 				<SideMenu />
 				<EditorProvider initialState={{}} reducer={editorReducer}>
 					{notebook ? (
-						<>
+						<SplitPane
+							split='vertical'
+							className='w-full h-full'
+							initialSizes={[1, 5]}
+						>
 							<FileExplorer />
 							<EditorPanel />
-						</>
+						</SplitPane>
 					) : (
 						<div className='relative flex-grow flex flex-col'>
 							<NotificationArea />
