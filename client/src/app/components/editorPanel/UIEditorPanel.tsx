@@ -4,6 +4,7 @@ import { Editor } from './Editor';
 import { Placeholder } from '../Placeholder';
 import { NotificationArea } from '../NotificationArea';
 import { Preview } from './Preview';
+import { SplitPane } from 'react-collapse-pane';
 
 interface Props {
 	text: string;
@@ -18,9 +19,15 @@ export function UIEditorPanel({ text, setText }: Props) {
 			<NotificationArea />
 
 			{currentFile ? (
-				<div className='flex h-full'>
-					<Editor text={text} setText={setText} />
-					<Preview text={text} />
+				<div className='w-full h-full'>
+					<SplitPane
+						className='w-full h-full'
+						split='vertical'
+						minSizes={32}
+					>
+						<Editor text={text} setText={setText} />
+						<Preview text={text} />
+					</SplitPane>
 				</div>
 			) : (
 				<Placeholder text='Create or open a note to continue' />
