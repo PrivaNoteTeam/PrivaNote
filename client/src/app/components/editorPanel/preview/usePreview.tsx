@@ -76,7 +76,7 @@ export function usePreview(text: string) {
 				found
 					? 'border-gray-800 hover:border-gray-700'
 					: 'border-red-400 hover:border-red-500'
-			} p-2 my-2 cursor-pointer rounded-md min-w-min w-4/6 mr-auto'>
+			} p-2 my-2 cursor-pointer rounded-md min-w-min w-64 mr-auto'>
 					${render}
 				</div>`;
 		},
