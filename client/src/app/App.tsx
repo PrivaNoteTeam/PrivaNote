@@ -42,14 +42,20 @@ export function App() {
 				<SideMenu />
 				<EditorProvider initialState={{}} reducer={editorReducer}>
 					{notebook ? (
-						<SplitPane
-							split='vertical'
-							className='w-full h-full'
-							initialSizes={[1, 5]}
-						>
-							<FileExplorer />
-							<EditorPanel />
-						</SplitPane>
+						<div className='relative flex-grow'>
+							<SplitPane
+								split='vertical'
+								initialSizes={[1, 5]}
+								resizerOptions={{
+									hoverCss: {
+										backgroundColor: 'rgb(59, 130, 246)'
+									}
+								}}
+							>
+								<FileExplorer />
+								<EditorPanel />
+							</SplitPane>
+						</div>
 					) : (
 						<div className='relative flex-grow flex flex-col'>
 							<NotificationArea />

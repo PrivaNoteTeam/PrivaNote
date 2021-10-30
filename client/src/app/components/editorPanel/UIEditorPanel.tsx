@@ -15,15 +15,23 @@ export function UIEditorPanel({ text, setText }: Props) {
 	const [{ currentFile }] = useStore();
 
 	return (
-		<div className='relative flex-grow flex flex-col h-full w-full'>
+		<div className='relative flex-grow flex flex-col h-full'>
 			<NotificationArea />
 
 			{currentFile ? (
 				<div className='w-full h-full'>
 					<SplitPane
-						className='w-full h-full'
+						className=''
 						split='vertical'
 						minSizes={32}
+						resizerOptions={{
+							css: {
+								backgroundColor: 'rgb(31, 41, 55)'
+							},
+							hoverCss: {
+								backgroundColor: 'rgb(59, 130, 246)'
+							}
+						}}
 					>
 						<Editor text={text} setText={setText} />
 						<Preview text={text} />

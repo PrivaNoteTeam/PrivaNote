@@ -22,7 +22,7 @@ export function UIFileExplorer({
 	const [{ notebook }] = useStore();
 
 	return (
-		<div className='bg-gray-800 pt-2 flex flex-col resize-x h-full w-full'>
+		<div className='bg-gray-800 pt-2 flex flex-col resize-x h-full'>
 			<div className='flex justify-between'>
 				<p className='text-gray-500 text-sm font-bold px-3 py-1 select-none'>
 					{getFileName(notebook!)}
