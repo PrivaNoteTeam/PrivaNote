@@ -38,11 +38,11 @@ export function App() {
 
 	return (
 		<>
-			<div className='bg-gray-800 w-screen h-screen flex'>
+			<div className='bg-gray-800 w-screen h-screen flex relative'>
 				<SideMenu />
 				<EditorProvider initialState={{}} reducer={editorReducer}>
 					{notebook ? (
-						<div className='relative flex-grow'>
+						<div className='relative flex-grow z-auto'>
 							<SplitPane
 								split='vertical'
 								initialSizes={[1, 5]}
