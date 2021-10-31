@@ -6,6 +6,7 @@ const clientId = credentials.web.client_id;
 const clientSecret = credentials.web.client_secret;
 const redirect_uris = credentials.web.redirect_uris;
 const ROOT_DRIVE_FOLDER_NAME = 'privanote';
+let NOTEBOOK_LOCATION = '';
 
 const oAuth2Client = new google.auth.OAuth2(
 	clientId,
@@ -40,6 +41,8 @@ export const getToken = async (code: string) => {
 		return {};
 	}
 };
+
+//need to try authenticating upon opening notebook
 
 export const setGoogleAuth = (tokens: any) => {
 	oAuth2Client.setCredentials(tokens);
@@ -98,6 +101,11 @@ export const createAFolder = async (name: string) => {
 	} catch (error) {
 		return console.log(error);
 	}
+};
+
+export const setNotebookLocation = (location: string) => {
+	NOTEBOOK_LOCATION = location;
+	console.log(NOTEBOOK_LOCATION);
 };
 
 export const initializeGoogleDrive = () => {

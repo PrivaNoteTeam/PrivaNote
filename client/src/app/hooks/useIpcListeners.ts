@@ -48,6 +48,7 @@ export function useIpcListeners() {
 				});
 
 				exportNotebookStructure(location);
+				ipcRenderer.send('notebookRootLocation', location);
 			}
 		);
 

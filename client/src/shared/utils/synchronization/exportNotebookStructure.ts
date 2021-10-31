@@ -1,9 +1,9 @@
 import { saveFile } from '../fileSystem/saveFile';
 import { FileItem } from '../../types';
-import { getNotebookStructure } from './getNotebookStructure';
+import { createNotebookStructure } from './createNotebookStructure';
 
 export const exportNotebookStructure = (path: string) => {
-	const notebookStructure = getNotebookStructure(path);
+	const notebookStructure = createNotebookStructure(path);
 
 	const name = 'notebookStructure.json';
 	const exportFile: FileItem = {
