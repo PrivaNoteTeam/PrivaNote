@@ -54,7 +54,7 @@ export function useIpcListeners() {
 
 		createListener(
 			'googleDriveAuth',
-			(_, accessToken: string, idToken: string) => {
+			(_, accessToken: string, refreshToken: string, idToken: string) => {
 				if (!notebook) return;
 
 				configDispatch({
@@ -63,6 +63,7 @@ export function useIpcListeners() {
 						providerName: 'Google Drive',
 						path: notebook,
 						accessToken,
+						refreshToken,
 						idToken
 					}
 				});

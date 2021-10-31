@@ -40,6 +40,7 @@ type ConfigDispatch = Dispatch<
 				providerName: string;
 				path: string;
 				accessToken?: string;
+				refreshToken?: string;
 				idToken?: string;
 			}
 	  >

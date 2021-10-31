@@ -5,7 +5,7 @@ import { URL } from 'url';
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import { getToken } from '@shared/Api/googleDriveSync';
+import { getToken, setGoogleAuth } from '@shared/Api/googleDriveSync';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -47,17 +47,23 @@ app.on('will-finish-launching', () => {
 			const authorizationCode =
 				urlObject.searchParams.get('authorizationCode');
 
-			const tokens: any = await getToken(authorizationCode!);
+			const tokens = await getToken(authorizationCode!);
 
-			console.log(tokens);
-			console.log(' ');
+			setGoogleAuth(tokens);
 
-			const { access_token: accessToken, id_token: idToken } =
-				tokens.tokens;
+			const {
+				access_token: accessToken,
+				id_token: idToken,
+				refresh_token: refreshToken
+			} = tokens;
 
+			// Refresh token is only received when google account first
+			// authorizes PrivaNote so remove access here:
+			// https://myaccount.google.com/permissions
 			mainWindow.webContents.send(
 				'googleDriveAuth',
 				accessToken,
+				refreshToken,
 				idToken
 			);
 		}

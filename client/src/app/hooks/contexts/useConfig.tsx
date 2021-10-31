@@ -18,6 +18,7 @@ const actions = {
 		providerName: string;
 		path: string;
 		accessToken?: string;
+		refreshToken?: string;
 		idToken?: string;
 	}>(),
 	removeProvider: createAction('REMOVE_PROVIDER')<{
@@ -62,6 +63,7 @@ const reducer = (
 					{
 						name: action.payload.providerName,
 						accessToken: action.payload.accessToken,
+						refreshToken: action.payload.refreshToken,
 						idToken: action.payload.idToken
 					}
 				]
