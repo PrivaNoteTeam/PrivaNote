@@ -1,5 +1,6 @@
 import { verifyUser } from '@shared/Api/verifyUser';
 import { getFileName, parseCodeFromUrl } from '@shared/utils';
+import { exportNotebookStructure } from '@shared/utils/fileSystem/exportNotebookStructure';
 import { ipcRenderer } from 'electron';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -45,6 +46,8 @@ export function useIpcListeners() {
 					type: 'LOAD',
 					payload: location
 				});
+
+				exportNotebookStructure(location);
 			}
 		);
 

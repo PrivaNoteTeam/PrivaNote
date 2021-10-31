@@ -11,32 +11,32 @@ export const getNotebookStructure = (path: string) => {
 	}[] = [];
 
 	if (path) {
-		fs.readdir(path, (err, files) => {
-			if (err) {
-				console.log(err);
-			} else {
-				files.forEach((file) => {
-					let absolutePath = path + '/' + file;
-					let stats = fs.statSync(absolutePath);
-					if (stats.isDirectory()) {
-						notebookStructure.push({
-							name: file,
-							mimeType: 'Folder',
-							absolutePath: absolutePath,
-							size: stats.size,
-							subFolder: getNotebookStructure(path + '/' + file)
-						});
-					} else {
-						notebookStructure.push({
-							name: file,
-							absolutePath: absolutePath,
-							mimeType: mime.lookup(file),
-							size: stats.size
-						});
-					}
-				});
-			}
-		});
+		try {
+			const files = fs.readdirSync(path);
+			files.forEach((file) => {
+				let absolutePath = `${path}/${file}`;
+				let stats = fs.statSync(absolutePath);
+				if (stats.isDirectory()) {
+					notebookStructure.push({
+						name: file,
+						mimeType: 'Folder',
+						absolutePath: absolutePath,
+						size: stats.size,
+						subFolder: getNotebookStructure(absolutePath)
+					});
+				} else {
+					notebookStructure.push({
+						name: file,
+						absolutePath: absolutePath,
+						mimeType: mime.lookup(file),
+						size: stats.size
+					});
+				}
+			});
+		} catch (error) {
+			console.log('Error reading notebook structure\n', error);
+		}
 	}
+
 	return notebookStructure;
 };

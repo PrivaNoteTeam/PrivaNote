@@ -105,8 +105,9 @@ export const initializeGoogleDrive = () => {
 		if (!folders || !folders.length) {
 			// Folder doesn't exist, creating a new one
 			createAFolder(ROOT_DRIVE_FOLDER_NAME);
+			// upload new contents
 		} else {
-			// start syncing process
+			// synchronize google drive with current files
 		}
 	});
 };
