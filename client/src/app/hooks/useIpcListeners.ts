@@ -1,6 +1,6 @@
 import { verifyUser } from '@shared/Api/verifyUser';
 import { getFileName, parseCodeFromUrl } from '@shared/utils';
-import { exportNotebookStructure } from '@shared/utils/fileSystem/exportNotebookStructure';
+import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
 import { ipcRenderer } from 'electron';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
