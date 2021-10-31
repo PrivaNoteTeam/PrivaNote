@@ -5,7 +5,11 @@ import { URL } from 'url';
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import { getToken, setGoogleAuth } from '@shared/Api/googleDriveSync';
+import {
+	getToken,
+	listFiles,
+	setGoogleAuth
+} from '@shared/Api/googleDriveSync';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -50,6 +54,7 @@ app.on('will-finish-launching', () => {
 			const tokens = await getToken(authorizationCode!);
 
 			setGoogleAuth(tokens);
+			listFiles();
 
 			const {
 				access_token: accessToken,
