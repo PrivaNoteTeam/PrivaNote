@@ -5,6 +5,7 @@ import { URL } from 'url';
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
+import { getToken } from '@shared/Api/googleDriveSync';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -34,7 +35,7 @@ if (!app.isDefaultProtocolClient('privanote')) {
 }
 
 app.on('will-finish-launching', () => {
-	app.on('open-url', (event, url) => {
+	app.on('open-url', async (event, url) => {
 		event.preventDefault();
 
 		const urlObject = new URL(url);
@@ -43,9 +44,16 @@ app.on('will-finish-launching', () => {
 		if (url.startsWith('privanote://reset-password')) {
 			mainWindow.webContents.send('url-privanote', url);
 		} else if (url.startsWith('privanote://google-drive/auth')) {
-			const accessToken = urlObject.searchParams.get('accessToken');
-			const idToken = urlObject.searchParams.get('idToken');
-			console.log(idToken);
+			const authorizationCode =
+				urlObject.searchParams.get('authorizationCode');
+
+			const tokens: any = await getToken(authorizationCode!);
+
+			console.log(tokens);
+			console.log(' ');
+
+			const { access_token: accessToken, id_token: idToken } =
+				tokens.tokens;
 
 			mainWindow.webContents.send(
 				'googleDriveAuth',
