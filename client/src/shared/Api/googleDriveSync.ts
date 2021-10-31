@@ -5,6 +5,7 @@ import credentials from '../../googleCredentials.json';
 const clientId = credentials.web.client_id;
 const clientSecret = credentials.web.client_secret;
 const redirect_uris = credentials.web.redirect_uris;
+const ROOT_DRIVE_FOLDER_NAME = 'privanote';
 
 const oAuth2Client = new google.auth.OAuth2(
 	clientId,
@@ -12,7 +13,7 @@ const oAuth2Client = new google.auth.OAuth2(
 	redirect_uris[0]
 );
 
-let drive: any;
+let drive = google.drive('v3');
 
 const scopeBaseUrl = 'https://www.googleapis.com/auth/';
 const scope = [
@@ -51,8 +52,10 @@ export const setGoogleAuth = (tokens: any) => {
 export const listFiles = () => {
 	drive.files.list(
 		{
-			pageSize: 10,
-			fields: 'nextPageToken, files(id, name)'
+			// pageSize: 10,
+			q: 'trashed=false',
+			fields: 'nextPageToken, files(id, name)',
+			spaces: 'drive'
 		},
 		(err: any, res: any) => {
 			if (err) return console.log('The API returned an error: ' + err);
@@ -67,4 +70,43 @@ export const listFiles = () => {
 			}
 		}
 	);
+};
+
+export const searchForFolder = async (name: string) => {
+	try {
+		const res = await drive.files.list({
+			q: `name = '${name}' and mimeType = 'application/vnd.google-apps.folder' and trashed=false`,
+			fields: 'nextPageToken, files(id, name)',
+			spaces: 'drive'
+		});
+		return res.data.files;
+	} catch (error) {
+		return console.log(error);
+	}
+};
+
+export const createAFolder = async (name: string) => {
+	try {
+		const res = await drive.files.create({
+			requestBody: {
+				name: name,
+				mimeType: 'application/vnd.google-apps.folder'
+			},
+			fields: 'id'
+		});
+		return res.data;
+	} catch (error) {
+		return console.log(error);
+	}
+};
+
+export const initializeGoogleDrive = () => {
+	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then((folders) => {
+		if (!folders || !folders.length) {
+			// Folder doesn't exist, creating a new one
+			createAFolder(ROOT_DRIVE_FOLDER_NAME);
+		} else {
+			// start syncing process
+		}
+	});
 };

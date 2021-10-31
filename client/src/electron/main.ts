@@ -7,7 +7,8 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import {
 	getToken,
-	listFiles,
+	initializeGoogleDrive,
+	// listFiles,
 	setGoogleAuth
 } from '@shared/Api/googleDriveSync';
 
@@ -54,7 +55,8 @@ app.on('will-finish-launching', () => {
 			const tokens = await getToken(authorizationCode!);
 
 			setGoogleAuth(tokens);
-			listFiles();
+			// listFiles();
+			initializeGoogleDrive();
 
 			const {
 				access_token: accessToken,

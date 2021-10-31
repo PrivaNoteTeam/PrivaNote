@@ -16,3 +16,4 @@ export async function getGoogleAuth() {
 			});
 	});
 }
+// File no longer used as server is no longer generating auth url
