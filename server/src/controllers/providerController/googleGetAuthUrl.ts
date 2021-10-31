@@ -5,3 +5,4 @@ export const googleGetAuthUrl = (_: Request, res: Response) => {
 
 	res.send(authUrl);
 };
+// Controller no longer used, moved to client

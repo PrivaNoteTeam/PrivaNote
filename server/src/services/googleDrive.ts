@@ -41,3 +41,4 @@ export const getToken = async (code: string) => {
 		return {};
 	}
 };
+// No longer used, moved to client
