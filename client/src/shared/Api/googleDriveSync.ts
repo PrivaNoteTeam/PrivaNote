@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import { google } from 'googleapis';
 import credentials from '../../googleCredentials.json';
 
@@ -12,6 +13,22 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 
 let drive: any;
+
+const scopeBaseUrl = 'https://www.googleapis.com/auth/';
+const scope = [
+	`${scopeBaseUrl}drive.metadata.readonly`,
+	`${scopeBaseUrl}userinfo.profile`,
+	`${scopeBaseUrl}drive.file`
+];
+
+export const getGoogleAuth = () => {
+	const authUrl = oAuth2Client.generateAuthUrl({
+		access_type: 'offline',
+		scope
+	});
+
+	shell.openExternal(authUrl);
+};
 
 export const getToken = async (code: string) => {
 	try {
