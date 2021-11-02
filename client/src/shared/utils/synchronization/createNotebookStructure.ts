@@ -6,6 +6,8 @@ type structure = {
 	mimeType: string | false;
 	absolutePath: string | false;
 	size: number;
+	dateCreated: Date;
+	lastModified: Date;
 	subFolder?: any[];
 }[];
 
@@ -24,6 +26,8 @@ const getSubNotebookStructure = (path: string) => {
 						mimeType: 'Folder',
 						absolutePath: absolutePath,
 						size: stats.size,
+						dateCreated: stats.birthtime,
+						lastModified: stats.mtime,
 						subFolder: getSubNotebookStructure(absolutePath)
 					});
 				} else {
@@ -31,7 +35,9 @@ const getSubNotebookStructure = (path: string) => {
 						name: file,
 						absolutePath: absolutePath,
 						mimeType: mime.lookup(file),
-						size: stats.size
+						size: stats.size,
+						dateCreated: stats.birthtime,
+						lastModified: stats.mtime
 					});
 				}
 			});
@@ -57,6 +63,8 @@ export const createNotebookStructure = (path: string) => {
 			mimeType: 'Folder',
 			absolutePath: path,
 			size: stats.size,
+			dateCreated: stats.birthtime,
+			lastModified: stats.mtime,
 			subFolder: getSubNotebookStructure(path)
 		};
 	}

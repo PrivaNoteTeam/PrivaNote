@@ -8,7 +8,7 @@ import { PageManager } from '@components/PageManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { useIpcListeners } from './hooks/useIpcListeners';
-import { useGoogleDrive } from './hooks/useGoogleDrive';
+// import { useGoogleDrive } from './hooks/useGoogleDrive';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
@@ -26,7 +26,7 @@ export function App() {
 	const [, userDispatch] = useUserStore();
 
 	useIpcListeners();
-	useGoogleDrive();
+	// useGoogleDrive();
 
 	useEffect(() => {
 		getUser().then(({ user }) => {

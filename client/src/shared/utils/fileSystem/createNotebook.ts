@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { defaultConfig } from '../defaultConfig';
+import { exportNotebookStructure } from '../synchronization/exportNotebookStructure';
 
 export const createNotebook = async (path: string) => {
 	fs.mkdirSync(path);
@@ -8,10 +9,29 @@ export const createNotebook = async (path: string) => {
 	JSON.stringify(defaultConfig);
 	// needs to be replaced with useConfig
 	return new Promise<boolean>((resolve, _) => {
-		fs.writeFile(
-			`${path}/.privanote/app.json`,
-			JSON.stringify(defaultConfig),
-			(err) => resolve(!err)
-		);
+		try {
+			fs.writeFile(
+				`${path}/.privanote/app.json`,
+				JSON.stringify(defaultConfig),
+				(err) => {
+					if (err) console.log(err);
+				}
+			);
+
+			fs.writeFile(
+				`${path}/.privanote/notebookStructure.json`,
+				'',
+				(err) => {
+					if (err) {
+						console.log(err);
+					} else {
+						exportNotebookStructure(path);
+					}
+				}
+			);
+			resolve(true);
+		} catch (err) {
+			console.log(err);
+		}
 	});
 };
