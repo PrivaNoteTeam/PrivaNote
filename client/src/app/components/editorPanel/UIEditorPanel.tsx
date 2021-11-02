@@ -10,9 +10,15 @@ interface Props {
 	livePreviewVisiable: boolean;
 	text: string;
 	setText: React.Dispatch<string>;
+	handlePreviewClose: () => void;
 }
 
-export function UIEditorPanel({ text, setText, livePreviewVisiable }: Props) {
+export function UIEditorPanel({
+	text,
+	setText,
+	livePreviewVisiable,
+	handlePreviewClose
+}: Props) {
 	const [{ currentFile }] = useStore();
 
 	return (
@@ -37,7 +43,10 @@ export function UIEditorPanel({ text, setText, livePreviewVisiable }: Props) {
 						>
 							<Editor text={text} setText={setText} />
 							{livePreviewVisiable ? (
-								<Preview text={text} />
+								<Preview
+									text={text}
+									onClose={handlePreviewClose}
+								/>
 							) : (
 								<div></div>
 							)}

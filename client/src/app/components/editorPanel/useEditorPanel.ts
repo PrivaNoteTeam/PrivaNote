@@ -76,12 +76,17 @@ export function useEditorPanel() {
 		});
 	}, [notebook, primarySelection, secondarySelection, livePreviewVisiable]);
 
+	const handlePreviewClose = () => {
+		setLivePreviewVisiable(false);
+	};
+
 	return {
 		primarySelection,
 		secondarySelection,
 		editorDispatch,
 		text,
 		setText,
-		livePreviewVisiable
+		livePreviewVisiable,
+		handlePreviewClose
 	};
 }
