@@ -3,7 +3,13 @@ import { useEditorPanel } from './editorPanel/useEditorPanel';
 import { UIEditorPanel } from './editorPanel/UIEditorPanel';
 
 export function EditorPanel() {
-	const { text, setText } = useEditorPanel();
+	const { text, setText, livePreviewVisiable } = useEditorPanel();
 
-	return <UIEditorPanel text={text} setText={setText} />;
+	return (
+		<UIEditorPanel
+			livePreviewVisiable={livePreviewVisiable}
+			text={text}
+			setText={setText}
+		/>
+	);
 }

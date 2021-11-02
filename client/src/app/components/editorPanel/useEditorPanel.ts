@@ -10,6 +10,7 @@ import {
 import { useEditorStore } from '@hooks';
 
 export function useEditorPanel() {
+	const [livePreviewVisiable, setLivePreviewVisiable] = useState(true);
 	const [{ notebook, currentFile }, dispatch] = useStore();
 	const [{ primarySelection, secondarySelection }, editorDispatch] =
 		useEditorStore();
@@ -29,6 +30,14 @@ export function useEditorPanel() {
 				type: 'openNote',
 				currentFile: newFile
 			});
+		});
+
+		ipcRenderer.removeAllListeners('toggleLivePreviewVisabilty');
+		ipcRenderer.on('toggleLivePreviewVisabilty', () => {
+			if (!notebook) {
+				return;
+			}
+			setLivePreviewVisiable(!livePreviewVisiable);
 		});
 
 		//ipcRenderer.removeAllListeners('toggleFileExplorer');
@@ -65,13 +74,14 @@ export function useEditorPanel() {
 				});
 			});
 		});
-	}, [notebook, primarySelection, secondarySelection]);
+	}, [notebook, primarySelection, secondarySelection, livePreviewVisiable]);
 
 	return {
 		primarySelection,
 		secondarySelection,
 		editorDispatch,
 		text,
-		setText
+		setText,
+		livePreviewVisiable
 	};
 }

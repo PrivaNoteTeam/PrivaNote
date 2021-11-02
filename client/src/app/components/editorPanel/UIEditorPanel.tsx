@@ -7,11 +7,12 @@ import { Preview } from './Preview';
 import { SplitPane } from 'react-collapse-pane';
 
 interface Props {
+	livePreviewVisiable: boolean;
 	text: string;
 	setText: React.Dispatch<string>;
 }
 
-export function UIEditorPanel({ text, setText }: Props) {
+export function UIEditorPanel({ text, setText, livePreviewVisiable }: Props) {
 	const [{ currentFile }] = useStore();
 
 	return (
@@ -20,22 +21,30 @@ export function UIEditorPanel({ text, setText }: Props) {
 
 			{currentFile ? (
 				<div className='w-full h-full'>
-					<SplitPane
-						className=''
-						split='vertical'
-						minSizes={32}
-						resizerOptions={{
-							css: {
-								backgroundColor: 'rgb(31, 41, 55)'
-							},
-							hoverCss: {
-								backgroundColor: 'rgb(59, 130, 246)'
-							}
-						}}
-					>
+					{livePreviewVisiable ? (
+						<SplitPane
+							className=''
+							split='vertical'
+							minSizes={32}
+							resizerOptions={{
+								css: {
+									backgroundColor: 'rgb(31, 41, 55)'
+								},
+								hoverCss: {
+									backgroundColor: 'rgb(59, 130, 246)'
+								}
+							}}
+						>
+							<Editor text={text} setText={setText} />
+							{livePreviewVisiable ? (
+								<Preview text={text} />
+							) : (
+								<div></div>
+							)}
+						</SplitPane>
+					) : (
 						<Editor text={text} setText={setText} />
-						<Preview text={text} />
-					</SplitPane>
+					)}
 				</div>
 			) : (
 				<Placeholder text='Create or open a note to continue' />
