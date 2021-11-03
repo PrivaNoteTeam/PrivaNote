@@ -1,12 +1,17 @@
+import { createNotebookStructure } from '@shared/utils/synchronization/createNotebookStructure';
 import { shell } from 'electron';
 import { google } from 'googleapis';
 import credentials from '../../googleCredentials.json';
+// import { nanoid } from 'nanoid';
+import fs from 'fs';
+import { saveFile } from '@shared/utils';
+import { FileItem } from '@types';
 
 const clientId = credentials.web.client_id;
 const clientSecret = credentials.web.client_secret;
 const redirect_uris = credentials.web.redirect_uris;
 const ROOT_DRIVE_FOLDER_NAME = 'privanote';
-let NOTEBOOK_LOCATION = '';
+let ROOT_DRIVE_FOLDER_ID = '';
 
 const oAuth2Client = new google.auth.OAuth2(
 	clientId,
@@ -88,34 +93,115 @@ export const searchForFolder = async (name: string) => {
 	}
 };
 
-export const createAFolder = async (name: string) => {
+type fileMetadata = {
+	id?: string;
+	name: string;
+	mimeType: string;
+	parents?: [string];
+};
+
+export const createAFolder = async (folder: any, parentId: string = '') => {
 	try {
+		let metadata: fileMetadata;
+
+		metadata = {
+			name: folder.name,
+			mimeType: 'application/vnd.google-apps.folder'
+		};
+
+		if (parentId) {
+			metadata.parents = [parentId];
+		}
+
 		const res = await drive.files.create({
-			requestBody: {
-				name: name,
-				mimeType: 'application/vnd.google-apps.folder'
-			},
+			requestBody: metadata,
 			fields: 'id'
 		});
-		return res.data;
+
+		return res.data as any;
 	} catch (error) {
 		return console.log(error);
 	}
 };
 
-export const setNotebookLocation = (location: string) => {
-	NOTEBOOK_LOCATION = location;
-	console.log(NOTEBOOK_LOCATION);
+export const createAFile = async (file: any, parentId: string) => {
+	try {
+		let metadata: fileMetadata = {
+			name: file.name,
+			mimeType: file.mimeType,
+			parents: [parentId]
+		};
+		let media = {
+			mimeType: file.mimeType,
+			body: fs.createReadStream(file.absolutePath)
+		};
+
+		const res = await drive.files.create({
+			requestBody: metadata,
+			media: media,
+			fields: 'id'
+		});
+
+		return res.data as any;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const uploadEntireNotebook = async (notebookItems: any, parentId: string) => {
+	if (
+		notebookItems.mimeType === 'Notebook' ||
+		notebookItems.mimeType === 'Folder'
+	) {
+		await createAFolder(notebookItems, parentId)
+			.then(async (res) => {
+				notebookItems.ids.googleDrive = res.id;
+				for (let item of notebookItems.subFolder) {
+					item = await uploadEntireNotebook(
+						item,
+						notebookItems.ids.googleDrive
+					);
+				}
+			})
+			.catch((err) => console.log(err));
+	} else if (notebookItems.mimeType) {
+		await createAFile(notebookItems, parentId)
+			.then((res) => {
+				notebookItems.ids.googleDrive = res.id;
+			})
+			.catch((err) => console.log(err));
+	}
+	return notebookItems;
 };
 
 export const initializeGoogleDrive = () => {
-	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then((folders) => {
+	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then(async (folders) => {
 		if (!folders || !folders.length) {
 			// Folder doesn't exist, creating a new one
-			createAFolder(ROOT_DRIVE_FOLDER_NAME);
-			// upload new contents
+			let notebookLocation = '/Users/jasonxie/Desktop/PrivaNote Notebook';
+			let notebookItems: any = createNotebookStructure(notebookLocation);
+			await createAFolder({ name: ROOT_DRIVE_FOLDER_NAME })
+				.then(async (res) => {
+					ROOT_DRIVE_FOLDER_ID = res.id;
+					notebookItems = await uploadEntireNotebook(
+						notebookItems,
+						ROOT_DRIVE_FOLDER_ID
+					);
+				})
+				.catch((err) => console.log(err));
+
+			const name = 'notebookStructure.json';
+			const exportFile: FileItem = {
+				name: name,
+				path: `${notebookLocation}/.privanote/${name}`
+			};
+
+			saveFile(exportFile, JSON.stringify(notebookItems));
 		} else {
 			// synchronize google drive with current files
+			// createAFolder(ROOT_DRIVE_FOLDER_NAME, nanoid())
+			// 	.then((res) => console.log(res))
+			// 	.catch((err) => console.log(err));
 		}
 	});
 };

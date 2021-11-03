@@ -30,6 +30,7 @@ app.whenReady().then(() => {
 });
 
 let deepLinkingUrl: any;
+let NOTEBOOK_LOCATION = '';
 
 if (process.platform === 'win32') {
 	deepLinkingUrl = process.argv.slice(1);
@@ -80,3 +81,12 @@ app.on('will-finish-launching', () => {
 });
 
 export const getLink = () => deepLinkingUrl;
+
+export const setNotebookLocation = (location: string) => {
+	NOTEBOOK_LOCATION = location;
+	// console.log(NOTEBOOK_LOCATION);
+};
+
+export const getNotebookLocation = () => {
+	return NOTEBOOK_LOCATION;
+};

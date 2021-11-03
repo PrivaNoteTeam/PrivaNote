@@ -4,7 +4,7 @@ import { selectDirectory } from './handlers/selectDirectory';
 import { explorerItemContextMenu, userContextMenuTemplate } from './menus';
 import { exportNote } from './handlers/exportNote';
 import { User } from '@types';
-import { setNotebookLocation } from '@shared/api/googleDriveSync';
+// import { setNotebookLocation } from './main';
 
 export function registerIpcHandlers() {
 	ipcMain.on('quit', () => app.quit());
@@ -44,6 +44,7 @@ export function registerIpcHandlers() {
 	});
 
 	ipcMain.on('notebookRootLocation', (_, location) => {
-		setNotebookLocation(location);
+		// setNotebookLocation(location);
+		console.log(location);
 	});
 }

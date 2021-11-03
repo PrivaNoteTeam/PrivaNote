@@ -1,7 +1,10 @@
 import fs from 'fs';
 import mime from 'mime-types';
+// import { nanoid } from 'nanoid';
+// import { google } from 'googleapis';
 
 type structure = {
+	ids: {};
 	name: string;
 	mimeType: string | false;
 	absolutePath: string | false;
@@ -22,6 +25,7 @@ const getSubNotebookStructure = (path: string) => {
 				let stats = fs.statSync(absolutePath);
 				if (stats.isDirectory()) {
 					notebookStructure.push({
+						ids: {},
 						name: file,
 						mimeType: 'Folder',
 						absolutePath: absolutePath,
@@ -31,14 +35,18 @@ const getSubNotebookStructure = (path: string) => {
 						subFolder: getSubNotebookStructure(absolutePath)
 					});
 				} else {
-					notebookStructure.push({
-						name: file,
-						absolutePath: absolutePath,
-						mimeType: mime.lookup(file),
-						size: stats.size,
-						dateCreated: stats.birthtime,
-						lastModified: stats.mtime
-					});
+					let mimeType = mime.lookup(file);
+					if (mimeType) {
+						notebookStructure.push({
+							ids: {},
+							name: file,
+							absolutePath: absolutePath,
+							mimeType: mimeType,
+							size: stats.size,
+							dateCreated: stats.birthtime,
+							lastModified: stats.mtime
+						});
+					}
 				}
 			});
 		} catch (error) {
@@ -59,8 +67,9 @@ export const createNotebookStructure = (path: string) => {
 		let stats = fs.statSync(path);
 
 		notebookStructure = {
+			ids: {},
 			name: name,
-			mimeType: 'Folder',
+			mimeType: 'Notebook',
 			absolutePath: path,
 			size: stats.size,
 			dateCreated: stats.birthtime,
