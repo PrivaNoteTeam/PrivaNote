@@ -1,6 +1,8 @@
 import { MenuItemConstructorOptions, Menu, dialog, ipcMain } from 'electron';
 import { getConfig } from '@utils';
 import { exportNote } from '../handlers/exportNote';
+import { setNotebook } from '@shared/notebook';
+import { getNotebookStructure } from '@shared/utils/synchronization/getNotebookStructure';
 
 const template: MenuItemConstructorOptions[] = [
 	{
@@ -30,7 +32,10 @@ const template: MenuItemConstructorOptions[] = [
 						.then((value) => {
 							const path = value.filePaths[0];
 
-							if (!getConfig(path)) {
+							if (
+								!getConfig(path) ||
+								!getNotebookStructure(path)
+							) {
 								window.webContents.send(
 									'openNotebook',
 									path,
@@ -38,7 +43,7 @@ const template: MenuItemConstructorOptions[] = [
 								);
 								return;
 							}
-
+							setNotebook(path);
 							window.webContents.send('openNotebook', path, true);
 						});
 				}

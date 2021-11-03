@@ -4,7 +4,6 @@ import { selectDirectory } from './handlers/selectDirectory';
 import { explorerItemContextMenu, userContextMenuTemplate } from './menus';
 import { exportNote } from './handlers/exportNote';
 import { User } from '@types';
-// import { setNotebookLocation } from './main';
 
 export function registerIpcHandlers() {
 	ipcMain.on('quit', () => app.quit());
@@ -41,10 +40,5 @@ export function registerIpcHandlers() {
 				message: 'Please select a note to export.'
 			});
 		}
-	});
-
-	ipcMain.on('notebookRootLocation', (_, location) => {
-		// setNotebookLocation(location);
-		console.log(location);
 	});
 }

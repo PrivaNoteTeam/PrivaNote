@@ -5,12 +5,8 @@ import { URL } from 'url';
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import {
-	getToken,
-	initializeGoogleDrive,
-	// listFiles,
-	setGoogleAuth
-} from '@shared/Api/googleDriveSync';
+import { getToken, setGoogleAuth } from '@shared/Api/googleDrive/setup';
+import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
 
 const handleReady = () => {
 	registerIpcHandlers();
@@ -30,7 +26,6 @@ app.whenReady().then(() => {
 });
 
 let deepLinkingUrl: any;
-let NOTEBOOK_LOCATION = '';
 
 if (process.platform === 'win32') {
 	deepLinkingUrl = process.argv.slice(1);
@@ -81,12 +76,3 @@ app.on('will-finish-launching', () => {
 });
 
 export const getLink = () => deepLinkingUrl;
-
-export const setNotebookLocation = (location: string) => {
-	NOTEBOOK_LOCATION = location;
-	// console.log(NOTEBOOK_LOCATION);
-};
-
-export const getNotebookLocation = () => {
-	return NOTEBOOK_LOCATION;
-};

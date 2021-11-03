@@ -1,7 +1,5 @@
 import fs from 'fs';
 import mime from 'mime-types';
-// import { nanoid } from 'nanoid';
-// import { google } from 'googleapis';
 
 type structure = {
 	ids: {};
