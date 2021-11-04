@@ -49,7 +49,6 @@ app.on('will-finish-launching', () => {
 				urlObject.searchParams.get('authorizationCode');
 
 			const tokens = await getToken(authorizationCode!);
-
 			setGoogleAuth(tokens);
 			// listFiles();
 			initializeGoogleDrive();

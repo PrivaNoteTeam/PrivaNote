@@ -55,3 +55,18 @@ export const setGoogleAuth = (tokens: any) => {
 export const getDrive = () => {
 	return drive;
 };
+
+export const isConnected = async () => {
+	try {
+		const res = await drive.files.list({
+			q: 'trashed=false',
+			fields: 'nextPageToken, files(id, name)',
+			spaces: 'drive'
+		});
+		if (res.status != 200) return false;
+		return true; // connection has been established
+	} catch (error) {
+		console.log('The API returned an error: \n', error);
+		return false;
+	}
+};

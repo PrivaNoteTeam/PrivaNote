@@ -70,6 +70,10 @@ export function useIpcListeners() {
 			}
 		);
 
+		createListener('removeCloudProvider', (_, providerName: string) => {
+			console.log(providerName);
+		});
+
 		createListener('url-privanote', (_, url) => {
 			// parse code out of url
 			const code = parseCodeFromUrl(url, 'resetPassword');
