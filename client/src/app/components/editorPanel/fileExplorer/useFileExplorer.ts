@@ -58,7 +58,7 @@ export function useFileExplorer() {
 		});
 
 		if (isRenaming) {
-			renameExplorerItem(secondarySelection?.path!, renameText)
+			renameExplorerItem(secondarySelection?.path!, renameText, notebook)
 				.then((renamedItem) => {
 					editorDispatch({
 						type: 'rename',

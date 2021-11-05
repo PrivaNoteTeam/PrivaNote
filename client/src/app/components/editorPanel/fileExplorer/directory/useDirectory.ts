@@ -14,7 +14,7 @@ interface Args {
 }
 
 export function useDirectory({ item, renameText, setRenameText }: Args) {
-	const [{ currentNote }, dispatch] = useStore();
+	const [{ currentNote, notebook }, dispatch] = useStore();
 	const [{ secondarySelection, isRenaming }, editorDispatch] =
 		useEditorStore();
 	const [isOpened, setIsOpened] = useState(false);
@@ -63,7 +63,7 @@ export function useDirectory({ item, renameText, setRenameText }: Args) {
 		event: React.KeyboardEvent<HTMLInputElement>
 	) => {
 		if (event.key === 'Enter' || event.code === '13') {
-			renameExplorerItem(item.path, renameText)
+			renameExplorerItem(item.path, renameText, notebook)
 				.then((renamedItem) => {
 					editorDispatch({
 						type: 'rename',
