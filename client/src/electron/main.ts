@@ -50,7 +50,6 @@ app.on('will-finish-launching', () => {
 
 			const tokens = await getToken(authorizationCode!);
 			setGoogleAuth(tokens);
-			// listFiles();
 			initializeGoogleDrive();
 
 			const {

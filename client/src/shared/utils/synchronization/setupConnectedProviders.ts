@@ -3,6 +3,7 @@ import { getNotebookLocation } from '@shared/notebook';
 import { isConnected, setGoogleAuth } from '@shared/Api/googleDrive/setup';
 import { removeConnectedProvider } from './removeConnectedProvider';
 import { dialog } from 'electron';
+import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
 
 export const setupConnectedProviders = async () => {
 	const config = getConfig(getNotebookLocation());
@@ -18,6 +19,7 @@ export const setupConnectedProviders = async () => {
 
 			if (await isConnected()) {
 				// start syncing
+				initializeGoogleDrive();
 			} else {
 				removeConnectedProvider('Google Drive');
 				dialog.showMessageBox({

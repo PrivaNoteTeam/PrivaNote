@@ -1,7 +1,9 @@
 import fs from 'fs';
 import { FileSystemItem } from '../../types';
+import { addFolderToStructure } from '../synchronization/addFolderToStructure';
 
-export function createDirectory(path: string) {
+// notebook should be mandatory, made it optional cause i didn't want to touch test file - J.X.
+export function createDirectory(path: string, notebook: any = undefined) {
 	let count = 0;
 	let filename = 'Untitled';
 
@@ -17,5 +19,8 @@ export function createDirectory(path: string) {
 
 	fs.mkdirSync(directory.path);
 
+	if (notebook) {
+		addFolderToStructure(directory.path, notebook);
+	}
 	return directory;
 }

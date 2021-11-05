@@ -4,8 +4,8 @@ import mime from 'mime-types';
 type structure = {
 	ids: {};
 	name: string;
-	mimeType: string | false;
-	absolutePath: string | false;
+	mimeType: string;
+	absolutePath: string;
 	size: number;
 	dateCreated: Date;
 	lastModified: Date;

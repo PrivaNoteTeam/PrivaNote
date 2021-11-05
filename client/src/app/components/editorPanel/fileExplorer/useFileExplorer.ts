@@ -31,8 +31,10 @@ export function useFileExplorer() {
 		const newDirectoryPath = primarySelection
 			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
-		const newDirectory = createDirectory(newDirectoryPath as string);
-
+		const newDirectory = createDirectory(
+			newDirectoryPath as string,
+			notebook as string
+		);
 		editorDispatch({
 			type: 'primarySelect',
 			primarySelection: newDirectory,

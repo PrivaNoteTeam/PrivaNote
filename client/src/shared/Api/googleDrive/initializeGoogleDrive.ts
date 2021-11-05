@@ -1,17 +1,16 @@
 import { searchForFolder } from './searchForFolder';
-import { createNotebookStructure } from '@shared/utils/synchronization/createNotebookStructure';
 import { uploadEntireNotebook } from './uploadEntireNotebook';
 import { createAFolder } from './createAFolder';
-import { FileItem } from '@types';
 import { saveFile } from '@shared/utils';
 import { getNotebookLocation } from '@shared/notebook';
+import { getNotebookStructure } from '@shared/utils/synchronization/getNotebookStructure';
 
 let ROOT_DRIVE_FOLDER_NAME = 'privanote';
 let ROOT_DRIVE_FOLDER_ID = '';
 
 export const initializeGoogleDrive = () => {
-	let notebookLocation: any = getNotebookLocation();
-	let notebookItems: any = createNotebookStructure(notebookLocation);
+	let notebookLocation = getNotebookLocation();
+	let notebookItems = getNotebookStructure(notebookLocation);
 
 	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then(async (folders) => {
 		if (!folders || !folders.length) {
@@ -28,12 +27,10 @@ export const initializeGoogleDrive = () => {
 				.catch((err) => console.log(err));
 
 			const name = 'notebookStructure.json';
-			const exportFile: FileItem = {
-				name: name,
-				path: `${notebookLocation}/.privanote/${name}`
-			};
-
-			saveFile(exportFile, JSON.stringify(notebookItems));
+			saveFile(
+				{ name: name, path: `${notebookLocation}/.privanote/${name}` },
+				JSON.stringify(notebookItems)
+			);
 		} else {
 			// synchronize google drive with current files
 			// createAFolder(ROOT_DRIVE_FOLDER_NAME, nanoid())
