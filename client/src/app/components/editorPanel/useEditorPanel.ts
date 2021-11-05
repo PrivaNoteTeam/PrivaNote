@@ -50,7 +50,7 @@ export function useEditorPanel() {
 
 		ipcRenderer.removeAllListeners('deleteExplorerItem');
 		ipcRenderer.on('deleteExplorerItem', () => {
-			deleteExplorerItem(secondarySelection?.path).then(() => {
+			deleteExplorerItem(secondarySelection?.path, notebook).then(() => {
 				if (
 					currentNote?.path === secondarySelection?.path ||
 					!fileExist(currentNote?.path)
@@ -58,6 +58,14 @@ export function useEditorPanel() {
 					dispatch({
 						type: 'openNote',
 						currentNote: undefined
+					});
+				}
+
+				if (primarySelection!.path === secondarySelection!.path) {
+					editorDispatch({
+						type: 'primarySelect',
+						primarySelection: undefined,
+						isRenaming
 					});
 				}
 
