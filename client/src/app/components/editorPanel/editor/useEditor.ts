@@ -5,7 +5,7 @@ import { saveFile } from '@utils';
 import fs from 'fs';
 
 export function useEditor() {
-	const [{ currentNote }] = useStore();
+	const [{ currentNote, notebook }] = useStore();
 	const [text, setText] = useState<string>('');
 	const [unsaved, setUnsaved] = useState(false);
 	const [manualSave, setManualSave] = useState(false);
@@ -15,14 +15,14 @@ export function useEditor() {
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
 		if (autoSave) {
-			saveFile(currentNote!, event.target.value);
+			saveFile(currentNote!, event.target.value, notebook);
 		} else {
 			setUnsaved(true);
 		}
 	};
 
 	if (manualSave) {
-		saveFile(currentNote!, text);
+		saveFile(currentNote!, text, notebook);
 		setUnsaved(false);
 		setManualSave(false);
 	}
