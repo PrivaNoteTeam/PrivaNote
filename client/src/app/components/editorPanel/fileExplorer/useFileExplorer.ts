@@ -19,7 +19,7 @@ export function useFileExplorer() {
 		const newFilePath = primarySelection
 			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
-		const newFile = createFile(newFilePath as string);
+		const newFile = createFile(newFilePath as string, notebook as string);
 
 		dispatch({
 			type: 'openNote',
