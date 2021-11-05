@@ -2,6 +2,7 @@ import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
+import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let newItemName: string;
@@ -79,5 +80,6 @@ export const addItemToStructure = (item: string, notebook: string) => {
 	addToStructure(notebookStructure!);
 	exportNotebookStructure(notebookPath, notebookStructure);
 	console.log(notebookStructure);
+	syncUpstream('ADD', 'NEW ITEM OR FOLDER ITEMS', notebook);
 	// Upload new item along with the notebookStructure.json config file to sync
 };

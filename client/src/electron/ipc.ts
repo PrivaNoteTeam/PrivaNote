@@ -4,6 +4,7 @@ import { selectDirectory } from './handlers/selectDirectory';
 import { explorerItemContextMenu, userContextMenuTemplate } from './menus';
 import { exportNote } from './handlers/exportNote';
 import { User } from '@types';
+import { setNotebook } from '@shared/notebook';
 
 export function registerIpcHandlers() {
 	ipcMain.on('quit', () => app.quit());
@@ -40,5 +41,9 @@ export function registerIpcHandlers() {
 				message: 'Please select a note to export.'
 			});
 		}
+	});
+
+	ipcMain.on('setNotebook', (_, path) => {
+		setNotebook(path);
 	});
 }

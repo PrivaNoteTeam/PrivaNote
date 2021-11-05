@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
+import { ipcRenderer } from 'electron';
 
 interface FormValues {
 	name: string;
@@ -57,6 +58,10 @@ export function useCreateNotebookModal() {
 			}
 
 			const isCreated = await createNotebook(`${location}/${name}`);
+
+			if (isCreated) {
+				ipcRenderer.send('setNotebook', path);
+			}
 
 			if (!isCreated) {
 				setError('name', { message: 'an error occurred' });

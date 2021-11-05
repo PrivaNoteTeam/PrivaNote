@@ -14,6 +14,9 @@ export const setNotebook = (location: string) => {
 
 	notebookName = name;
 	notebookLocation = location;
+
+	console.log(notebookName);
+	console.log(notebookLocation);
 };
 
 export const getNotebookName = () => {

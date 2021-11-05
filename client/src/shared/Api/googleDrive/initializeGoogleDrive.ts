@@ -12,6 +12,9 @@ export const initializeGoogleDrive = () => {
 	let notebookLocation = getNotebookLocation();
 	let notebookItems = getNotebookStructure(notebookLocation);
 
+	console.log(notebookLocation);
+	console.log(notebookItems);
+
 	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then(async (folders) => {
 		if (!folders || !folders.length) {
 			// Folder doesn't exist, creating a new one
