@@ -3,7 +3,7 @@ import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-import { syncUpstream } from './syncUpstream';
+// import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let newItemName: string;
@@ -59,27 +59,8 @@ const addToStructure = (structure: any) => {
 			if (stats.isDirectory()) {
 				newItem.mimeType = 'Folder';
 				newItem.subFolder = [];
-				// structure.subFolder.push({
-				// 	ids: {},
-				// 	name: newItemName,
-				// 	mimeType: 'Folder',
-				// 	absolutePath: newItemPath,
-				// 	size: stats.size,
-				// 	dateCreated: stats.birthtime,
-				// 	lastModified: stats.mtime,
-				// 	subFolder: []
-				// });
 			} else {
 				newItem.mimeType = mime.lookup(newItemName);
-				// structure.subFolder.push({
-				// 	ids: {},
-				// 	name: newItemName,
-				// 	mimeType: mime.lookup(newItemName),
-				// 	absolutePath: newItemPath,
-				// 	size: stats.size,
-				// 	dateCreated: stats.birthtime,
-				// 	lastModified: stats.mtime
-				// });
 			}
 			structure.subFolder.push(newItem);
 		}
@@ -87,16 +68,24 @@ const addToStructure = (structure: any) => {
 };
 
 export const addItemToStructure = (item: string) => {
-	setupItemVariables(item);
-
-	let notebookStructure = getNotebookStructure(notebookPath);
-	addToStructure(notebookStructure!);
-	exportNotebookStructure(notebookPath, notebookStructure);
-	// console.log(notebookStructure);
-	syncUpstream(
-		'ADD',
-		{ parentIds: parentIds, newItem: newItem },
-		notebookPath
-	);
+	return new Promise<{}>((resolve, _) => {
+		try {
+			setupItemVariables(item);
+			let notebookStructure = getNotebookStructure(notebookPath);
+			addToStructure(notebookStructure!);
+			exportNotebookStructure(notebookStructure);
+			resolve({
+				action: 'ADD',
+				content: { parentIds: parentIds, item: newItem }
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	});
+	// syncUpstream(
+	// 	'ADD',
+	// 	{ parentIds: parentIds, newItem: newItem },
+	// 	notebookPath
+	// );
 	// Upload new item along with the notebookStructure.json config file to sync
 };

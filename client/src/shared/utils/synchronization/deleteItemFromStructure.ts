@@ -1,7 +1,6 @@
 import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let notebookPath: string;
@@ -9,6 +8,7 @@ let notebookName: string;
 let itemPath: string;
 let itemName: string;
 let level: number;
+let deletedItem: {};
 
 const setupItemVariables = (item: string) => {
 	notebookPath = getNotebookLocation();
@@ -40,20 +40,34 @@ const removeFromStructure = (structure: any) => {
 			structure.mimeType === 'Notebook' ||
 			structure.mimeType === 'Folder'
 		) {
-			structure.subFolder = structure.subFolder.filter(
-				(item: any) =>
-					item.name !== itemName && itemPath != item.absolutePath
-			);
+			structure.subFolder = structure.subFolder.filter((item: any) => {
+				if (item.name !== itemName && itemPath != item.absolutePath) {
+					return true;
+				} else {
+					deletedItem = item;
+					return false;
+				}
+			});
 		}
 	}
 };
 
 export const deleteItemFromStructure = (item: string) => {
-	setupItemVariables(item);
+	return new Promise<{}>((resolve, _) => {
+		try {
+			setupItemVariables(item);
+			let notebookStructure = getNotebookStructure(notebookPath);
+			removeFromStructure(notebookStructure);
+			exportNotebookStructure(notebookStructure);
+			resolve({
+				action: 'DELETE',
+				content: { item: deletedItem }
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	});
 
-	let notebookStructure = getNotebookStructure(notebookPath);
-	removeFromStructure(notebookStructure);
-	exportNotebookStructure(notebookPath, notebookStructure);
-	syncUpstream('DELETE', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
+	// syncUpstream('DELETE', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
 	// delete item on drive and upload the new notebookStructure.json config file to sync
 };

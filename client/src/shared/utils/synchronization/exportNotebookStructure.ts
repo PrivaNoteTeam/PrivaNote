@@ -1,23 +1,18 @@
-import { saveFile } from '../fileSystem/saveFile';
-import { FileItem } from '../../types';
+import fs from 'fs';
 import { createNotebookStructure } from './createNotebookStructure';
+import { getNotebookLocation } from '@shared/notebook';
 
-export const exportNotebookStructure = (
-	path: string,
-	structure: any = undefined
-) => {
+export const exportNotebookStructure = (structure: any = undefined) => {
 	let notebookStructure: any;
+	let notebookLocation = getNotebookLocation();
 	if (structure) {
 		notebookStructure = structure;
 	} else {
-		notebookStructure = createNotebookStructure(path);
+		notebookStructure = createNotebookStructure(notebookLocation);
 	}
 
-	const name = 'notebookStructure.json';
-	const exportFile: FileItem = {
-		name: name,
-		path: `${path}/.privanote/${name}`
-	};
-
-	saveFile(exportFile, JSON.stringify(notebookStructure));
+	fs.writeFileSync(
+		`${notebookLocation}/.privanote/notebookStructure.json`,
+		JSON.stringify(notebookStructure)
+	);
 };

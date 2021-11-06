@@ -1,7 +1,7 @@
+import fs from 'fs';
 import { searchForFolder } from './searchForFolder';
 import { uploadEntireNotebook } from './uploadEntireNotebook';
 import { createAFolder } from './createAFolder';
-import { saveFile } from '@shared/utils';
 import { getNotebookLocation } from '@shared/notebook';
 import { getNotebookStructure } from '@shared/utils/synchronization/getNotebookStructure';
 
@@ -11,9 +11,6 @@ let ROOT_DRIVE_FOLDER_ID = '';
 export const initializeGoogleDrive = () => {
 	let notebookLocation = getNotebookLocation();
 	let notebookItems = getNotebookStructure(notebookLocation);
-
-	console.log(notebookLocation);
-	console.log(notebookItems);
 
 	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then(async (folders) => {
 		if (!folders || !folders.length) {
@@ -29,9 +26,8 @@ export const initializeGoogleDrive = () => {
 				})
 				.catch((err) => console.log(err));
 
-			const name = 'notebookStructure.json';
-			saveFile(
-				{ name: name, path: `${notebookLocation}/.privanote/${name}` },
+			fs.writeFileSync(
+				`${notebookLocation}/.privanote/notebookStructure.json`,
 				JSON.stringify(notebookItems)
 			);
 		} else {

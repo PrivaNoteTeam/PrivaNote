@@ -3,7 +3,6 @@ import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let notebookPath: string;
@@ -13,6 +12,7 @@ let itemName: string;
 let newItemName: string;
 let newItemPath: string;
 let level: number;
+let renamedItem: {};
 
 const setupItemVariables = (item: string, newName: string) => {
 	notebookPath = getNotebookLocation();
@@ -58,16 +58,23 @@ const renameInStructure = (structure: any) => {
 				? 'Folder'
 				: mime.lookup(newItemName);
 			structure.subFolder[itemIndex].size = stats.size;
+			renamedItem = structure.subFolder[itemIndex];
 		}
 	}
 };
 
 export const renameItemInStructure = (item: string, newName: string) => {
-	setupItemVariables(item, newName);
-
-	let notebookStructure = getNotebookStructure(notebookPath);
-	renameInStructure(notebookStructure);
-	exportNotebookStructure(notebookPath, notebookStructure);
-	// console.log(notebookStructure);
-	syncUpstream('RENAME', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
+	return new Promise<{}>((resolve, _) => {
+		try {
+			setupItemVariables(item, newName);
+			let notebookStructure = getNotebookStructure(notebookPath);
+			renameInStructure(notebookStructure);
+			exportNotebookStructure(notebookStructure);
+			resolve({ action: 'RENAME', content: { item: renamedItem } });
+		} catch (err) {
+			console.log(err);
+		}
+		// console.log(notebookStructure);
+		// syncUpstream('RENAME', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
+	});
 };

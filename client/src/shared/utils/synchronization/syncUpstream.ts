@@ -1,12 +1,9 @@
 import { googleDriveUpstream } from '@shared/Api/googleDrive/googleDriveUpstream';
+import { getNotebookLocation } from '@shared/notebook';
 import { getConfig } from '../getConfig';
 
-export const syncUpstream = (
-	action: string,
-	content: any,
-	notebook: string
-) => {
-	const config = getConfig(notebook);
+export const syncUpstream = (action: string, content: any) => {
+	const config = getConfig(getNotebookLocation());
 
 	if (config) {
 		// PRIVANOTE VAULT
@@ -16,7 +13,7 @@ export const syncUpstream = (
 			return p.name === 'Google Drive';
 		});
 		if (googleConfig) {
-			googleDriveUpstream(action, content, notebook);
+			googleDriveUpstream(action, content);
 		}
 
 		// ONE DRIVE

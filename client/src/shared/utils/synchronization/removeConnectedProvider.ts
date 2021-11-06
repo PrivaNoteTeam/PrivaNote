@@ -1,6 +1,5 @@
-// import fs from 'fs';
+import fs from 'fs';
 import { getNotebookLocation } from '@shared/notebook';
-import { saveFile } from '..';
 import { getConfig } from '../getConfig';
 
 export const removeConnectedProvider = (name: string) => {
@@ -10,11 +9,9 @@ export const removeConnectedProvider = (name: string) => {
 		config.connectedProviders = config.connectedProviders.filter(
 			(p) => p.name !== name
 		);
-		saveFile(
-			{
-				name: 'app.json',
-				path: `${notebookLocation}/.privanote/app.json`
-			},
+
+		fs.writeFileSync(
+			`${notebookLocation}/.privanote/app.json`,
 			JSON.stringify(config)
 		);
 	}

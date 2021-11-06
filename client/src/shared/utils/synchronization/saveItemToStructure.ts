@@ -2,7 +2,6 @@ import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import fs from 'fs';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let itemName: string;
@@ -10,6 +9,7 @@ let notebookName: string;
 let itemPath: string;
 let notebookPath: string;
 let level: number;
+let savedItem: {};
 
 const setupItemVariables = (item: string) => {
 	notebookPath = getNotebookLocation();
@@ -47,16 +47,21 @@ const saveToStructure = (structure: any) => {
 			});
 			structure.subFolder[itemIndex].size = stats.size;
 			structure.subFolder[itemIndex].lastModified = stats.mtime;
+			savedItem = structure.subFolder[itemIndex];
 		}
 	}
 };
 
 export const saveItemToStructure = (item: string) => {
-	setupItemVariables(item);
-
-	let notebookStructure = getNotebookStructure(notebookPath);
-	saveToStructure(notebookStructure);
-	exportNotebookStructure(notebookPath, notebookStructure);
-	// console.log(notebookStructure);
-	syncUpstream('SAVE', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
+	return new Promise<{}>((resolve, _) => {
+		try {
+			setupItemVariables(item);
+			let notebookStructure = getNotebookStructure(notebookPath);
+			saveToStructure(notebookStructure);
+			exportNotebookStructure(notebookStructure);
+			resolve({ action: 'SAVE', content: { item: savedItem } });
+		} catch (err) {
+			console.log(err);
+		}
+	});
 };

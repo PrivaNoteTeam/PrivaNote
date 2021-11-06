@@ -1,18 +1,15 @@
+import { getNotebookLocation } from '@shared/notebook';
 import { updateFileID } from '@shared/utils/synchronization/updateFileID';
 import { createAFile } from './createAFile';
 import { createAFolder } from './createAFolder';
 
 let notebookLocation: string;
 
-export const googleDriveUpstream = (
-	action: string,
-	content: any,
-	notebook: string
-) => {
+export const googleDriveUpstream = (action: string, content: any) => {
 	// console.log(action);
 	// console.log(content);
 	// console.log(notebook);
-	notebookLocation = notebook;
+	notebookLocation = getNotebookLocation();
 	console.log(notebookLocation);
 
 	switch (action) {
