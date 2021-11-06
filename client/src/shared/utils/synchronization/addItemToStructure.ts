@@ -3,7 +3,6 @@ import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-// import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let newItemName: string;

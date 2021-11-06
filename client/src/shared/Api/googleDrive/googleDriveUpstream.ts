@@ -1,30 +1,52 @@
 import { getNotebookLocation } from '@shared/notebook';
-import { updateFileID } from '@shared/utils/synchronization/updateFileID';
+import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
+import { UpdateItemIDInStructure } from '@shared/utils/synchronization/UpdateItemIDInStructure';
 import { createAFile } from './createAFile';
 import { createAFolder } from './createAFolder';
+import { updateAFile } from './updateAFile';
 
 let notebookLocation: string;
+let notebookStructureLocation: string;
 
 export const googleDriveUpstream = (action: string, content: any) => {
+	notebookLocation = getNotebookLocation();
+	notebookStructureLocation =
+		notebookLocation + '/.privanote/notebookStructure.json';
+
 	// console.log(action);
 	// console.log(content);
-	// console.log(notebook);
-	notebookLocation = getNotebookLocation();
 	console.log(notebookLocation);
 
 	switch (action) {
 		case 'ADD':
-			console.log('Add new file or folder to google drive');
-			if ((content.mimeType = 'Folder')) {
-				createAFolder(
-					content.newItem,
-					content.parentIds.googleDrive
-				).then((res: any) => {
-					content.newItem.ids.googleDrive = res.id;
-					updateFileID(content.newItem);
-				});
+			if (content.item.mimeType === 'Folder') {
+				createAFolder(content.item, content.parentIds.googleDrive).then(
+					(res: any) => {
+						content.item.ids.googleDrive = res.id;
+						UpdateItemIDInStructure(content.item).then((res) => {
+							if (!res) return;
+							getItemFromStructure(
+								notebookStructureLocation
+							).then((item) => {
+								updateAFile(item);
+							});
+						});
+					}
+				);
 			} else {
-				createAFile(content.newItem, content.parentIds.googleDrive);
+				createAFile(content.item, content.parentIds.googleDrive).then(
+					(res: any) => {
+						content.item.ids.googleDrive = res.id;
+						UpdateItemIDInStructure(content.item).then((res) => {
+							if (!res) return;
+							getItemFromStructure(
+								notebookStructureLocation
+							).then((item) => {
+								updateAFile(item);
+							});
+						});
+					}
+				);
 			}
 			break;
 		case 'DELETE':

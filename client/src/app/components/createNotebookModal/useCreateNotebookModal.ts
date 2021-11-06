@@ -1,11 +1,10 @@
-import { useStore } from '@hooks';
+import { useConfig, useStore } from '@hooks';
 import { createNotebook } from '@utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import * as yup from 'yup';
 import { useHistory } from 'react-router';
-import { ipcRenderer } from 'electron';
 
 interface FormValues {
 	name: string;
@@ -25,6 +24,7 @@ const validationSchema = yup.object({
 export function useCreateNotebookModal() {
 	const [, dispatch] = useStore();
 	let history = useHistory();
+	const [, configDispatch] = useConfig();
 
 	const close = () => {
 		history.push('/');
@@ -59,10 +59,6 @@ export function useCreateNotebookModal() {
 
 			const isCreated = await createNotebook(`${location}/${name}`);
 
-			if (isCreated) {
-				ipcRenderer.send('setNotebook', path);
-			}
-
 			if (!isCreated) {
 				setError('name', { message: 'an error occurred' });
 				return;
@@ -76,6 +72,12 @@ export function useCreateNotebookModal() {
 			dispatch({
 				type: 'openNotebook',
 				notebook: path
+			});
+
+			// see the useConfig for init. This is temporary. Added this to allow for createNotebook for googleDrive
+			configDispatch({
+				type: 'LOAD',
+				payload: path
 			});
 
 			return;

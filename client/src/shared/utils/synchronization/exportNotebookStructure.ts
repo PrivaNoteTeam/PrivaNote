@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { createNotebookStructure } from './createNotebookStructure';
 import { getNotebookLocation } from '@shared/notebook';
+import { updateFileStats } from './updateFileStats';
 
 export const exportNotebookStructure = (structure: any = undefined) => {
 	let notebookStructure: any;
@@ -15,4 +16,6 @@ export const exportNotebookStructure = (structure: any = undefined) => {
 		`${notebookLocation}/.privanote/notebookStructure.json`,
 		JSON.stringify(notebookStructure)
 	);
+
+	updateFileStats(`${notebookLocation}/.privanote/notebookStructure.json`);
 };
