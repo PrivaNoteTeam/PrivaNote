@@ -3,6 +3,7 @@ import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromS
 import { UpdateItemIDInStructure } from '@shared/utils/synchronization/UpdateItemIDInStructure';
 import { createAFile } from './createAFile';
 import { createAFolder } from './createAFolder';
+import { deleteAFile } from './deleteAFile';
 import { updateAFile } from './updateAFile';
 
 let notebookLocation: string;
@@ -14,8 +15,8 @@ export const googleDriveUpstream = (action: string, content: any) => {
 		notebookLocation + '/.privanote/notebookStructure.json';
 
 	// console.log(action);
-	// console.log(content);
-	console.log(notebookLocation);
+	// // console.log(content);
+	// console.log(notebookLocation);
 
 	switch (action) {
 		case 'ADD':
@@ -50,13 +51,25 @@ export const googleDriveUpstream = (action: string, content: any) => {
 			}
 			break;
 		case 'DELETE':
-			console.log('Delete file or folder from google Drive');
+			deleteAFile(content.item).then(() => {
+				getItemFromStructure(notebookStructureLocation).then((item) => {
+					updateAFile(item);
+				});
+			});
 			break;
 		case 'RENAME':
-			console.log('Change the name of a file or folder in Google Drive');
+			updateAFile(content.item).then(() => {
+				getItemFromStructure(notebookStructureLocation).then((item) => {
+					updateAFile(item);
+				});
+			});
 			break;
 		case 'SAVE':
-			console.log('Save new content to a file in Google Drive');
+			updateAFile(content.item).then(() => {
+				getItemFromStructure(notebookStructureLocation).then((item) => {
+					updateAFile(item);
+				});
+			});
 			break;
 		default:
 			break;

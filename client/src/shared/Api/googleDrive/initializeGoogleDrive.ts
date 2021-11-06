@@ -28,7 +28,7 @@ export const initializeGoogleDrive = () => {
 
 			fs.writeFileSync(
 				`${notebookLocation}/.privanote/notebookStructure.json`,
-				JSON.stringify(notebookItems)
+				JSON.stringify(notebookItems, null, 4)
 			);
 		} else {
 			// synchronize google drive with current files

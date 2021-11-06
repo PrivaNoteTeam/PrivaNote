@@ -12,7 +12,7 @@ export const createNotebook = async (path: string) => {
 		try {
 			fs.writeFileSync(
 				`${path}/.privanote/app.json`,
-				JSON.stringify(defaultConfig)
+				JSON.stringify(defaultConfig, null, 4)
 			);
 
 			fs.writeFileSync(`${path}/.privanote/notebookStructure.json`, '');

@@ -71,7 +71,7 @@ const reducer = (
 
 			fs.writeFileSync(
 				action.payload.path + '/.privanote/app.json',
-				JSON.stringify(addProviderState)
+				JSON.stringify(addProviderState, null, 4)
 			);
 
 			return addProviderState as PrivaNoteConfig;
@@ -93,7 +93,7 @@ const reducer = (
 
 			fs.writeFileSync(
 				action.payload.path + '/.privanote/app.json',
-				JSON.stringify(removeProviderState)
+				JSON.stringify(removeProviderState, null, 4)
 			);
 
 			return removeProviderState as PrivaNoteConfig;

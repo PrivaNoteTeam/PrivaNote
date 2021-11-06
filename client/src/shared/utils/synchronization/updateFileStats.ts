@@ -53,7 +53,7 @@ export const updateFileStats = (path: any) => {
 
 		fs.writeFileSync(
 			`${getNotebookLocation()}/.privanote/notebookStructure.json`,
-			JSON.stringify(notebookStructure)
+			JSON.stringify(notebookStructure, null, 4)
 		);
 	} catch (err) {
 		console.log(err);

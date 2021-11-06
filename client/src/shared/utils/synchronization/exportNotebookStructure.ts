@@ -14,7 +14,7 @@ export const exportNotebookStructure = (structure: any = undefined) => {
 
 	fs.writeFileSync(
 		`${notebookLocation}/.privanote/notebookStructure.json`,
-		JSON.stringify(notebookStructure)
+		JSON.stringify(notebookStructure, null, 4)
 	);
 
 	updateFileStats(`${notebookLocation}/.privanote/notebookStructure.json`);
