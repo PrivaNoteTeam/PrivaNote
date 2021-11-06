@@ -1,6 +1,8 @@
+import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import fs from 'fs';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
+import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let itemName: string;
@@ -9,12 +11,9 @@ let itemPath: string;
 let notebookPath: string;
 let level: number;
 
-const setupItemVariables = (item: string, notebook: string) => {
-	notebookPath =
-		notebook.slice(-1) === '/'
-			? notebook.substr(0, notebook.length - 1)
-			: notebook;
-	notebookName = notebookPath.split('/').slice(-1)[0];
+const setupItemVariables = (item: string) => {
+	notebookPath = getNotebookLocation();
+	notebookName = getNotebookName();
 
 	itemPath = item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
 	folderChain = itemPath.split('/');
@@ -52,11 +51,12 @@ const saveToStructure = (structure: any) => {
 	}
 };
 
-export const saveItemToStructure = (item: string, notebook: string) => {
-	setupItemVariables(item, notebook);
+export const saveItemToStructure = (item: string) => {
+	setupItemVariables(item);
 
 	let notebookStructure = getNotebookStructure(notebookPath);
 	saveToStructure(notebookStructure);
 	exportNotebookStructure(notebookPath, notebookStructure);
-	console.log(notebookStructure);
+	// console.log(notebookStructure);
+	syncUpstream('SAVE', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
 };

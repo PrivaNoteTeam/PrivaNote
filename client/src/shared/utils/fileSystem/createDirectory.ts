@@ -1,9 +1,8 @@
+import { ipcRenderer } from 'electron';
 import fs from 'fs';
 import { FileSystemItem } from '../../types';
-import { addItemToStructure } from '../synchronization/addItemToStructure';
 
-// notebook should be mandatory, made it optional cause i didn't want to touch test file - J.X.
-export function createDirectory(path: string, notebook: any = undefined) {
+export function createDirectory(path: string) {
 	let count = 0;
 	let filename = 'Untitled';
 
@@ -19,8 +18,7 @@ export function createDirectory(path: string, notebook: any = undefined) {
 
 	fs.mkdirSync(directory.path);
 
-	if (notebook) {
-		addItemToStructure(directory.path, notebook);
-	}
+	ipcRenderer.send('createDirectory', directory.path);
+
 	return directory;
 }

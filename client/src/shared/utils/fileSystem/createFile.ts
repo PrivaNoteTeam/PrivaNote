@@ -1,9 +1,8 @@
+import { ipcRenderer } from 'electron';
 import fs from 'fs';
 import { FileItem } from '../../types';
-import { addItemToStructure } from '../synchronization/addItemToStructure';
 
-// notebook should be mandatory, made it optional cause i didn't want to touch test file - J.X.
-export function createFile(path: string, notebook: any = undefined) {
+export function createFile(path: string) {
 	let count = 0;
 	let filename = 'Untitled.md';
 
@@ -18,9 +17,7 @@ export function createFile(path: string, notebook: any = undefined) {
 
 	fs.writeFileSync(file.path, '');
 
-	if (notebook) {
-		addItemToStructure(file.path, notebook);
-	}
+	ipcRenderer.send('createFile', file.path);
 
 	return file;
 }

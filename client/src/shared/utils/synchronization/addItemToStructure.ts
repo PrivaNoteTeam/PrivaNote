@@ -1,3 +1,4 @@
+import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
@@ -10,13 +11,12 @@ let notebookName: string;
 let newItemPath: string;
 let notebookPath: string;
 let level: number;
+let parentIds: {};
+let newItem: any;
 
-const setupItemVariables = (item: string, notebook: string) => {
-	notebookPath =
-		notebook.slice(-1) === '/'
-			? notebook.substr(0, notebook.length - 1)
-			: notebook;
-	notebookName = notebookPath.split('/').slice(-1)[0];
+const setupItemVariables = (item: string) => {
+	notebookPath = getNotebookLocation();
+	notebookName = getNotebookName();
 
 	newItemPath =
 		item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
@@ -45,41 +45,58 @@ const addToStructure = (structure: any) => {
 			structure.mimeType === 'Notebook' ||
 			structure.mimeType === 'Folder'
 		) {
+			parentIds = structure.ids;
 			let stats = fs.statSync(newItemPath);
+			newItem = {
+				ids: {},
+				name: newItemName,
+				absolutePath: newItemPath,
+				size: stats.size,
+				dateCreated: stats.birthtime,
+				lastModified: stats.mtime
+			};
 
 			if (stats.isDirectory()) {
-				structure.subFolder.push({
-					ids: {},
-					name: newItemName,
-					mimeType: 'Folder',
-					absolutePath: newItemPath,
-					size: stats.size,
-					dateCreated: stats.birthtime,
-					lastModified: stats.mtime,
-					subFolder: []
-				});
+				newItem.mimeType = 'Folder';
+				newItem.subFolder = [];
+				// structure.subFolder.push({
+				// 	ids: {},
+				// 	name: newItemName,
+				// 	mimeType: 'Folder',
+				// 	absolutePath: newItemPath,
+				// 	size: stats.size,
+				// 	dateCreated: stats.birthtime,
+				// 	lastModified: stats.mtime,
+				// 	subFolder: []
+				// });
 			} else {
-				structure.subFolder.push({
-					ids: {},
-					name: newItemName,
-					mimeType: mime.lookup(newItemName),
-					absolutePath: newItemPath,
-					size: stats.size,
-					dateCreated: stats.birthtime,
-					lastModified: stats.mtime
-				});
+				newItem.mimeType = mime.lookup(newItemName);
+				// structure.subFolder.push({
+				// 	ids: {},
+				// 	name: newItemName,
+				// 	mimeType: mime.lookup(newItemName),
+				// 	absolutePath: newItemPath,
+				// 	size: stats.size,
+				// 	dateCreated: stats.birthtime,
+				// 	lastModified: stats.mtime
+				// });
 			}
+			structure.subFolder.push(newItem);
 		}
 	}
 };
 
-export const addItemToStructure = (item: string, notebook: string) => {
-	setupItemVariables(item, notebook);
+export const addItemToStructure = (item: string) => {
+	setupItemVariables(item);
 
 	let notebookStructure = getNotebookStructure(notebookPath);
 	addToStructure(notebookStructure!);
 	exportNotebookStructure(notebookPath, notebookStructure);
-	console.log(notebookStructure);
-	syncUpstream('ADD', 'NEW ITEM OR FOLDER ITEMS', notebook);
+	// console.log(notebookStructure);
+	syncUpstream(
+		'ADD',
+		{ parentIds: parentIds, newItem: newItem },
+		notebookPath
+	);
 	// Upload new item along with the notebookStructure.json config file to sync
 };

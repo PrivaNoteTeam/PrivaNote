@@ -50,7 +50,7 @@ export function useEditorPanel() {
 
 		ipcRenderer.removeAllListeners('deleteExplorerItem');
 		ipcRenderer.on('deleteExplorerItem', () => {
-			deleteExplorerItem(secondarySelection?.path, notebook).then(() => {
+			deleteExplorerItem(secondarySelection?.path).then(() => {
 				if (
 					currentNote?.path === secondarySelection?.path ||
 					!fileExist(currentNote?.path)

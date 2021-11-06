@@ -1,14 +1,9 @@
+import { ipcRenderer } from 'electron';
 import fs from 'fs';
+import { getFileSystemItem } from '..';
 import { FileSystemItem } from '../../types';
-import { renameItemInStructure } from '../synchronization/renameItemInStructure';
-import { getFileSystemItem } from './getFileSystemItem';
 
-// notebook should be mandatory, made it optional cause i didn't want to touch test file - J.X.
-export const renameExplorerItem = async (
-	path: string,
-	newName: string,
-	notebook: any = undefined
-) => {
+export const renameExplorerItem = async (path: string, newName: string) => {
 	return new Promise<FileSystemItem | undefined>((resolve, reject) => {
 		try {
 			path =
@@ -19,7 +14,7 @@ export const renameExplorerItem = async (
 			if (fs.existsSync(path) && !fs.existsSync(newPath)) {
 				fs.renameSync(path, newPath);
 
-				renameItemInStructure(path, newName, notebook);
+				ipcRenderer.send('renameExplorerItem', path, newName);
 
 				resolve(getFileSystemItem(newPath));
 			} else {

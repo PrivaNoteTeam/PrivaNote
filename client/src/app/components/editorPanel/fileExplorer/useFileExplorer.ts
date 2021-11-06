@@ -19,7 +19,7 @@ export function useFileExplorer() {
 		const newFilePath = primarySelection
 			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
-		const newFile = createFile(newFilePath as string, notebook as string);
+		const newFile = createFile(newFilePath as string);
 
 		dispatch({
 			type: 'openNote',
@@ -31,10 +31,7 @@ export function useFileExplorer() {
 		const newDirectoryPath = primarySelection
 			? getParentDirectory(primarySelection.path, { onlyFiles: true })
 			: notebook;
-		const newDirectory = createDirectory(
-			newDirectoryPath as string,
-			notebook as string
-		);
+		const newDirectory = createDirectory(newDirectoryPath as string);
 		editorDispatch({
 			type: 'primarySelect',
 			primarySelection: newDirectory,
@@ -58,7 +55,7 @@ export function useFileExplorer() {
 		});
 
 		if (isRenaming) {
-			renameExplorerItem(secondarySelection?.path!, renameText, notebook)
+			renameExplorerItem(secondarySelection?.path!, renameText)
 				.then((renamedItem) => {
 					editorDispatch({
 						type: 'rename',

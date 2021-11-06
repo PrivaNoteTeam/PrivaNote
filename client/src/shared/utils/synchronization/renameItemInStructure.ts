@@ -1,7 +1,9 @@
+import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import fs from 'fs';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
+import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let notebookPath: string;
@@ -12,16 +14,9 @@ let newItemName: string;
 let newItemPath: string;
 let level: number;
 
-const setupItemVariables = (
-	item: string,
-	newName: string,
-	notebook: string
-) => {
-	notebookPath =
-		notebook.slice(-1) === '/'
-			? notebook.substr(0, notebook.length - 1)
-			: notebook;
-	notebookName = notebookPath.split('/').slice(-1)[0];
+const setupItemVariables = (item: string, newName: string) => {
+	notebookPath = getNotebookLocation();
+	notebookName = getNotebookName();
 
 	itemPath = item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
 	folderChain = itemPath.split('/');
@@ -67,15 +62,12 @@ const renameInStructure = (structure: any) => {
 	}
 };
 
-export const renameItemInStructure = (
-	item: string,
-	newName: string,
-	notebook: string
-) => {
-	setupItemVariables(item, newName, notebook);
+export const renameItemInStructure = (item: string, newName: string) => {
+	setupItemVariables(item, newName);
 
 	let notebookStructure = getNotebookStructure(notebookPath);
 	renameInStructure(notebookStructure);
 	exportNotebookStructure(notebookPath, notebookStructure);
-	console.log(notebookStructure);
+	// console.log(notebookStructure);
+	syncUpstream('RENAME', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
 };

@@ -1,5 +1,7 @@
+import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
+import { syncUpstream } from './syncUpstream';
 
 let folderChain: Array<string>;
 let notebookPath: string;
@@ -8,12 +10,9 @@ let itemPath: string;
 let itemName: string;
 let level: number;
 
-const setupItemVariables = (item: string, notebook: string) => {
-	notebookPath =
-		notebook.slice(-1) === '/'
-			? notebook.substr(0, notebook.length - 1)
-			: notebook;
-	notebookName = notebookPath.split('/').slice(-1)[0];
+const setupItemVariables = (item: string) => {
+	notebookPath = getNotebookLocation();
+	notebookName = getNotebookName();
 
 	itemPath = item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
 	folderChain = itemPath.split('/');
@@ -49,11 +48,12 @@ const removeFromStructure = (structure: any) => {
 	}
 };
 
-export const deleteItemFromStructure = (item: string, notebook: string) => {
-	setupItemVariables(item, notebook);
+export const deleteItemFromStructure = (item: string) => {
+	setupItemVariables(item);
 
 	let notebookStructure = getNotebookStructure(notebookPath);
 	removeFromStructure(notebookStructure);
 	exportNotebookStructure(notebookPath, notebookStructure);
+	syncUpstream('DELETE', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
 	// delete item on drive and upload the new notebookStructure.json config file to sync
 };

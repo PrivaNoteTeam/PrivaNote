@@ -8,10 +8,6 @@ export const syncUpstream = (
 ) => {
 	const config = getConfig(notebook);
 
-	console.log(config);
-	console.log(action);
-	console.log(content);
-
 	if (config) {
 		// PRIVANOTE VAULT
 
