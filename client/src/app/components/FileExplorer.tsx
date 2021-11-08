@@ -1,20 +1,13 @@
 import React from 'react';
-import { FileSystemItem } from '@types';
 import { UIFileExplorer } from './fileExplorer/UIFileExplorer';
-
 import { useFileExplorer } from './fileExplorer/useFileExplorer';
 
-interface Props {
-	items: FileSystemItem[];
-}
-
-export function FileExplorer({ items }: Props) {
+export function FileExplorer() {
 	const {
+		items,
 		handleAddDirectoryClick,
 		handleAddFileClick,
-		handleOuterClick,
-		renameText,
-		setRenameText
+		handleOuterClick
 	} = useFileExplorer();
 
 	return (
@@ -23,8 +16,6 @@ export function FileExplorer({ items }: Props) {
 			handleAddDirectoryClick={handleAddDirectoryClick}
 			handleAddFileClick={handleAddFileClick}
 			handleOuterClick={handleOuterClick}
-			renameText={renameText}
-			setRenameText={setRenameText}
 		/>
 	);
 }

@@ -65,7 +65,7 @@ export function useCreateNotebookModal() {
 
 			dispatch({
 				type: 'openNote',
-				currentNote: undefined
+				currentFile: undefined
 			});
 
 			dispatch({

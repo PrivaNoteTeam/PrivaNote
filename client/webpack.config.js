@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { node } = require('webpack');
 
 module.exports = [
 	{
@@ -66,6 +67,10 @@ module.exports = [
 				{
 					test: /\.svg/,
 					use: ['@svgr/webpack']
+				},
+				{
+					test: /.node$/,
+					loader: 'node-loader'
 				}
 			]
 		},

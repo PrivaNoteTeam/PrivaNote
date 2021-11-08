@@ -53,13 +53,12 @@ export function UIVerificationModal({ register, errors, handleSubmit }: Props) {
 								<p className='text-gray-200 text-sm'>
 									Didn't receive an email?
 								</p>
-								<a
-									href='#'
+								<p
 									onClick={() => {}}
 									className='text-blue-500 text-sm hover:underline cursor-pointer'
 								>
 									Resend
-								</a>
+								</p>
 							</div>
 							<input
 								type='submit'

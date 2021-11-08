@@ -41,7 +41,7 @@ describe.skip('Breadcrumb Logic', () => {
 
 	const initialState: AppState = {
 		notebook: '/Users/admin/Documents/notebook',
-		currentNote: {
+		currentFile: {
 			name: 'segments.md',
 			path: 'testing/path/segments.md'
 		}

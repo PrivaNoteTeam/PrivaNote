@@ -125,13 +125,12 @@ export function RegisterModal() {
 							register={register}
 						/>
 						<div className='flex justify-between items-end'>
-							<a
-								href='#'
+							<p
 								onClick={handleClick}
 								className='text-blue-500 hover:underline cursor-pointer'
 							>
 								Already have an account?
-							</a>
+							</p>
 							<input
 								type='submit'
 								value='Register'

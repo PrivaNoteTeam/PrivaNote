@@ -3,7 +3,15 @@ import { useEditorPanel } from './editorPanel/useEditorPanel';
 import { UIEditorPanel } from './editorPanel/UIEditorPanel';
 
 export function EditorPanel() {
-	const { fileExplorerVisible } = useEditorPanel();
+	const { text, setText, handlePreviewClose, livePreviewVisiable } =
+		useEditorPanel();
 
-	return <UIEditorPanel fileExplorerVisible={fileExplorerVisible} />;
+	return (
+		<UIEditorPanel
+			livePreviewVisiable={livePreviewVisiable}
+			text={text}
+			setText={setText}
+			handlePreviewClose={handlePreviewClose}
+		/>
+	);
 }
