@@ -1,5 +1,4 @@
 import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
-import { dialog } from 'electron';
 import { getDrive } from './setup';
 
 export const deleteAFile = async (file: any) => {

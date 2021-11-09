@@ -2,7 +2,6 @@ import { getConfig } from '../getConfig';
 import { getNotebookLocation } from '@shared/notebook';
 import { isConnected, setGoogleAuth } from '@shared/Api/googleDrive/setup';
 import { removeConnectedProvider } from './removeConnectedProvider';
-import { dialog } from 'electron';
 import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
 
 export const setupConnectedProviders = async () => {
@@ -15,17 +14,18 @@ export const setupConnectedProviders = async () => {
 			return p.name === 'Google Drive';
 		});
 		if (googleConfig) {
-			setGoogleAuth({ access_token: googleConfig.accessToken }); // should be/include refresh token if exist
+			try {
+				setGoogleAuth({ access_token: googleConfig.accessToken }); // should be/include refresh token if exist
 
-			if (await isConnected()) {
-				// start syncing
-				initializeGoogleDrive();
-			} else {
+				if (await isConnected()) {
+					// start syncing
+					initializeGoogleDrive();
+				} else {
+					removeConnectedProvider('Google Drive');
+				}
+			} catch (error) {
+				console.log(error);
 				removeConnectedProvider('Google Drive');
-				dialog.showMessageBox({
-					message:
-						'Google Drive connection is lost. Please reconnect to start syncing again.'
-				});
 			}
 		}
 
