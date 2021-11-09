@@ -12,9 +12,5 @@ export const deleteAFile = async (file: any) => {
 	} catch (error) {
 		console.log(error);
 		removeConnectedProvider('Google Drive');
-		dialog.showMessageBox({
-			message:
-				'Google Drive connection is lost. Please reconnect to start syncing again.'
-		});
 	}
 };

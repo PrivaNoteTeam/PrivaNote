@@ -72,6 +72,10 @@ export function useIpcListeners() {
 
 		createListener('removeCloudProvider', (_, providerName: string) => {
 			console.log(providerName);
+			configDispatch({
+				type: 'REMOVE_PROVIDER',
+				payload: { providerName: providerName, path: notebook! }
+			});
 		});
 
 		createListener('url-privanote', (_, url) => {
