@@ -15,12 +15,11 @@ export const removeConnectedProvider = (name: string) => {
 
 		fs.writeFileSync(
 			`${notebookLocation}/.privanote/app.json`,
-			JSON.stringify(config)
+			JSON.stringify(config, null, 4)
 		);
 
 		dialog.showMessageBox({
-			message:
-				'Google Drive connection is lost. Please reconnect to start syncing again.'
+			message: `${name} connection is lost. Please reconnect to start syncing again.`
 		});
 
 		mainWindow.webContents.send('removeCloudProvider', name);

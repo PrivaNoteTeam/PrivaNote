@@ -4,6 +4,11 @@ import { uploadEntireNotebook } from './uploadEntireNotebook';
 import { createAFolder } from './createAFolder';
 import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import { getNotebookStructure } from '@shared/utils/synchronization/getNotebookStructure';
+import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
+import { downloadAFile } from './downloadAFile';
+import { updateFileStats } from '@shared/utils/synchronization/updateFileStats';
+import { updateAFile } from './updateAFile';
+import { detectStructureChanges } from '@shared/utils/synchronization/detectStructureChanges';
 
 let ROOT_DRIVE_FOLDER_NAME = 'privanote';
 let ROOT_DRIVE_FOLDER_ID = '';
@@ -11,12 +16,15 @@ let notebookName: string;
 let notebookLocation: string;
 
 const uploadNewNotebook = async (structure: any, parentId: string) => {
+	let structureLocation = `${notebookLocation}/.privanote/notebookStructure.json`;
 	structure = await uploadEntireNotebook(structure, parentId);
 	// rewrite updated structure that contains new google ids
-	fs.writeFileSync(
-		`${notebookLocation}/.privanote/notebookStructure.json`,
-		JSON.stringify(structure, null, 4)
-	);
+	fs.writeFileSync(structureLocation, JSON.stringify(structure, null, 4));
+
+	updateFileStats(structureLocation);
+	getItemFromStructure(structureLocation).then((item) => {
+		updateAFile(item);
+	});
 };
 
 export const initializeGoogleDrive = () => {
@@ -60,6 +68,17 @@ export const initializeGoogleDrive = () => {
 									folder.name === notebookStructure.name
 								) {
 									// sync with recent modified files
+									let item = await getItemFromStructure(
+										`${notebookLocation}/.privanote/notebookStructure.json`
+									);
+									await downloadAFile(item).then(
+										(cloudStructure) => {
+											// merge drive items and local items
+											detectStructureChanges(
+												cloudStructure
+											);
+										}
+									);
 									console.log(
 										'sync with recent modified files'
 									);

@@ -66,7 +66,7 @@ export const isConnected = async () => {
 		if (res.status != 200) return false;
 		return true; // connection has been established
 	} catch (error) {
-		console.log('The API returned an error: \n', error);
+		console.log('The API returned an error from setup.ts: \n', error);
 		return false;
 	}
 };

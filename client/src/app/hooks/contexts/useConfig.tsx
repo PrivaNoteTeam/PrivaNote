@@ -76,6 +76,8 @@ const reducer = (
 
 			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
+			console.log('STATE:', state);
+			if (!state || !state.connectedProviders) return;
 			if (
 				!state!.connectedProviders.find((p) => {
 					return p.name === action.payload.providerName;
