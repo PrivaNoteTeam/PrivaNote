@@ -12,7 +12,7 @@ export function SettingsPage() {
 
 	return (
 		<Page onClose={handleClose}>
-			<div className='flex'>
+			<div className='flex space-x-6'>
 				<div className='flex flex-col space-y-4'>
 					<input
 						className='py-0.5 px-1 bg-gray-700 border border-blue-500 rounded-md text-gray-200 text-sm outline-none'

@@ -12,9 +12,12 @@ export function Category({ title, settings }: Props) {
 	return (
 		<div>
 			<h1 className='text-white text-2xl font-medium'>{title}</h1>
-			{settings.map((setting) => {
-				return <SettingItem {...setting} />;
-			})}
+			{settings.map((setting) => (
+				<div className='my-0.5'>
+					<SettingItem {...setting} />
+					<hr className='text-gray-700 mt-0.5' />
+				</div>
+			))}
 		</div>
 	);
 }
