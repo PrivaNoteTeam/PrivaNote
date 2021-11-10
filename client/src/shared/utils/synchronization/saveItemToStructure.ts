@@ -27,6 +27,12 @@ const setupItemVariables = (item: string) => {
 const saveToStructure = (structure: any) => {
 	if (!structure) return;
 	level++;
+
+	let parentStats = fs.statSync(structure.absolutePath);
+	structure.size = parentStats.size;
+	structure.lastModified = parentStats.mtime;
+	structure.statusModified = parentStats.ctime;
+
 	if (level < folderChain.length) {
 		for (let folder of structure.subFolder) {
 			if (

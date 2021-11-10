@@ -21,29 +21,24 @@ const getSubNotebookStructure = (path: string) => {
 			files.forEach((file) => {
 				let absolutePath = `${path}/${file}`;
 				let stats = fs.statSync(absolutePath);
+				let item: any = {
+					ids: {},
+					name: file,
+					absolutePath: absolutePath,
+					size: stats.size,
+					dateCreated: stats.birthtime,
+					lastModified: stats.mtime,
+					statusModified: stats.ctime
+				};
 				if (stats.isDirectory()) {
-					notebookStructure.push({
-						ids: {},
-						name: file,
-						mimeType: 'Folder',
-						absolutePath: absolutePath,
-						size: stats.size,
-						dateCreated: stats.birthtime,
-						lastModified: stats.mtime,
-						subFolder: getSubNotebookStructure(absolutePath)
-					});
+					item.mimeType = 'Folder';
+					item.subFolder = getSubNotebookStructure(absolutePath);
+					notebookStructure.push(item);
 				} else {
 					let mimeType = mime.lookup(file);
 					if (mimeType) {
-						notebookStructure.push({
-							ids: {},
-							name: file,
-							absolutePath: absolutePath,
-							mimeType: mimeType,
-							size: stats.size,
-							dateCreated: stats.birthtime,
-							lastModified: stats.mtime
-						});
+						item.mimeType = mimeType;
+						notebookStructure.push(item);
 					}
 				}
 			});
@@ -72,6 +67,7 @@ export const createNotebookStructure = (path: string) => {
 			size: stats.size,
 			dateCreated: stats.birthtime,
 			lastModified: stats.mtime,
+			statusModified: stats.ctime,
 			subFolder: getSubNotebookStructure(path)
 		};
 	}

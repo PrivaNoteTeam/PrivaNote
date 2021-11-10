@@ -34,6 +34,12 @@ const setupItemVariables = (item: string, newName: string) => {
 const renameInStructure = (structure: any) => {
 	if (!structure) return;
 	level++;
+
+	let parentStats = fs.statSync(structure.absolutePath);
+	structure.size = parentStats.size;
+	structure.lastModified = parentStats.mtime;
+	structure.statusModified = parentStats.ctime;
+
 	if (level < folderChain.length) {
 		for (let folder of structure.subFolder) {
 			if (
@@ -58,6 +64,7 @@ const renameInStructure = (structure: any) => {
 				? 'Folder'
 				: mime.lookup(newItemName);
 			structure.subFolder[itemIndex].size = stats.size;
+			structure.subFolder[itemIndex].statusModified = stats.ctime;
 			renamedItem = structure.subFolder[itemIndex];
 		}
 	}
