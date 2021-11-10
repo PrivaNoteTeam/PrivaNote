@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TextField } from '../TextField';
-import { useModalStore } from '@hooks';
 import * as yup from 'yup';
 import { ModalLayout } from './Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,14 +7,15 @@ import { useForm } from 'react-hook-form';
 import { FormError, ResetPasswordFormValues } from '@types';
 import { FormBanner } from './FormBanner';
 import { resetPassword } from '@shared/Api/resetPassword';
+import { useHistory } from 'react-router-dom';
 
 const validationSchema = yup.object({
 	password: yup.string().required()
 });
 
 export function ResetPasswordModal() {
-	const [, modalManagerDispatch] = useModalStore();
 	const [formError] = useState<FormError | undefined>();
+	let history = useHistory();
 
 	const {
 		register,
@@ -30,31 +30,18 @@ export function ResetPasswordModal() {
 		async ({ password }: ResetPasswordFormValues) => {
 			resetPassword({ password }).then((response) => {
 				if (response.success) {
-					modalManagerDispatch({
-						type: 'resetPasswordModal',
-						resetPasswordModalVisible: false
-					});
+					history.push('/');
 				}
 			});
 		}
 	);
 
 	const handleCancelClick = () => {
-		modalManagerDispatch({
-			type: 'loginModal',
-			loginModalVisible: true
-		});
+		history.push('/login');
 	};
 
 	return (
-		<ModalLayout
-			close={() =>
-				modalManagerDispatch({
-					type: 'resetPasswordModal',
-					resetPasswordModalVisible: false
-				})
-			}
-		>
+		<ModalLayout close={() => history.push('/')}>
 			<form onSubmit={submitHandler} className='w-80 space-y-8'>
 				<div className='space-y-3'>
 					<h2 className='text-center text-2xl text-white select-none'>

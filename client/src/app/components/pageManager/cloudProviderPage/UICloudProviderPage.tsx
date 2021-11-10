@@ -1,15 +1,16 @@
 import React from 'react';
 import { ProviderItem } from './ProviderItem';
 import { Page } from '../Page';
-import { useConfig, usePageStore } from '@hooks';
+import { useConfig } from '@hooks';
+import { useHistory } from 'react-router';
 
 interface Props {
 	handleClose: () => void;
 }
 
 export function UICloudProviderPage({ handleClose }: Props) {
-	const [, pageDispatch] = usePageStore();
 	const [config] = useConfig();
+	let history = useHistory();
 
 	const placeholder = (
 		<div className='text-gray-500 text-sm flex flex-col space-y-1 w-2/3'>
@@ -58,12 +59,7 @@ export function UICloudProviderPage({ handleClose }: Props) {
 				{renderProviders?.length != 0 ? renderProviders : placeholder}
 				<div className='flex justify-end'>
 					<button
-						onClick={() => {
-							pageDispatch({
-								type: 'selectCloudProviderPage',
-								selectCloudProviderPageVisible: true
-							});
-						}}
+						onClick={() => history.push('/cloudprovider/select')}
 						className='pn-button bg-blue-500 bg-opacity-50 border-blue-500 hover:border-blue-400'
 					>
 						See providers

@@ -1,4 +1,3 @@
-import { useModalStore } from '@app/hooks';
 import { VerificationFormValues } from '@types';
 import React from 'react';
 import {
@@ -9,6 +8,7 @@ import {
 } from 'react-hook-form';
 import { ModalLayout } from '../Modal';
 import { TextField } from '../../TextField';
+import { useHistory } from 'react-router';
 
 interface Props {
 	register: UseFormRegister<VerificationFormValues>;
@@ -19,15 +19,12 @@ interface Props {
 }
 
 export function UIVerificationModal({ register, errors, handleSubmit }: Props) {
-	const [, modalManagerDispatch] = useModalStore();
+	let history = useHistory();
 
 	return (
 		<ModalLayout
 			close={() => {
-				modalManagerDispatch({
-					type: 'verificationModal',
-					verificationModalVisible: false
-				});
+				history.push('/');
 			}}
 		>
 			<form onSubmit={handleSubmit} className='w-80 space-y-8'>
@@ -56,13 +53,12 @@ export function UIVerificationModal({ register, errors, handleSubmit }: Props) {
 								<p className='text-gray-200 text-sm'>
 									Didn't receive an email?
 								</p>
-								<a
-									href='#'
+								<p
 									onClick={() => {}}
 									className='text-blue-500 text-sm hover:underline cursor-pointer'
 								>
 									Resend
-								</a>
+								</p>
 							</div>
 							<input
 								type='submit'

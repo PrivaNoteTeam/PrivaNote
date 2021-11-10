@@ -1,52 +1,45 @@
 import React from 'react';
+import { ipcRenderer } from 'electron';
+import { Route, useHistory } from 'react-router';
+import { CreateNotebookModal } from './CreateNotebookModal';
 import { LoginModal } from './modalManager/LoginModal';
 import { RegisterModal } from './modalManager/RegisterModal';
-import { CreateNotebookModal } from './CreateNotebookModal';
-import { ipcRenderer } from 'electron';
-import { useModalStore } from '../hooks';
+import { ResetPasswordModal } from './modalManager/ResetPasswordModal';
 import { VerificiationModal } from './modalManager/VerificationModal';
 import { TwoFactorAuthModal } from './modalManager/TwoFactorAuthModal';
 import { ForgotPasswordModal } from './modalManager/ForgotPasswordModal';
-import { ResetPasswordModal } from './modalManager/ResetPasswordModal';
 
 export function ModalManager() {
-	const [
-		{
-			loginModalVisible,
-			registerModalVisible,
-			createNotebookModalVisible,
-			verificationModalVisible,
-			twoFactorAuthModalVisible,
-			forgotPasswordModalVisible,
-			resetPasswordModalVisible
-		},
-		modalManagerDispatch
-	] = useModalStore();
-
+	let history = useHistory();
 	ipcRenderer.on('createNotebook', () => {
-		modalManagerDispatch({
-			type: 'createNotebookModal',
-			createNotebookModalVisible: true
-		});
+		history.push('/notebook/create');
 	});
 
-	let render: JSX.Element | null = null;
-
-	if (loginModalVisible) {
-		render = <LoginModal />;
-	} else if (registerModalVisible) {
-		render = <RegisterModal />;
-	} else if (createNotebookModalVisible) {
-		render = <CreateNotebookModal />;
-	} else if (verificationModalVisible) {
-		render = <VerificiationModal />;
-	} else if (twoFactorAuthModalVisible) {
-		render = <TwoFactorAuthModal />;
-	} else if (forgotPasswordModalVisible) {
-		render = <ForgotPasswordModal />;
-	} else if (resetPasswordModalVisible) {
-		render = <ResetPasswordModal />;
-	}
-
-	return render;
+	return (
+		<>
+			<Route
+				path='/notebook/create'
+				children={<CreateNotebookModal />}
+				exact
+			/>
+			<Route path='/login' children={<LoginModal />} exact />
+			<Route path='/register' children={<RegisterModal />} exact />
+			<Route
+				path='/forgot-password'
+				children={<ForgotPasswordModal />}
+				exact
+			/>
+			<Route
+				path='/reset-password'
+				children={<ResetPasswordModal />}
+				exact
+			/>
+			<Route
+				path='/verification'
+				children={<VerificiationModal />}
+				exact
+			/>
+			<Route path='/2fa' children={<TwoFactorAuthModal />} exact />
+		</>
+	);
 }

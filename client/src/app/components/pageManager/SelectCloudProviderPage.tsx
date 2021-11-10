@@ -1,11 +1,13 @@
 import React from 'react';
 import { Page } from './Page';
-import { usePageStore, useConfig } from '@hooks';
+import { useConfig } from '@hooks';
 import { ProviderItem } from './cloudProviderPage/ProviderItem';
+import { useHistory } from 'react-router';
 
 export function SelectCloudProviderPage() {
-	const [, pageDispatch] = usePageStore();
 	const [config] = useConfig();
+	let history = useHistory();
+
 	const providers = config?.connectedProviders || [];
 	const configProviderNames = providers.map((p) => p.name);
 
@@ -15,14 +17,7 @@ export function SelectCloudProviderPage() {
 	});
 
 	return (
-		<Page
-			onClose={() =>
-				pageDispatch({
-					type: 'selectCloudProviderPage',
-					selectCloudProviderPageVisible: false
-				})
-			}
-		>
+		<Page onClose={() => history.push('/')}>
 			<div className='flex flex-col space-y-6'>
 				<div>
 					<h1 className='text-2xl text-white select-none'>
@@ -56,12 +51,7 @@ export function SelectCloudProviderPage() {
 				)}
 				<div className='flex justify-end'>
 					<button
-						onClick={() => {
-							pageDispatch({
-								type: 'cloudProviderPage',
-								cloudProviderPageVisible: true
-							});
-						}}
+						onClick={() => history.push('/cloudprovider')}
 						className='pn-button bg-gray-500 bg-opacity-50 border-gray-500 hover:border-gray-400'
 					>
 						Go back

@@ -1,9 +1,10 @@
-import { useStore, useModalStore } from '@hooks';
+import { useStore } from '@hooks';
 import { createNotebook } from '@utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fs from 'fs';
 import * as yup from 'yup';
+import { useHistory } from 'react-router';
 
 interface FormValues {
 	name: string;
@@ -22,13 +23,10 @@ const validationSchema = yup.object({
 
 export function useCreateNotebookModal() {
 	const [, dispatch] = useStore();
-	const [, modalManagerDispatch] = useModalStore();
+	let history = useHistory();
 
 	const close = () => {
-		modalManagerDispatch({
-			type: 'createNotebookModal',
-			createNotebookModalVisible: false
-		});
+		history.push('/');
 	};
 
 	const {
@@ -67,7 +65,7 @@ export function useCreateNotebookModal() {
 
 			dispatch({
 				type: 'openNote',
-				currentNote: undefined
+				currentFile: undefined
 			});
 
 			dispatch({

@@ -1,10 +1,12 @@
 import { Dispatch } from 'react';
 import { PayloadAction } from 'typesafe-actions';
 
+export type FileSystemItemType = 'note' | 'directory' | 'attachment';
+
 export interface FileSystemItem {
 	name: string;
 	path: string;
-	type: 'note' | 'directory';
+	type: FileSystemItemType;
 }
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
@@ -49,7 +51,7 @@ type ConfigDispatch = Dispatch<
 // Reducer Types
 export interface AppState {
 	notebook?: string;
-	currentNote?: FileItem;
+	currentFile?: FileItem;
 }
 
 export interface AppAction extends AppState {
@@ -64,44 +66,13 @@ export interface UserAction extends UserState {
 	type: 'login' | 'logout';
 }
 
-export interface ModalManagerState {
-	loginModalVisible: boolean;
-	registerModalVisible: boolean;
-	createNotebookModalVisible: boolean;
-	verificationModalVisible: boolean;
-	twoFactorAuthModalVisible: boolean;
-	forgotPasswordModalVisible: boolean;
-	resetPasswordModalVisible: boolean;
-}
-
-export interface ModalManagerAction extends Partial<ModalManagerState> {
-	type:
-		| 'loginModal'
-		| 'registerModal'
-		| 'createNotebookModal'
-		| 'verificationModal'
-		| 'twoFactorAuthModal'
-		| 'forgotPasswordModal'
-		| 'resetPasswordModal';
-}
-
-export interface PageManagerState {
-	cloudProviderPageVisible: boolean;
-	selectCloudProviderPageVisible: boolean;
-}
-
-export interface PageManagerAction extends Partial<PageManagerState> {
-	type: 'cloudProviderPage' | 'selectCloudProviderPage';
-}
-
 export interface EditorState {
 	primarySelection?: FileSystemItem;
 	secondarySelection?: FileSystemItem;
-	isRenaming: boolean;
 }
 
-export interface EditorAction extends EditorState {
-	type: 'primarySelect' | 'secondarySelect' | 'rename';
+export interface EditorAction extends Partial<EditorState> {
+	type: 'primarySelect' | 'secondarySelect';
 }
 
 export interface RegisterFormValues {

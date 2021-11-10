@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useModalStore } from '@hooks';
 import { ModalLayout } from './Modal';
 import { TextField } from '../TextField';
 import * as yup from 'yup';
@@ -10,6 +9,7 @@ import { RegisterFormValues } from '@types';
 import { FormBanner } from './FormBanner';
 import { FormError } from '@types';
 import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const validationSchema = yup.object({
 	email: yup.string().email('Invalid email').required(),
@@ -28,8 +28,8 @@ const validationSchema = yup.object({
 });
 
 export function RegisterModal() {
-	const [, modalManagerDispatch] = useModalStore();
 	const [formError, setFormError] = useState<FormError | undefined>();
+	let history = useHistory();
 
 	const {
 		register,
@@ -42,11 +42,7 @@ export function RegisterModal() {
 	});
 
 	const handleClick = () => {
-		modalManagerDispatch({
-			type: 'registerModal',
-			registerModalVisible: false
-		});
-		modalManagerDispatch({ type: 'loginModal', loginModalVisible: true });
+		history.push('/login');
 	};
 
 	const handleSubmit = useFormHandleSubmit(
@@ -68,10 +64,7 @@ export function RegisterModal() {
 					} else if (response.formError) {
 						setFormError(response.formError);
 					} else if (response.success) {
-						modalManagerDispatch({
-							type: 'verificationModal',
-							verificationModalVisible: true
-						});
+						history.push('/verification');
 					} else {
 						setFormError(unknownError);
 					}
@@ -90,10 +83,7 @@ export function RegisterModal() {
 	return (
 		<ModalLayout
 			close={() => {
-				modalManagerDispatch({
-					type: 'registerModal',
-					registerModalVisible: false
-				});
+				history.push('/');
 			}}
 		>
 			<form onSubmit={handleSubmit} className='w-80 space-y-8'>
@@ -135,13 +125,12 @@ export function RegisterModal() {
 							register={register}
 						/>
 						<div className='flex justify-between items-end'>
-							<a
-								href='#'
+							<p
 								onClick={handleClick}
 								className='text-blue-500 hover:underline cursor-pointer'
 							>
 								Already have an account?
-							</a>
+							</p>
 							<input
 								type='submit'
 								value='Register'

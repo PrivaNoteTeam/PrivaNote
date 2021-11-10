@@ -1,39 +1,63 @@
 import React from 'react';
 import { useStore } from '@hooks';
-import { getFileSystemItems } from '@utils';
-import { FileExplorer } from './FileExplorer';
 import { Editor } from './Editor';
-import { Placeholder } from './Placeholder';
+import { Placeholder } from '../Placeholder';
 import { NotificationArea } from '../NotificationArea';
+import { Preview } from './Preview';
+import { SplitPane } from 'react-collapse-pane';
 
 interface Props {
-	fileExplorerVisible: boolean;
+	livePreviewVisiable: boolean;
+	text: string;
+	setText: React.Dispatch<string>;
+	handlePreviewClose: () => void;
 }
 
-export function UIEditorPanel({ fileExplorerVisible }: Props) {
-	const [{ notebook, currentNote }] = useStore();
+export function UIEditorPanel({
+	text,
+	setText,
+	livePreviewVisiable,
+	handlePreviewClose
+}: Props) {
+	const [{ currentFile }] = useStore();
 
-	return notebook ? (
-		<>
-			{fileExplorerVisible && (
-				<FileExplorer items={getFileSystemItems(notebook)} />
+	return (
+		<div className='relative flex-grow flex flex-col h-full'>
+			<NotificationArea />
+
+			{currentFile ? (
+				<div className='w-full h-full'>
+					{livePreviewVisiable ? (
+						<SplitPane
+							className=''
+							split='vertical'
+							minSizes={32}
+							resizerOptions={{
+								css: {
+									backgroundColor: 'rgb(31, 41, 55)'
+								},
+								hoverCss: {
+									backgroundColor: 'rgb(59, 130, 246)'
+								}
+							}}
+						>
+							<Editor text={text} setText={setText} />
+							{livePreviewVisiable ? (
+								<Preview
+									text={text}
+									onClose={handlePreviewClose}
+								/>
+							) : (
+								<div></div>
+							)}
+						</SplitPane>
+					) : (
+						<Editor text={text} setText={setText} />
+					)}
+				</div>
+			) : (
+				<Placeholder text='Create or open a note to continue' />
 			)}
-			<div className='relative flex-grow flex flex-col'>
-				<NotificationArea />
-
-				{currentNote ? (
-					<Editor />
-				) : (
-					<Placeholder text='Create or open a note to continue' />
-				)}
-			</div>
-		</>
-	) : (
-		<>
-			<div className='relative flex-grow flex flex-col'>
-				<NotificationArea />
-				<Placeholder text='Open a notebook to continue' />
-			</div>
-		</>
+		</div>
 	);
 }

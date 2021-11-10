@@ -10,12 +10,11 @@ import {
 import { useEditorStore } from '@hooks';
 
 export function useEditorPanel() {
-	const [{ notebook, currentNote }, dispatch] = useStore();
-	const [
-		{ primarySelection, secondarySelection, isRenaming },
-		editorDispatch
-	] = useEditorStore();
-	const [fileExplorerVisible, setFileExplorerVisible] = useState(true);
+	const [livePreviewVisiable, setLivePreviewVisiable] = useState(true);
+	const [{ notebook, currentFile }, dispatch] = useStore();
+	const [{ primarySelection, secondarySelection }, editorDispatch] =
+		useEditorStore();
+	const [text, setText] = useState('');
 
 	useEffect(() => {
 		ipcRenderer.removeAllListeners('createNote');
@@ -29,52 +28,65 @@ export function useEditorPanel() {
 
 			dispatch({
 				type: 'openNote',
-				currentNote: newFile
+				currentFile: newFile
 			});
 		});
 
-		ipcRenderer.removeAllListeners('toggleFileExplorer');
-		ipcRenderer.on('toggleFileExplorer', () => {
-			if (!notebook) return;
-
-			setFileExplorerVisible(!fileExplorerVisible);
+		ipcRenderer.removeAllListeners('toggleLivePreviewVisabilty');
+		ipcRenderer.on('toggleLivePreviewVisabilty', () => {
+			if (!notebook) {
+				return;
+			}
+			setLivePreviewVisiable(!livePreviewVisiable);
 		});
 
+		//ipcRenderer.removeAllListeners('toggleFileExplorer');
+		//ipcRenderer.on('toggleFileExplorer', () => {
+		//if (!notebook) return;
+
+		//setFileExplorerVisible(!fileExplorerVisible);
+		//});
+		/*
 		ipcRenderer.removeAllListeners('renameExplorerItem');
 		ipcRenderer.on('renameExplorerItem', () => {
 			editorDispatch({
 				type: 'rename',
 				isRenaming: true
 			});
-		});
+		});*/
 
 		ipcRenderer.removeAllListeners('deleteExplorerItem');
 		ipcRenderer.on('deleteExplorerItem', () => {
 			deleteExplorerItem(secondarySelection?.path).then(() => {
 				if (
-					currentNote?.path === secondarySelection?.path ||
-					!fileExist(currentNote?.path)
+					currentFile?.path === secondarySelection?.path ||
+					!fileExist(currentFile?.path)
 				) {
 					dispatch({
 						type: 'openNote',
-						currentNote: undefined
+						currentFile: undefined
 					});
 				}
 
 				editorDispatch({
 					type: 'secondarySelect',
-					secondarySelection: undefined,
-					isRenaming // find a way to not need this
+					secondarySelection: undefined
 				});
 			});
 		});
-	}, [notebook, primarySelection, secondarySelection, fileExplorerVisible]);
+	}, [notebook, primarySelection, secondarySelection, livePreviewVisiable]);
+
+	const handlePreviewClose = () => {
+		setLivePreviewVisiable(false);
+	};
 
 	return {
 		primarySelection,
 		secondarySelection,
-		isRenaming,
-		fileExplorerVisible,
-		editorDispatch
+		editorDispatch,
+		text,
+		setText,
+		livePreviewVisiable,
+		handlePreviewClose
 	};
 }

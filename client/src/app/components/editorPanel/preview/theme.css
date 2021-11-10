@@ -1,0 +1,63 @@
+#wrapper h1 {
+	@apply text-5xl mb-2;
+}
+
+#wrapper h2 {
+	@apply text-4xl;
+}
+
+#wrapper h3 {
+	@apply text-3xl;
+}
+
+#wrapper h4 {
+	@apply text-2xl;
+}
+
+#wrapper h5 {
+	@apply text-xl;
+}
+
+#wrapper h6 {
+	@apply text-lg;
+}
+
+#wrapper ul {
+	@apply list-inside list-disc;
+}
+
+#wrapper img {
+	@apply rounded-xl;
+}
+
+#wrapper a:not(.attachment-link) {
+	@apply text-blue-500 hover:underline;
+}
+
+#wrapper .attachment-link a {
+	@apply hover:no-underline text-gray-400;
+}
+
+#wrapper > p > code {
+	@apply inline-block bg-gray-800 border border-gray-700 rounded-md p-0.5 m-0.5 text-sm font-mono;
+}
+
+#wrapper ol {
+	@apply list-decimal list-inside;
+}
+
+#wrapper pre {
+	@apply bg-gray-800 border border-gray-700 rounded-md p-0.5 m-0.5 text-sm font-mono;
+}
+
+#wrapper pre code span.hljs-comment {
+	@apply text-green-600;
+}
+
+#wrapper pre code span.hljs-keyword {
+	@apply text-blue-400;
+}
+
+#wrapper pre code span.hljs-string {
+	@apply text-yellow-400;
+}
