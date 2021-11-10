@@ -4,10 +4,17 @@ const editorSettings: Category = {
 	title: 'Editor Settings',
 	settings: [
 		{
+			title: 'Spell Check',
+			description: 'Enable spell checking',
+			type: 'boolean',
+			ui: 'switch'
+		},
+		{
 			title: 'Font Size',
 			description: 'Controls the font size in pixels.',
 			type: 'number',
-			ui: 'text'
+			ui: 'number',
+			maxLength: 3
 		}
 	]
 };

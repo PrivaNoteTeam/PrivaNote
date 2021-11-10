@@ -128,8 +128,9 @@ export type NotificationState = Notification[];
 export interface Setting {
 	title: string;
 	description: string;
-	ui: 'text' | 'dropdown' | 'switch';
+	ui: 'text' | 'number' | 'dropdown' | 'switch';
 	type: 'boolean' | 'number' | 'string';
+	maxLength?: number;
 }
 
 export interface Category {
