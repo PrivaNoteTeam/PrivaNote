@@ -12,7 +12,8 @@ export function SettingItem({
 	ui,
 	max,
 	min,
-	maxLength
+	maxLength,
+	options
 }: Props) {
 	let field: JSX.Element | null = null;
 
@@ -24,7 +25,7 @@ export function SettingItem({
 			field = <NumberField size={maxLength} max={max} min={min} />;
 			break;
 		case 'dropdown':
-			field = <Dropdown />;
+			field = <Dropdown items={options!} />;
 			break;
 		case 'switch':
 			field = <Switch />;

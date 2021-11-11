@@ -13,7 +13,8 @@ const editorSettings: Category = {
 			title: 'Dictionary Language',
 			description: 'Sets the language for the spell checker.',
 			type: 'string',
-			ui: 'dropdown'
+			ui: 'dropdown',
+			options: ['English (CA)', 'Français (CA)']
 		},
 		{
 			title: 'Font Size',
@@ -47,7 +48,17 @@ const editorSettings: Category = {
 
 const previewSettings: Category = {
 	title: 'Preview Settings',
-	settings: []
+	settings: [
+		{
+			title: 'Font Size',
+			description: 'Controls the font size in pixels.',
+			type: 'number',
+			ui: 'number',
+			maxLength: 2,
+			min: 3,
+			max: 72
+		}
+	]
 };
 
 export const settings = [editorSettings, previewSettings];

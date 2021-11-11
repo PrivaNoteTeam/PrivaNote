@@ -133,6 +133,7 @@ export interface Setting {
 	maxLength?: number;
 	min?: number;
 	max?: number;
+	options?: string[];
 }
 
 export interface Category {

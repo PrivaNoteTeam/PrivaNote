@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import ChevronDownIcon from '@assets/icons/chevron-down.svg';
 
 interface Props {
-	items?: string[];
+	items: string[];
 	initialValue?: string;
 }
 
-export function Dropdown({ items = [], initialValue }: Props) {
+export function Dropdown({ items, initialValue }: Props) {
 	if (!initialValue) initialValue = items[0];
 
 	const [opened, setOpened] = useState(false);
@@ -25,9 +25,6 @@ export function Dropdown({ items = [], initialValue }: Props) {
 
 		setOpened(false);
 	};
-
-	// testing items
-	items = ['Item 1', 'Item 2', 'Item 3', 'Longer Item 4'];
 
 	return (
 		<div>
