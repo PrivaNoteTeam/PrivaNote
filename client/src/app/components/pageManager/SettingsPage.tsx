@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Page } from './Page';
+import { NavigationTree } from './settingsPage/NavigationTree';
 import { SettingsPane } from './settingsPage/SettingsPane';
 
 export function SettingsPage() {
@@ -18,12 +19,7 @@ export function SettingsPage() {
 						className='py-0.5 px-1 bg-gray-700 border border-blue-500 rounded-md text-gray-200 text-sm outline-none'
 						placeholder='Search settings'
 					></input>
-
-					{/* Category Tree */}
-					<div>
-						<h2 className='text-lg text-white '>Categories</h2>
-						<div>{/* Nodes */}</div>
-					</div>
+					<NavigationTree />
 				</div>
 				<div className='flex-grow'>
 					<SettingsPane />
