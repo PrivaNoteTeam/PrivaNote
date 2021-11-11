@@ -131,6 +131,8 @@ export interface Setting {
 	ui: 'text' | 'number' | 'dropdown' | 'switch';
 	type: 'boolean' | 'number' | 'string';
 	maxLength?: number;
+	min?: number;
+	max?: number;
 }
 
 export interface Category {

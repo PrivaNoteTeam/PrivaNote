@@ -5,7 +5,7 @@ const editorSettings: Category = {
 	settings: [
 		{
 			title: 'Spell Check',
-			description: 'Enable spell checking',
+			description: 'Enable spell checking.',
 			type: 'boolean',
 			ui: 'switch'
 		},
@@ -14,7 +14,27 @@ const editorSettings: Category = {
 			description: 'Controls the font size in pixels.',
 			type: 'number',
 			ui: 'number',
-			maxLength: 3
+			maxLength: 2,
+			min: 3,
+			max: 72
+		},
+		{
+			title: 'Tab Width',
+			description: 'Controls the width of tabs.',
+			type: 'number',
+			ui: 'number',
+			maxLength: 2,
+			min: 1,
+			max: 24
+		},
+		{
+			title: 'Columns',
+			description: 'Sets the number of text columns.',
+			type: 'number',
+			ui: 'number',
+			maxLength: 3,
+			min: 1,
+			max: 200
 		}
 	]
 };

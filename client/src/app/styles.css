@@ -2,22 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-.pn-label {
-	@apply text-gray-500 text-xs uppercase font-semibold;
+@layer utilities {
+	.pn-drop-shadow {
+		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	}
 }
 
-.pn-input {
-	@apply bg-gray-900 rounded-md text-gray-300 px-4 py-1 border border-gray-700 outline-none;
+@layer components {
+	.pn-label {
+		@apply text-gray-500 text-xs uppercase font-semibold;
+	}
+
+	.pn-input {
+		@apply bg-gray-900 rounded-md text-gray-300 px-4 py-1 border border-gray-700 outline-none;
+	}
+	.pn-button {
+		@apply rounded-md text-white px-4 py-1 align-middle border cursor-pointer select-none;
+	}
+
+	.pn-dark-button {
+		@apply bg-gray-900 border-gray-700 hover:border-blue-500;
+	}
+
+	.pn-number-input {
+		@apply pn-input border-l-0 border-r-0 rounded-none w-min;
+	}
+
+	.pn-number-increment {
+		@apply bg-gray-900 rounded-r-md text-gray-300 border border-gray-700 w-10 cursor-pointer hover:bg-gray-700 hover:text-white;
+	}
+
+	.pn-number-decrement {
+		@apply bg-gray-900 rounded-l-md text-gray-300 border border-gray-700 w-10 cursor-pointer hover:bg-gray-700 hover:text-white;
+	}
 }
 
-.pn-button {
-	@apply rounded-md text-white px-4 py-1 align-middle border cursor-pointer select-none;
-}
-
-.pn-dark-button {
-	@apply bg-gray-900 border-gray-700 hover:border-blue-500;
-}
-
-.pn-drop-shadow {
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+/* Hide increment buttons on number inputs */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
