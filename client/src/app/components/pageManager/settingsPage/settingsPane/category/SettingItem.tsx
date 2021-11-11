@@ -2,6 +2,7 @@ import React from 'react';
 import { Setting } from '@types';
 import { Switch } from './settingItem/Switch';
 import { NumberField } from './settingItem/NumberField';
+import { Dropdown } from './settingItem/Dropdown';
 
 type Props = Setting;
 
@@ -23,7 +24,7 @@ export function SettingItem({
 			field = <NumberField size={maxLength} max={max} min={min} />;
 			break;
 		case 'dropdown':
-			field = <p>Dropdown WIP</p>;
+			field = <Dropdown />;
 			break;
 		case 'switch':
 			field = <Switch />;

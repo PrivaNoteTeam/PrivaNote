@@ -10,6 +10,12 @@ const editorSettings: Category = {
 			ui: 'switch'
 		},
 		{
+			title: 'Dictionary Language',
+			description: 'Sets the language for the spell checker.',
+			type: 'string',
+			ui: 'dropdown'
+		},
+		{
 			title: 'Font Size',
 			description: 'Controls the font size in pixels.',
 			type: 'number',

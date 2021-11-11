@@ -8,14 +8,13 @@ interface Props {
 }
 
 export function Category({ title, settings }: Props) {
-	console.log(settings);
 	return (
 		<div>
 			<h1 className='text-white text-2xl font-medium'>{title}</h1>
 			{settings.map((setting) => (
-				<div className='my-0.5'>
+				<div className=''>
 					<SettingItem {...setting} />
-					<hr className='text-gray-700 mt-0.5' />
+					<hr className='border-gray-700 my-6' />
 				</div>
 			))}
 		</div>
