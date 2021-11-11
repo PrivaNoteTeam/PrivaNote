@@ -25,6 +25,10 @@ export function SettingsPane({ searchFilter }: Props) {
 		});
 	}
 
+	filteredSettings = filteredSettings.filter((category) => {
+		return category.settings.length > 0;
+	});
+
 	return (
 		<div className='w-full'>
 			{filteredSettings.map((category) => (
