@@ -28,20 +28,17 @@ export function Dropdown({ items, initialValue }: Props) {
 
 	return (
 		<div>
-			<div
-				className='pn-input flex justify-between pr-1 w-60 cursor-pointer'
-				onClick={toggleOpen}
-			>
-				<p className='text-white'>{value}</p>
+			<div className='pn-dropdown-active' onClick={toggleOpen}>
+				<p>{value}</p>
 				<ChevronDownIcon fill='#FFF' />
 			</div>
 			{opened && (
 				<div className='absolute w-60 mt-2'>
-					<ul className='bg-gray-900 border border-gray-700 rounded-md'>
+					<ul className='pn-dropdown-list'>
 						{items.map((item) => (
 							<li
 								onClick={selectItem}
-								className='text-white px-2 py-1 hover:bg-blue-600 cursor-pointer select-none'
+								className='pn-dropdown-item'
 							>
 								{item}
 							</li>

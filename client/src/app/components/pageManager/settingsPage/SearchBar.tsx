@@ -23,9 +23,9 @@ export function SearchBar({ onSearch }: Props) {
 
 	return (
 		<input
-			className={`p-1 bg-gray-700 border ${
-				focused ? 'border-blue-500' : 'border-gray-600'
-			} rounded-sm text-gray-200 text-md outline-none`}
+			className={`px-2 py-1 w-48 bg-gray-900 border ${
+				focused ? 'border-blue-500' : 'border-gray-700'
+			} rounded-md text-gray-200 text-md outline-none`}
 			placeholder='Search settings'
 			onChange={handleChange}
 			onFocus={handleFocus}

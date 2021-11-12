@@ -35,6 +35,18 @@
 	.pn-number-decrement {
 		@apply bg-gray-900 rounded-l-md text-gray-300 border border-gray-700 w-10 cursor-pointer hover:bg-gray-700 hover:text-white;
 	}
+
+	.pn-dropdown-active {
+		@apply pn-input flex justify-between pr-1 w-60 cursor-pointer;
+	}
+
+	.pn-dropdown-list {
+		@apply bg-gray-900 border border-gray-700 rounded-md;
+	}
+
+	.pn-dropdown-item {
+		@apply px-2 py-1 text-gray-300 hover:bg-blue-600 cursor-pointer select-none;
+	}
 }
 
 /* Hide increment buttons on number inputs */

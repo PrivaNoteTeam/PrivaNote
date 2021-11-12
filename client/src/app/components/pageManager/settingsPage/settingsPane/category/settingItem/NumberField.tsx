@@ -52,7 +52,10 @@ export function NumberField({ initialValue = 0, ...inputProps }: Props) {
 	return (
 		<div className='w-full'>
 			<div className='flex w-min'>
-				<button onClick={decrement} className='pn-number-decrement'>
+				<button
+					onClick={decrement}
+					className='pn-number-decrement select-none'
+				>
 					-
 				</button>
 				<input
@@ -62,7 +65,10 @@ export function NumberField({ initialValue = 0, ...inputProps }: Props) {
 					value={value}
 					onChange={handleChange}
 				/>
-				<button onClick={increment} className='pn-number-increment'>
+				<button
+					onClick={increment}
+					className='pn-number-increment select-none'
+				>
 					+
 				</button>
 			</div>

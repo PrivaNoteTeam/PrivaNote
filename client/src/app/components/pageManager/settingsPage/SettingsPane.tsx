@@ -2,8 +2,6 @@ import React from 'react';
 import { settings } from '@shared/data/settings';
 import { Category } from './settingsPane/Category';
 
-Object.freeze(settings);
-
 interface Props {
 	searchFilter: string;
 }

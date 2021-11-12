@@ -4,6 +4,12 @@ const editorSettings: Category = {
 	title: 'Editor Settings',
 	settings: [
 		{
+			title: 'Auto Save',
+			description: 'Enable auto save for notes.',
+			type: 'boolean',
+			ui: 'switch'
+		},
+		{
 			title: 'Spell Check',
 			description: 'Enable spell checking.',
 			type: 'boolean',
