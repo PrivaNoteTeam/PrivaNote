@@ -28,12 +28,16 @@
 		@apply pn-input border-l-0 border-r-0 rounded-none w-min;
 	}
 
+	.pn-number-button {
+		@apply bg-gray-900 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 w-10 cursor-pointer select-none;
+	}
+
 	.pn-number-increment {
-		@apply bg-gray-900 rounded-r-md text-gray-300 border border-gray-700 w-10 cursor-pointer hover:bg-gray-700 hover:text-white;
+		@apply pn-number-button rounded-r-md;
 	}
 
 	.pn-number-decrement {
-		@apply bg-gray-900 rounded-l-md text-gray-300 border border-gray-700 w-10 cursor-pointer hover:bg-gray-700 hover:text-white;
+		@apply pn-number-button rounded-l-md;
 	}
 
 	.pn-dropdown-active {
