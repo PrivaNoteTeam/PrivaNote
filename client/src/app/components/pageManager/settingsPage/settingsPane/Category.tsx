@@ -10,7 +10,9 @@ interface Props {
 export function Category({ title, settings }: Props) {
 	return (
 		<div>
-			<h1 className='text-white text-2xl font-medium'>{title}</h1>
+			<h1 className='text-white text-xl font-bold mb-1 select-none'>
+				{title}
+			</h1>
 			{settings.map((setting) => (
 				<div className=''>
 					<SettingItem {...setting} />

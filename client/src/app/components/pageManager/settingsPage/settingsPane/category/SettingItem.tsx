@@ -33,7 +33,7 @@ export function SettingItem({
 	}
 
 	return (
-		<div className='flex justify-between'>
+		<div className='flex justify-between items-center'>
 			<div>
 				<p className='text-md text-gray-200 font-medium'>{title}</p>
 				<p className='text-md text-gray-400'>{description}</p>
