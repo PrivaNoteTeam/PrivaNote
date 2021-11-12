@@ -14,13 +14,11 @@ export function Switch({ initialValue = false }: Props) {
 	return (
 		<div
 			onClick={handleClick}
-			className={`rounded-full h-6 ${
-				value ? 'bg-blue-500' : 'bg-gray-400'
-			} w-10 p-1 cursor-pointer`}
+			className={`pn-switch ${value ? 'pn-switch-on' : 'pn-switch-off'}`}
 		>
 			<div
-				className={`rounded-full w-6 h-6 bg-gray-200 -m-1 shadow-xl ${
-					value ? 'ml-auto' : ''
+				className={`pn-switch-thumb ${
+					value ? 'pn-switch-thumb-on' : 'pn-switch-thumb-off'
 				}`}
 			/>
 		</div>
