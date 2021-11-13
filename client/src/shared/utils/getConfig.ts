@@ -1,4 +1,5 @@
 import fs from 'fs';
+import p from 'path';
 import { PrivaNoteConfig } from '../types';
 import { defaultConfig } from './defaultConfig';
 
@@ -20,11 +21,11 @@ const isConfig = (value: unknown) => {
  */
 
 export const getConfig = (path: string): PrivaNoteConfig | undefined => {
-	if (!fs.existsSync(`${path}/.privanote`)) return;
-	if (!fs.existsSync(`${path}/.privanote/app.json`)) return;
+	if (!fs.existsSync(`${path}${p.sep}.privanote`)) return;
+	if (!fs.existsSync(`${path}${p.sep}.privanote${p.sep}app.json`)) return;
 
 	const content = JSON.parse(
-		fs.readFileSync(`${path}/.privanote/app.json`).toString()
+		fs.readFileSync(`${path}${p.sep}.privanote${p.sep}app.json`).toString()
 	);
 
 	if (!isConfig(content)) return;

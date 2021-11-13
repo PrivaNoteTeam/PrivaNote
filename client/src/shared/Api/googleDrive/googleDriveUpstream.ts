@@ -1,3 +1,4 @@
+import p from 'path';
 import { getNotebookLocation } from '@shared/notebook';
 import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
 import { UpdateItemIDInStructure } from '@shared/utils/synchronization/UpdateItemIDInStructure';
@@ -11,12 +12,7 @@ let notebookStructureLocation: string;
 
 export const googleDriveUpstream = (action: string, content: any) => {
 	notebookLocation = getNotebookLocation();
-	notebookStructureLocation =
-		notebookLocation + '/.privanote/notebookStructure.json';
-
-	// console.log(action);
-	// // console.log(content);
-	// console.log(notebookLocation);
+	notebookStructureLocation = `${notebookLocation}${p.sep}.privanote${p.sep}notebookStructure.json`;
 
 	switch (action) {
 		case 'ADD':

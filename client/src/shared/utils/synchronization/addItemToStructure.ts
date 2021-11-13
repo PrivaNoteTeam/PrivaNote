@@ -1,5 +1,10 @@
-import { getNotebookLocation, getNotebookName } from '@shared/notebook';
+import {
+	getNotebookLocation,
+	getNotebookName,
+	getNotebookParentLocation
+} from '@shared/notebook';
 import fs from 'fs';
+import p from 'path';
 import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
@@ -18,8 +23,8 @@ const setupItemVariables = (item: string) => {
 	notebookName = getNotebookName();
 
 	newItemPath =
-		item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
-	folderChain = newItemPath.split('/');
+		item.slice(-1) === p.sep ? item.substr(0, item.length - 1) : item;
+	folderChain = newItemPath.split(p.sep);
 	folderChain = folderChain.slice(folderChain.indexOf(notebookName));
 
 	newItemName = folderChain.pop()!;
@@ -31,7 +36,8 @@ const addToStructure = (structure: any) => {
 	if (!structure) return;
 	level++;
 
-	let parentStats = fs.statSync(structure.absolutePath);
+	let absolutePath = p.join(getNotebookParentLocation(), ...structure.paths);
+	let parentStats = fs.statSync(absolutePath);
 	structure.size = parentStats.size;
 	structure.lastModified = parentStats.mtime;
 	structure.statusModified = parentStats.ctime;
@@ -52,10 +58,18 @@ const addToStructure = (structure: any) => {
 		) {
 			parentIds = structure.ids;
 			let stats = fs.statSync(newItemPath);
+
+			let paths: any =
+				newItemPath.slice(-1) === p.sep
+					? newItemPath.substr(0, newItemPath.length - 1)
+					: newItemPath;
+			paths = paths.split(p.sep);
+			paths = paths.slice(paths.indexOf(notebookName));
+
 			newItem = {
 				ids: {},
 				name: newItemName,
-				absolutePath: newItemPath,
+				paths: paths,
 				size: stats.size,
 				dateCreated: stats.birthtime,
 				lastModified: stats.mtime,

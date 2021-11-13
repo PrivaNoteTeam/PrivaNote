@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { getNotebookLocation } from '@shared/notebook';
 import { getConfig } from '../getConfig';
 import { dialog } from 'electron';
@@ -14,7 +15,7 @@ export const removeConnectedProvider = (name: string) => {
 		);
 
 		fs.writeFileSync(
-			`${notebookLocation}/.privanote/app.json`,
+			path.join(notebookLocation, '.privanote', 'app.json'),
 			JSON.stringify(config, null, 4)
 		);
 

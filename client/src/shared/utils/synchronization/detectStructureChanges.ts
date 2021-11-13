@@ -2,7 +2,7 @@ import { getNotebookStructure } from './getNotebookStructure';
 
 let changes: any = [];
 
-const retrieveStructureDate = (structure: any) => {
+const retrieveStructureLastModifiedDate = (structure: any) => {
 	if (structure.mimeType === 'Notebook' || structure.mimeType === 'Folder') {
 		for (let folder of structure.subFolder) {
 			if (folder.name === '.privanote') {
@@ -41,25 +41,30 @@ const comparator = (baseStructure: any, compareStructure: any) => {
 	}
 
 	console.log(item);
-	if (item.mimeType === 'Notebook' || item.mimeType === 'Folder') {
-		for (let file of baseStructure.subFolder) {
-			console.log(file);
-			// comparator(file);
-		}
-	}
+	// if (item.mimeType === 'Notebook' || item.mimeType === 'Folder') {
+	// 	for (let file of baseStructure.subFolder) {
+	// 		console.log(file);
+	// 		// comparator(file);
+	// 	}
+	// }
 };
 
 const scanAndCompare = (currentStructure: any, cloudStructure: any) => {
-	let currentDate = new Date(retrieveStructureDate(currentStructure));
-	let cloudDate = new Date(retrieveStructureDate(cloudStructure));
+	let currentDate = new Date(
+		retrieveStructureLastModifiedDate(currentStructure)
+	);
+	let cloudDate = new Date(retrieveStructureLastModifiedDate(cloudStructure));
+	console.log('currentStructure: ', currentDate);
+	console.log('cloudStructure: ', cloudDate);
 	if (currentDate > cloudDate) {
-		// comparator(currentStructure, cloudStructure);
+		console.log('CURRENT Structure is more recent');
+		comparator(currentStructure, cloudStructure);
 		// upstream
 	} else if (cloudDate > currentDate) {
-		// comparator(cloudStructure, currentStructure);
+		console.log('CLOUD Structure is more recent');
+		comparator(cloudStructure, currentStructure);
 		// downstream
 	}
-	comparator(currentStructure, cloudStructure);
 };
 
 export const detectStructureChanges = (cloudStructure: any) => {

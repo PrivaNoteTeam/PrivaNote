@@ -1,4 +1,5 @@
-import { getNotebookName } from '@shared/notebook';
+import p from 'path';
+import { getNotebookName, getNotebookParentLocation } from '@shared/notebook';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
 
@@ -27,7 +28,11 @@ const findAndReplaceId = (structure: any) => {
 			structure.mimeType === 'Folder'
 		) {
 			let itemIndex = structure.subFolder.findIndex((item: any) => {
-				return item.name === itemName && item.absolutePath === itemPath;
+				return (
+					item.name === itemName &&
+					itemPath.substr(itemPath.indexOf(notebookName)) ===
+						p.join(...item.paths)
+				);
 			});
 			if (itemIndex != -1) {
 				structure.subFolder[itemIndex].ids = newIds;
@@ -49,11 +54,8 @@ export const UpdateItemIDInStructure = (item: any) => {
 			notebookName = getNotebookName();
 			newIds = item.ids;
 			itemName = item.name;
-			itemPath =
-				item.absolutePath.slice(-1) === '/'
-					? item.absolutePath.substr(0, item.absolutePath.length - 1)
-					: item.absolutePath;
-			folderChain = itemPath.split('/');
+			itemPath = p.join(getNotebookParentLocation(), ...item.paths);
+			folderChain = itemPath.split(p.sep);
 			folderChain = folderChain.slice(folderChain.indexOf(notebookName));
 			folderChain.pop();
 			level = 0;

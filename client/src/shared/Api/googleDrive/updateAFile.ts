@@ -1,6 +1,8 @@
 import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
 import fs from 'fs';
+import p from 'path';
 import { getDrive } from './setup';
+import { getNotebookParentLocation } from '@shared/notebook';
 
 type fileMetadata = {
 	id?: string;
@@ -18,10 +20,12 @@ export const updateAFile = async (file: any) => {
 			mimeType: file.mimeType
 		};
 
+		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
+
 		if (file.mimeType != 'Folder') {
 			let media = {
 				mimeType: file.mimeType,
-				body: fs.createReadStream(file.absolutePath)
+				body: fs.createReadStream(absolutePath)
 			};
 
 			res = await getDrive().files.update({

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import p from 'path';
 import { createNotebookStructure } from './createNotebookStructure';
 import { getNotebookLocation } from '@shared/notebook';
 import { updateFileStats } from './updateFileStats';
@@ -13,9 +14,11 @@ export const exportNotebookStructure = (structure: any = undefined) => {
 	}
 
 	fs.writeFileSync(
-		`${notebookLocation}/.privanote/notebookStructure.json`,
+		p.join(notebookLocation, '.privanote', 'notebookStructure.json'),
 		JSON.stringify(notebookStructure, null, 4)
 	);
 
-	updateFileStats(`${notebookLocation}/.privanote/notebookStructure.json`);
+	updateFileStats(
+		p.join(notebookLocation, '.privanote', 'notebookStructure.json')
+	);
 };

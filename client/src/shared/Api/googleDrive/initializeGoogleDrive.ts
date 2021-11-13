@@ -1,4 +1,5 @@
 import fs from 'fs';
+import p from 'path';
 import { searchForFolder } from './searchForFolder';
 import { uploadEntireNotebook } from './uploadEntireNotebook';
 import { createAFolder } from './createAFolder';
@@ -16,7 +17,7 @@ let notebookName: string;
 let notebookLocation: string;
 
 const uploadNewNotebook = async (structure: any, parentId: string) => {
-	let structureLocation = `${notebookLocation}/.privanote/notebookStructure.json`;
+	let structureLocation = `${notebookLocation}${p.sep}.privanote${p.sep}notebookStructure.json`;
 	structure = await uploadEntireNotebook(structure, parentId);
 	// rewrite updated structure that contains new google ids
 	fs.writeFileSync(structureLocation, JSON.stringify(structure, null, 4));
@@ -28,9 +29,9 @@ const uploadNewNotebook = async (structure: any, parentId: string) => {
 };
 
 export const initializeGoogleDrive = () => {
-	let notebookStructure: any = getNotebookStructure(notebookLocation);
 	notebookName = getNotebookName();
 	notebookLocation = getNotebookLocation();
+	let notebookStructure: any = getNotebookStructure(notebookLocation);
 
 	searchForFolder(ROOT_DRIVE_FOLDER_NAME).then(async (folders) => {
 		if (!folders || !folders.length) {
@@ -52,7 +53,7 @@ export const initializeGoogleDrive = () => {
 							ROOT_DRIVE_FOLDER_ID
 						);
 					} else {
-						// check if structure was previously connected already
+						// check if structure was not previously connected already
 						if (!notebookStructure.ids.googleDrive) {
 							await uploadNewNotebook(
 								notebookStructure,
@@ -69,7 +70,7 @@ export const initializeGoogleDrive = () => {
 								) {
 									// sync with recent modified files
 									let item = await getItemFromStructure(
-										`${notebookLocation}/.privanote/notebookStructure.json`
+										`${notebookLocation}${p.sep}.privanote${p.sep}notebookStructure.json`
 									);
 									await downloadAFile(item).then(
 										(cloudStructure) => {

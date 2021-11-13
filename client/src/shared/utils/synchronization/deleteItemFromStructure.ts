@@ -1,5 +1,10 @@
 import fs from 'fs';
-import { getNotebookLocation, getNotebookName } from '@shared/notebook';
+import p from 'path';
+import {
+	getNotebookLocation,
+	getNotebookName,
+	getNotebookParentLocation
+} from '@shared/notebook';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
 
@@ -15,8 +20,9 @@ const setupItemVariables = (item: string) => {
 	notebookPath = getNotebookLocation();
 	notebookName = getNotebookName();
 
-	itemPath = item.slice(-1) === '/' ? item.substr(0, item.length - 1) : item;
-	folderChain = itemPath.split('/');
+	itemPath =
+		item.slice(-1) === p.sep ? item.substr(0, item.length - 1) : item;
+	folderChain = itemPath.split(p.sep);
 	folderChain = folderChain.slice(folderChain.indexOf(notebookName));
 
 	itemName = folderChain.pop()!;
@@ -28,7 +34,8 @@ const removeFromStructure = (structure: any) => {
 	if (!structure) return;
 	level++;
 
-	let parentStats = fs.statSync(structure.absolutePath);
+	let absolutePath = p.join(getNotebookParentLocation(), ...structure.paths);
+	let parentStats = fs.statSync(absolutePath);
 	structure.size = parentStats.size;
 	structure.lastModified = parentStats.mtime;
 	structure.statusModified = parentStats.ctime;
@@ -48,7 +55,11 @@ const removeFromStructure = (structure: any) => {
 			structure.mimeType === 'Folder'
 		) {
 			structure.subFolder = structure.subFolder.filter((item: any) => {
-				if (item.name !== itemName && itemPath != item.absolutePath) {
+				if (
+					item.name !== itemName &&
+					itemPath.substr(itemPath.indexOf(notebookName)) !=
+						p.join(...item.paths)
+				) {
 					return true;
 				} else {
 					deletedItem = item;

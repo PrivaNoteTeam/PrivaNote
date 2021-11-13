@@ -1,16 +1,19 @@
 import fs from 'fs';
+import p from 'path';
 import mime from 'mime-types';
 
 type structure = {
 	ids: {};
 	name: string;
 	mimeType: string;
-	absolutePath: string;
+	paths: string;
 	size: number;
 	dateCreated: Date;
 	lastModified: Date;
 	subFolder?: any[];
 }[];
+
+let notebookName: any;
 
 const getSubNotebookStructure = (path: string) => {
 	let notebookStructure: structure = [];
@@ -19,12 +22,20 @@ const getSubNotebookStructure = (path: string) => {
 		try {
 			const files = fs.readdirSync(path);
 			files.forEach((file) => {
-				let absolutePath = `${path}/${file}`;
+				let absolutePath = `${path}${p.sep}${file}`;
 				let stats = fs.statSync(absolutePath);
+
+				let paths: any =
+					absolutePath.slice(-1) === p.sep
+						? absolutePath.substr(0, absolutePath.length - 1)
+						: absolutePath;
+				paths = paths.split(p.sep);
+				paths = paths.slice(paths.indexOf(notebookName));
+
 				let item: any = {
 					ids: {},
 					name: file,
-					absolutePath: absolutePath,
+					paths: paths,
 					size: stats.size,
 					dateCreated: stats.birthtime,
 					lastModified: stats.mtime,
@@ -54,16 +65,17 @@ export const createNotebookStructure = (path: string) => {
 	let notebookStructure;
 
 	if (path) {
-		path = path.slice(-1) === '/' ? path.substr(0, path.length - 1) : path;
-		let name = path.split('/').pop()!;
+		path =
+			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
+		notebookName = path.split(p.sep).pop()!;
 
 		let stats = fs.statSync(path);
 
 		notebookStructure = {
 			ids: {},
-			name: name,
+			name: notebookName,
 			mimeType: 'Notebook',
-			absolutePath: path,
+			paths: [notebookName],
 			size: stats.size,
 			dateCreated: stats.birthtime,
 			lastModified: stats.mtime,

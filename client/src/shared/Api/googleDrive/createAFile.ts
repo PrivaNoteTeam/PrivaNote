@@ -1,5 +1,7 @@
 import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
 import fs from 'fs';
+import p from 'path';
+import { getNotebookParentLocation } from '@shared/notebook';
 import { getDrive } from './setup';
 
 type fileMetadata = {
@@ -11,6 +13,8 @@ type fileMetadata = {
 
 export const createAFile = async (file: any, parentId: string) => {
 	try {
+		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
+
 		let metadata: fileMetadata = {
 			name: file.name,
 			mimeType: file.mimeType,
@@ -18,7 +22,7 @@ export const createAFile = async (file: any, parentId: string) => {
 		};
 		let media = {
 			mimeType: file.mimeType,
-			body: fs.createReadStream(file.absolutePath)
+			body: fs.createReadStream(absolutePath)
 		};
 
 		const res = await getDrive().files.create({

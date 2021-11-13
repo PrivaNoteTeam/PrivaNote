@@ -1,3 +1,4 @@
+import p from 'path';
 import { getNotebookName } from '@shared/notebook';
 import { getNotebookStructure } from './getNotebookStructure';
 
@@ -26,7 +27,11 @@ const findItem = (structure: any) => {
 			structure.mimeType === 'Folder'
 		) {
 			let itemIndex = structure.subFolder.findIndex((item: any) => {
-				return item.name === itemName && item.absolutePath === itemPath;
+				return (
+					item.name === itemName &&
+					p.join(...item.paths) ===
+						itemPath.substr(itemPath.indexOf(notebookName))
+				);
 			});
 			if (itemIndex != -1) {
 				item = structure.subFolder[itemIndex];
@@ -45,8 +50,9 @@ export const getItemFromStructure = (path: any) => {
 	return new Promise<{}>((resolve, _) => {
 		try {
 			notebookName = getNotebookName();
-			itemPath = path.slice(-1) === '/' ? path.substr(0, path - 1) : path;
-			folderChain = itemPath.split('/');
+			itemPath =
+				path.slice(-1) === p.sep ? path.substr(0, path - 1) : path;
+			folderChain = itemPath.split(p.sep);
 			folderChain = folderChain.slice(folderChain.indexOf(notebookName));
 			itemName = folderChain.pop()!;
 			level = 0;
