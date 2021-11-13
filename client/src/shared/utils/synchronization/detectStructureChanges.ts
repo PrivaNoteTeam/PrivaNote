@@ -1,6 +1,9 @@
 import { getNotebookStructure } from './getNotebookStructure';
+// import p from 'path';
 
 let changes: any = [];
+let cloudFiles: any = [];
+let localFiles: any = [];
 
 const retrieveStructureLastModifiedDate = (structure: any) => {
 	if (structure.mimeType === 'Notebook' || structure.mimeType === 'Folder') {
@@ -16,61 +19,122 @@ const retrieveStructureLastModifiedDate = (structure: any) => {
 	}
 };
 
-// 1. check if new files are added
-// 2. check if files have been deleted
-
-// const comparator = (baseStructure: any, compareStructure: any) => {
-const comparator = (baseStructure: any, compareStructure: any) => {
+const structureSpread = (structure: any, spread: [{}]) => {
 	let item = {
-		ids: baseStructure.ids,
-		name: baseStructure.name,
-		mimeType: baseStructure.mimeType,
-		absolutePath: baseStructure.absolutePath,
-		size: baseStructure.size,
-		dateCreated: baseStructure.dateCreated,
-		lastModified: baseStructure.lastModified,
-		statusModified: baseStructure.statusModified
+		ids: structure.ids,
+		name: structure.name,
+		mimeType: structure.mimeType,
+		paths: structure.paths,
+		size: structure.size,
+		dateCreated: structure.dateCreated,
+		lastModified: structure.lastModified,
+		statusModified: structure.statusModified
 	};
-
-	if (baseStructure.subFolder.length != compareStructure.subFolder.length) {
-		// item has been either deleted or added
-	} else {
-		// loop and check that each item is exactly the same
-		// if each item is not the same, the an item has
-		// been deleted and a new one has been created
+	spread.push(item);
+	if (structure.mimeType === 'Folder' || structure.mimeType === 'Notebook') {
+		for (let folder of structure.subFolder) {
+			structureSpread(folder, spread);
+		}
 	}
-
-	console.log(item);
-	// if (item.mimeType === 'Notebook' || item.mimeType === 'Folder') {
-	// 	for (let file of baseStructure.subFolder) {
-	// 		console.log(file);
-	// 		// comparator(file);
-	// 	}
-	// }
 };
 
-const scanAndCompare = (currentStructure: any, cloudStructure: any) => {
+const findAdd = (latestFiles: any, oldFiles: any) => {
+	for (let item1 of latestFiles) {
+		let itemFound = false;
+		for (let item2 of oldFiles) {
+			if (item1.ids.googleDrive === item2.ids.googleDrive) {
+				itemFound = true;
+			}
+		}
+		if (!itemFound) {
+			console.log('ADD: ', item1);
+		}
+	}
+};
+
+const findDelete = (latestFiles: any, oldFiles: any) => {
+	for (let item1 of oldFiles) {
+		let itemFound = false;
+		for (let item2 of latestFiles) {
+			if (item1.ids.googleDrive === item2.ids.googleDrive) {
+				itemFound = true;
+			}
+		}
+		if (!itemFound) {
+			console.log('DELETE: ', item1);
+		}
+	}
+};
+
+const findRename = (latestFiles: any, oldFiles: any) => {
+	for (let item1 of oldFiles) {
+		let renameFound = false;
+		let newName = '';
+		for (let item2 of latestFiles) {
+			if (
+				item1.ids.googleDrive === item2.ids.googleDrive &&
+				item1.name != item2.name
+			) {
+				renameFound = true;
+				newName = item2.name;
+			}
+		}
+		if (renameFound) {
+			console.log(`RENAME to ${newName}: `, item1);
+		}
+	}
+};
+
+const findUpdate = (latestFiles: any, oldFiles: any) => {
+	for (let item1 of oldFiles) {
+		let updateFound = false;
+		for (let item2 of latestFiles) {
+			if (
+				item1.ids.googleDrive === item2.ids.googleDrive &&
+				item1.lastModified != item2.lastModified
+			) {
+				updateFound = true;
+			}
+		}
+		if (updateFound) {
+			console.log(`UPDATE: `, item1);
+		}
+	}
+};
+
+const comparator = (latestFiles: any, oldFiles: any) => {
+	findAdd(latestFiles, oldFiles);
+	findDelete(latestFiles, oldFiles);
+	findRename(latestFiles, oldFiles);
+	findUpdate(latestFiles, oldFiles);
+};
+
+const scanAndCompare = (localStructure: any, cloudStructure: any) => {
 	let currentDate = new Date(
-		retrieveStructureLastModifiedDate(currentStructure)
+		retrieveStructureLastModifiedDate(localStructure)
 	);
 	let cloudDate = new Date(retrieveStructureLastModifiedDate(cloudStructure));
-	console.log('currentStructure: ', currentDate);
+	console.log('localStructure: ', currentDate);
 	console.log('cloudStructure: ', cloudDate);
+
+	structureSpread(localStructure, localFiles);
+	structureSpread(cloudStructure, cloudFiles);
+
 	if (currentDate > cloudDate) {
 		console.log('CURRENT Structure is more recent');
-		comparator(currentStructure, cloudStructure);
+		// comparator(currentStructure, cloudStructure);
 		// upstream
 	} else if (cloudDate > currentDate) {
 		console.log('CLOUD Structure is more recent');
-		comparator(cloudStructure, currentStructure);
+		comparator(cloudFiles, localFiles);
 		// downstream
 	}
 };
 
 export const detectStructureChanges = (cloudStructure: any) => {
-	let currentStructure = getNotebookStructure();
+	let localStructure = getNotebookStructure();
 
-	scanAndCompare(currentStructure, cloudStructure);
+	scanAndCompare(localStructure, cloudStructure);
 
 	console.log(changes);
 };
