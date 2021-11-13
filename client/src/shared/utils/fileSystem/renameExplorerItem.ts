@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import fs from 'fs';
+import p from 'path';
 import { getFileSystemItem } from '..';
 import { FileSystemItem } from '../../types';
 
@@ -14,7 +15,10 @@ export const renameExplorerItem = async (path: string, newName: string) => {
 			if (fs.existsSync(path) && !fs.existsSync(newPath)) {
 				fs.renameSync(path, newPath);
 
-				ipcRenderer.send('renameExplorerItem', path, newName);
+				// crossPath is temp fix until path is using path.sep
+				let crossPath = path.replace(/\\/g, p.sep); // replaces all '\'
+				crossPath = crossPath.replace(/\//g, p.sep); // replaces all '/'
+				ipcRenderer.send('renameExplorerItem', crossPath, newName);
 
 				resolve(getFileSystemItem(newPath));
 			} else {
