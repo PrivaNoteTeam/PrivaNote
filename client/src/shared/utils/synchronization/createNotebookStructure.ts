@@ -68,7 +68,7 @@ export const createNotebookStructure = (path: string) => {
 		path =
 			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
 		notebookName = path.split(p.sep).pop()!;
-
+		console.log(path);
 		let stats = fs.statSync(path);
 
 		notebookStructure = {
