@@ -10,6 +10,7 @@ import { downloadAFile } from './downloadAFile';
 import { updateFileStats } from '@shared/utils/synchronization/updateFileStats';
 import { updateAFile } from './updateAFile';
 import { detectStructureChanges } from '@shared/utils/synchronization/detectStructureChanges';
+import { googleDriveDownstream } from './googleDriveDownstream';
 
 let ROOT_DRIVE_FOLDER_NAME = 'privanote';
 let ROOT_DRIVE_FOLDER_ID = '';
@@ -75,9 +76,21 @@ export const initializeGoogleDrive = () => {
 									await downloadAFile(item).then(
 										(cloudStructure) => {
 											// merge drive items and local items
-											detectStructureChanges(
-												cloudStructure
-											);
+											let respond =
+												detectStructureChanges(
+													cloudStructure
+												);
+											// console.log('INIT', changes);
+											if (respond.type === 'local') {
+												respond.changes.forEach(
+													(change: any) => {
+														googleDriveDownstream(
+															change.action,
+															change.content
+														);
+													}
+												);
+											}
 										}
 									);
 									console.log(

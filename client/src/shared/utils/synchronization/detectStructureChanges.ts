@@ -1,12 +1,15 @@
+// import { getNotebookParentLocation } from '@shared/notebook';
+// import { getItemFromStructure } from './getItemFromStructure';
 import { getNotebookStructure } from './getNotebookStructure';
-// import p from 'path';
+import p from 'path';
 
-let changes: any = [];
-let cloudFiles: any = [];
-let localFiles: any = [];
+let changes: any;
+let cloudFiles: any;
+let localFiles: any;
+let respond: any;
 
 const retrieveStructureLastModifiedDate = (structure: any) => {
-	if (structure.mimeType === 'Notebook' || structure.mimeType === 'Folder') {
+	if (structure.mimeType === 'Notebook') {
 		for (let folder of structure.subFolder) {
 			if (folder.name === '.privanote') {
 				for (let file of folder.subFolder) {
@@ -41,13 +44,24 @@ const structureSpread = (structure: any, spread: [{}]) => {
 const findAdd = (latestFiles: any, oldFiles: any) => {
 	for (let item1 of latestFiles) {
 		let itemFound = false;
+		let addedItem: any = {};
 		for (let item2 of oldFiles) {
+			// if (item1.ids.googleDrive === item2.ids.googleDrive) {
+			if (p.join(...item1.paths) === p.join(...item2.paths)) {
+				itemFound = true;
+			}
 			if (item1.ids.googleDrive === item2.ids.googleDrive) {
 				itemFound = true;
 			}
 		}
+		// console.log('---\nADD: ', itemFound, ':\n', item1, '---\n');
+		addedItem = item1;
 		if (!itemFound) {
-			console.log('ADD: ', item1);
+			// console.log('ADD: ', item1);
+			changes.push({
+				action: 'ADD',
+				content: { item: addedItem }
+			});
 		}
 	}
 };
@@ -55,13 +69,16 @@ const findAdd = (latestFiles: any, oldFiles: any) => {
 const findDelete = (latestFiles: any, oldFiles: any) => {
 	for (let item1 of oldFiles) {
 		let itemFound = false;
+		let deletedItem: any = {};
 		for (let item2 of latestFiles) {
 			if (item1.ids.googleDrive === item2.ids.googleDrive) {
 				itemFound = true;
 			}
 		}
+		deletedItem = item1;
 		if (!itemFound) {
-			console.log('DELETE: ', item1);
+			// console.log('DELETE: ', item1);
+			changes.push({ action: 'DELETE', content: { item: deletedItem } });
 		}
 	}
 };
@@ -69,18 +86,22 @@ const findDelete = (latestFiles: any, oldFiles: any) => {
 const findRename = (latestFiles: any, oldFiles: any) => {
 	for (let item1 of oldFiles) {
 		let renameFound = false;
-		let newName = '';
+		let renamedItem;
 		for (let item2 of latestFiles) {
 			if (
 				item1.ids.googleDrive === item2.ids.googleDrive &&
 				item1.name != item2.name
 			) {
 				renameFound = true;
-				newName = item2.name;
+				renamedItem = item2;
 			}
 		}
 		if (renameFound) {
-			console.log(`RENAME to ${newName}: `, item1);
+			// console.log(`RENAME to ${newName}: `, item1);
+			changes.push({
+				action: 'RENAME',
+				content: { target: item1, item: renamedItem }
+			});
 		}
 	}
 };
@@ -88,16 +109,19 @@ const findRename = (latestFiles: any, oldFiles: any) => {
 const findUpdate = (latestFiles: any, oldFiles: any) => {
 	for (let item1 of oldFiles) {
 		let updateFound = false;
+		let updatedItem;
 		for (let item2 of latestFiles) {
 			if (
 				item1.ids.googleDrive === item2.ids.googleDrive &&
 				item1.lastModified != item2.lastModified
 			) {
 				updateFound = true;
+				updatedItem = item1;
 			}
 		}
 		if (updateFound) {
-			console.log(`UPDATE: `, item1);
+			// console.log(`UPDATE: `, item1);
+			changes.push({ action: 'UPDATE', content: { item: updatedItem } });
 		}
 	}
 };
@@ -122,21 +146,32 @@ const scanAndCompare = (localStructure: any, cloudStructure: any) => {
 
 	if (currentDate > cloudDate) {
 		console.log('CURRENT Structure is more recent');
-		// comparator(currentStructure, cloudStructure);
+		comparator(localFiles, cloudFiles);
 		// upstream
 	} else if (cloudDate > currentDate) {
 		console.log('CLOUD Structure is more recent');
 		comparator(cloudFiles, localFiles);
 		// downstream
+		respond = {
+			type: 'local',
+			changes: changes
+		};
 	}
 };
 
 export const detectStructureChanges = (cloudStructure: any) => {
 	let localStructure = getNotebookStructure();
+	changes = [];
+	cloudFiles = [];
+	localFiles = [];
 
 	scanAndCompare(localStructure, cloudStructure);
 
-	console.log(changes);
+	// changes.forEach((change: any) => {
+	// 	console.log(change.action, '\n', change.content.item);
+	// });
+	// return changes;
+	return respond;
 };
 
 // renaming

@@ -60,7 +60,7 @@ export const googleDriveUpstream = (action: string, content: any) => {
 				});
 			});
 			break;
-		case 'SAVE':
+		case 'UPDATE':
 			updateAFile(content.item).then(() => {
 				getItemFromStructure(notebookStructureLocation).then((item) => {
 					updateAFile(item);

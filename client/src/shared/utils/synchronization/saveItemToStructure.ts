@@ -76,7 +76,7 @@ export const saveItemToStructure = (item: string) => {
 			let notebookStructure = getNotebookStructure(notebookPath);
 			saveToStructure(notebookStructure);
 			exportNotebookStructure(notebookStructure);
-			resolve({ action: 'SAVE', content: { item: savedItem } });
+			resolve({ action: 'UPDATE', content: { item: savedItem } });
 		} catch (err) {
 			console.log(err);
 		}

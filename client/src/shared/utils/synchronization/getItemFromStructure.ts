@@ -46,7 +46,7 @@ const findItem = (structure: any) => {
  * Locates item in structure by name and absolutePath and returns it
  * @param {any} path The path of an item
  */
-export const getItemFromStructure = (path: any) => {
+export const getItemFromStructure = (path: any, structure: any = undefined) => {
 	return new Promise<{}>((resolve, _) => {
 		try {
 			notebookName = getNotebookName();
@@ -57,7 +57,12 @@ export const getItemFromStructure = (path: any) => {
 			itemName = folderChain.pop()!;
 			level = 0;
 
-			let notebookStructure = getNotebookStructure();
+			let notebookStructure: any;
+			if (structure) {
+				notebookStructure = structure;
+			} else {
+				notebookStructure = getNotebookStructure();
+			}
 			findItem(notebookStructure);
 
 			resolve(item);
