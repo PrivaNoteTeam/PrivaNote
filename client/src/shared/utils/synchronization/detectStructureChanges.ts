@@ -1,5 +1,3 @@
-// import { getNotebookParentLocation } from '@shared/notebook';
-// import { getItemFromStructure } from './getItemFromStructure';
 import { getNotebookStructure } from './getNotebookStructure';
 import p from 'path';
 
@@ -41,6 +39,14 @@ const structureSpread = (structure: any, spread: [{}]) => {
 	}
 };
 
+const getItemInFiles = (itemPath: any, fileList: any) => {
+	for (let item of fileList) {
+		if (p.join(...item.paths) === itemPath) {
+			return item;
+		}
+	}
+};
+
 const findAdd = (latestFiles: any, oldFiles: any) => {
 	for (let item1 of latestFiles) {
 		let itemFound = false;
@@ -58,9 +64,13 @@ const findAdd = (latestFiles: any, oldFiles: any) => {
 		addedItem = item1;
 		if (!itemFound) {
 			// console.log('ADD: ', item1);
+			let parentItem = getItemInFiles(
+				p.join(...addedItem.paths.slice(0, addedItem.paths.length - 1)),
+				latestFiles
+			);
 			changes.push({
 				action: 'ADD',
-				content: { item: addedItem }
+				content: { parentIds: parentItem.ids, item: addedItem }
 			});
 		}
 	}
@@ -147,13 +157,17 @@ const scanAndCompare = (localStructure: any, cloudStructure: any) => {
 	if (currentDate > cloudDate) {
 		console.log('CURRENT Structure is more recent');
 		comparator(localFiles, cloudFiles);
+		respond = {
+			type: 'CLOUD',
+			changes: changes
+		};
 		// upstream
 	} else if (cloudDate > currentDate) {
 		console.log('CLOUD Structure is more recent');
 		comparator(cloudFiles, localFiles);
 		// downstream
 		respond = {
-			type: 'local',
+			type: 'LOCAL',
 			changes: changes
 		};
 	}
@@ -167,53 +181,5 @@ export const detectStructureChanges = (cloudStructure: any) => {
 
 	scanAndCompare(localStructure, cloudStructure);
 
-	// changes.forEach((change: any) => {
-	// 	console.log(change.action, '\n', change.content.item);
-	// });
-	// return changes;
 	return respond;
 };
-
-// renaming
-// deleted files
-// new files
-// modified files/size increase/decrease (content change)
-
-// changes = {
-//     localChanges: [ // downstream
-//         {
-//             action: 'ADD',
-//             content: { parentIds: parentIds, item: newItem }
-//         },
-//         {
-//             action: 'RENAME',
-//             content: {item: renamedItem}
-//         },
-//         {
-//             action: 'DELETE',
-//             content: {item: deletedItem}
-//         },
-//         {
-//             action: 'SAVE',
-//             content: {item: savedItem}
-//         }
-//     ],
-//     cloudChanges: [ // upstream
-//         {
-//             action: 'ADD',
-//             content: { parentIds: parentIds, item: newItem }
-//         },
-//         {
-//             action: 'RENAME',
-//             content: {item: renamedItem}
-//         },
-//         {
-//             action: 'DELETE',
-//             content: {item: deletedItem}
-//         },
-//         {
-//             action: 'SAVE',
-//             content: {item: savedItem}
-//         }
-//     ]
-// }

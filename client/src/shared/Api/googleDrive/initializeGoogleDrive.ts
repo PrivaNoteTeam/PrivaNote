@@ -3,14 +3,22 @@ import p from 'path';
 import { searchForFolder } from './searchForFolder';
 import { uploadEntireNotebook } from './uploadEntireNotebook';
 import { createAFolder } from './createAFolder';
-import { getNotebookLocation, getNotebookName } from '@shared/notebook';
+import {
+	getNotebookLocation,
+	getNotebookName,
+	getNotebookParentLocation
+} from '@shared/notebook';
 import { getNotebookStructure } from '@shared/utils/synchronization/getNotebookStructure';
-import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
+import {
+	getItemFromStructure,
+	getItemFromStructureSync
+} from '@shared/utils/synchronization/getItemFromStructure';
 import { downloadAFile } from './downloadAFile';
 import { updateFileStats } from '@shared/utils/synchronization/updateFileStats';
 import { updateAFile } from './updateAFile';
 import { detectStructureChanges } from '@shared/utils/synchronization/detectStructureChanges';
 import { googleDriveDownstream } from './googleDriveDownstream';
+import { googleDriveUpstream } from './googleDriveUpstream';
 
 let ROOT_DRIVE_FOLDER_NAME = 'privanote';
 let ROOT_DRIVE_FOLDER_ID = '';
@@ -81,10 +89,64 @@ export const initializeGoogleDrive = () => {
 													cloudStructure
 												);
 											// console.log('INIT', changes);
-											if (respond.type === 'local') {
+											if (respond.type === 'LOCAL') {
 												respond.changes.forEach(
 													(change: any) => {
 														googleDriveDownstream(
+															change.action,
+															change.content
+														);
+													}
+												);
+											} else if (
+												respond.type === 'CLOUD'
+											) {
+												respond.changes.forEach(
+													(change: any) => {
+														if (
+															change.action ===
+															'ADD'
+														) {
+															if (
+																!change.content
+																	.parentIds
+																	.googleDrive
+															) {
+																let parentItem: any =
+																	getItemFromStructureSync(
+																		p.join(
+																			getNotebookParentLocation(),
+																			...change
+																				.content
+																				.item
+																				.paths
+																		)
+																	);
+																console.log(
+																	parentItem
+																);
+																change.content.parentIds =
+																	parentItem.ids;
+															}
+														}
+
+														console.log(
+															'---\nACTION: ',
+															change.action,
+															'\n',
+															change.content.item
+														);
+														if (
+															change.action ===
+															'ADD'
+														) {
+															console.log(
+																change.content
+																	.parentIds
+															);
+														}
+														console.log('---');
+														googleDriveUpstream(
 															change.action,
 															change.content
 														);

@@ -42,6 +42,26 @@ const findItem = (structure: any) => {
 	}
 };
 
+export const getItemFromStructureSync = (path: any) => {
+	try {
+		notebookName = getNotebookName();
+		itemPath = path.slice(-1) === p.sep ? path.substr(0, path - 1) : path;
+		folderChain = itemPath.split(p.sep);
+		folderChain = folderChain.slice(folderChain.indexOf(notebookName));
+		itemName = folderChain.pop()!;
+		level = 0;
+
+		let notebookStructure = getNotebookStructure();
+
+		findItem(notebookStructure);
+
+		return item;
+	} catch (err) {
+		console.log(err);
+		return;
+	}
+};
+
 /**
  * Locates item in structure by name and absolutePath and returns it
  * @param {any} path The path of an item
