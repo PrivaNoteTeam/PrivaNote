@@ -12,14 +12,17 @@ export interface FileSystemItem {
 export type FileItem = Omit<FileSystemItem, 'type'>;
 
 export interface PrivaNoteConfig {
-	autoSave: boolean;
-	spellCheck: boolean;
-	dictionaryLanguage: string;
-	fontFamily: string;
-	fontSize: number;
-	tabWidth: number;
-	columns: number;
-	connectedProviders: Provider[];
+	'editor.autoSave': boolean;
+	'editor.spellCheck': boolean;
+	'editor.dictionaryLanguage': string;
+	'editor.fontFamily': string;
+	'editor.fontSize': number;
+	'editor.tabWidth': number;
+	'editor.columns': number;
+
+	'preview.fontSize': number;
+
+	'cloud.connectedProviders': Provider[];
 }
 
 export type Provider = {
@@ -127,6 +130,7 @@ export interface Notification {
 export type NotificationState = Notification[];
 
 export interface Setting {
+	mapsTo: keyof PrivaNoteConfig;
 	title: string;
 	description: string;
 	ui: 'text' | 'number' | 'dropdown' | 'switch';

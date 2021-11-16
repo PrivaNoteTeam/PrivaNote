@@ -4,7 +4,7 @@ import { SettingItem } from './category/SettingItem';
 
 interface Props {
 	title: string;
-	settings: Setting[];
+	settings: Array<Setting & { value: any }>;
 }
 
 export function Category({ title, settings }: Props) {

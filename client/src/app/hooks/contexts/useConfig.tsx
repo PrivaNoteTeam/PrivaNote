@@ -49,7 +49,7 @@ const reducer = (
 			return getConfig(action.payload) as PrivaNoteConfig;
 		case getType(actions.addProvider):
 			if (
-				state!.connectedProviders.find((p) => {
+				state!['cloud.connectedProviders'].find((p) => {
 					return p.name === action.payload.providerName;
 				})
 			) {
@@ -59,7 +59,7 @@ const reducer = (
 			const addProviderState = {
 				...state,
 				connectedProviders: [
-					...state!.connectedProviders,
+					...state!['cloud.connectedProviders'],
 					{
 						name: action.payload.providerName,
 						accessToken: action.payload.accessToken,
@@ -77,9 +77,9 @@ const reducer = (
 			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
 			console.log('STATE:', state);
-			if (!state || !state.connectedProviders) return;
+			if (!state || !state['cloud.connectedProviders']) return;
 			if (
-				!state!.connectedProviders.find((p) => {
+				!state!['cloud.connectedProviders'].find((p) => {
 					return p.name === action.payload.providerName;
 				})
 			) {
@@ -88,7 +88,7 @@ const reducer = (
 
 			const removeProviderState = {
 				...state,
-				connectedProviders: state!.connectedProviders.filter(
+				connectedProviders: state!['cloud.connectedProviders'].filter(
 					(p) => p.name !== action.payload.providerName
 				)
 			};

@@ -8,7 +8,7 @@ export function SelectCloudProviderPage() {
 	const [config] = useConfig();
 	let history = useHistory();
 
-	const providers = config?.connectedProviders || [];
+	const providers = config!['cloud.connectedProviders'] || [];
 	const configProviderNames = providers.map((p) => p.name);
 
 	const allProviders = ['PrivaNote Vault', 'Google Drive', 'OneDrive'];

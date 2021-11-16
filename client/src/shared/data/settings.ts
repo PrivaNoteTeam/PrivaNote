@@ -7,20 +7,23 @@ const editorSettings: Category = {
 			title: 'Auto Save',
 			description: 'Enable auto save for notes.',
 			type: 'boolean',
-			ui: 'switch'
+			ui: 'switch',
+			mapsTo: 'editor.autoSave'
 		},
 		{
 			title: 'Spell Check',
 			description: 'Enable spell checking.',
 			type: 'boolean',
-			ui: 'switch'
+			ui: 'switch',
+			mapsTo: 'editor.spellCheck'
 		},
 		{
 			title: 'Dictionary Language',
 			description: 'Sets the language for the spell checker.',
 			type: 'string',
 			ui: 'dropdown',
-			options: ['English (CA)', 'Français (CA)']
+			options: ['English (CA)', 'Français (CA)'],
+			mapsTo: 'editor.dictionaryLanguage'
 		},
 		{
 			title: 'Font Size',
@@ -29,7 +32,8 @@ const editorSettings: Category = {
 			ui: 'number',
 			maxLength: 2,
 			min: 3,
-			max: 72
+			max: 72,
+			mapsTo: 'editor.fontSize'
 		},
 		{
 			title: 'Tab Width',
@@ -38,7 +42,8 @@ const editorSettings: Category = {
 			ui: 'number',
 			maxLength: 2,
 			min: 1,
-			max: 24
+			max: 24,
+			mapsTo: 'editor.tabWidth'
 		},
 		{
 			title: 'Columns',
@@ -47,7 +52,8 @@ const editorSettings: Category = {
 			ui: 'number',
 			maxLength: 3,
 			min: 1,
-			max: 200
+			max: 200,
+			mapsTo: 'editor.columns'
 		}
 	]
 };
@@ -62,7 +68,8 @@ const previewSettings: Category = {
 			ui: 'number',
 			maxLength: 2,
 			min: 3,
-			max: 72
+			max: 72,
+			mapsTo: 'preview.fontSize'
 		}
 	]
 };
