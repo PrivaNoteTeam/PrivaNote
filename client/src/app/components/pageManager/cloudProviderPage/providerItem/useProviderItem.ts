@@ -3,7 +3,8 @@ import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
 import { ConfigDispatch } from '@types';
-import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+// import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+import { getGoogleAuth } from '@shared/Api/googleDrive/setup';
 import { useHistory } from 'react-router-dom';
 
 type SupportedProvider = 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';

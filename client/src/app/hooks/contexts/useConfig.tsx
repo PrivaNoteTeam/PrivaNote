@@ -18,6 +18,7 @@ const actions = {
 		providerName: string;
 		path: string;
 		accessToken?: string;
+		refreshToken?: string;
 		idToken?: string;
 	}>(),
 	removeProvider: createAction('REMOVE_PROVIDER')<{
@@ -62,6 +63,7 @@ const reducer = (
 					{
 						name: action.payload.providerName,
 						accessToken: action.payload.accessToken,
+						refreshToken: action.payload.refreshToken,
 						idToken: action.payload.idToken
 					}
 				]
@@ -69,11 +71,13 @@ const reducer = (
 
 			fs.writeFileSync(
 				action.payload.path + '/.privanote/app.json',
-				JSON.stringify(addProviderState)
+				JSON.stringify(addProviderState, null, 4)
 			);
 
 			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
+			console.log('STATE:', state);
+			if (!state || !state.connectedProviders) return;
 			if (
 				!state!.connectedProviders.find((p) => {
 					return p.name === action.payload.providerName;
@@ -91,7 +95,7 @@ const reducer = (
 
 			fs.writeFileSync(
 				action.payload.path + '/.privanote/app.json',
-				JSON.stringify(removeProviderState)
+				JSON.stringify(removeProviderState, null, 4)
 			);
 
 			return removeProviderState as PrivaNoteConfig;

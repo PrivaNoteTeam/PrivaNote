@@ -8,7 +8,6 @@ import { PageManager } from '@components/PageManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { useIpcListeners } from './hooks/useIpcListeners';
-import { useGoogleDrive } from './hooks/useGoogleDrive';
 import { FileExplorer } from './components/FileExplorer';
 import { Placeholder } from './components/Placeholder';
 import { NotificationArea } from './components/NotificationArea';
@@ -28,7 +27,7 @@ export function App() {
 	const [, userDispatch] = useUserStore();
 
 	useIpcListeners();
-	useGoogleDrive();
+	// useGoogleDrive();
 
 	useEffect(() => {
 		getUser().then(({ user }) => {
