@@ -1,7 +1,7 @@
 import fs from 'fs';
 import p from 'path';
 import { nanoid } from 'nanoid';
-import mime from 'mime-types';
+import { createNotebookItem } from './createNotebookItem';
 import { NotebookItem, NotebookStructure } from '@types';
 
 let notebookName: string;
@@ -15,31 +15,16 @@ const getNotebookItems = (path: string) => {
 			const files = fs.readdirSync(path);
 			files.forEach((fileName) => {
 				let absolutePath = `${path}${p.sep}${fileName}`;
-				let stats = fs.statSync(absolutePath);
 
-				let paths: string[] = absolutePath.split(p.sep);
-				paths = paths.slice(paths.indexOf(notebookName));
+				let item = createNotebookItem(absolutePath);
 
-				let item: any = {
-					id: nanoid(),
-					cloudIds: [],
-					name: fileName,
-					paths: paths,
-					dateCreated: stats.birthtime,
-					lastModified: stats.mtime
-				};
-				if (stats.isDirectory()) {
-					item.mimeType = 'Folder';
+				if (item.mimeType === 'Folder') {
 					notebookStructure.push(
-						item as NotebookItem,
+						item,
 						...getNotebookItems(absolutePath)
 					);
 				} else {
-					let mimeType = mime.lookup(fileName);
-					if (mimeType) {
-						item.mimeType = mimeType;
-						notebookStructure.push(item as NotebookItem);
-					}
+					notebookStructure.push(item);
 				}
 			});
 		} catch (error) {

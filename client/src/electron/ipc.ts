@@ -5,7 +5,7 @@ import { explorerItemContextMenu, userContextMenuTemplate } from './menus';
 import { exportNote } from './handlers/exportNote';
 import { User } from '@types';
 import { setNotebook } from '@shared/notebook';
-// import { addItemToStructure } from '@shared/utils/synchronization/addItemToStructure';
+import { addItemToStructure } from '@shared/utils/synchronization/addItemToStructure';
 // import { deleteItemFromStructure } from '@shared/utils/synchronization/deleteItemFromStructure';
 // import { renameItemInStructure } from '@shared/utils/synchronization/renameItemInStructure';
 // import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStructure';
@@ -57,17 +57,17 @@ export function registerIpcHandlers() {
 		exportNotebookStructure();
 	});
 
-	// ipcMain.on('createDirectory', (_, path) => {
-	// 	addItemToStructure(path).then((res: any) => {
-	// 		syncUpstream(res.action, res.content);
-	// 	});
-	// });
+	ipcMain.on('createDirectory', (_, path) => {
+		addItemToStructure(path).then(() => {
+			// syncUpstream(res.action, res.content);
+		});
+	});
 
-	// ipcMain.on('createFile', (_, path) => {
-	// 	addItemToStructure(path).then((res: any) => {
-	// 		syncUpstream(res.action, res.content);
-	// 	});
-	// });
+	ipcMain.on('createFile', (_, path) => {
+		addItemToStructure(path).then(() => {
+			// syncUpstream(res.action, res.content);
+		});
+	});
 
 	// ipcMain.on('deleteExplorerItem', (_, path) => {
 	// 	deleteItemFromStructure(path).then((res: any) => {
