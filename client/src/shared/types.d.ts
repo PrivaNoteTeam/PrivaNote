@@ -125,3 +125,19 @@ export interface Notification {
 }
 
 export type NotificationState = Notification[];
+
+export interface Setting {
+	title: string;
+	description: string;
+	ui: 'text' | 'number' | 'dropdown' | 'switch';
+	type: 'boolean' | 'number' | 'string';
+	maxLength?: number;
+	min?: number;
+	max?: number;
+	options?: string[];
+}
+
+export interface Category {
+	title: string;
+	settings: Setting[];
+}
