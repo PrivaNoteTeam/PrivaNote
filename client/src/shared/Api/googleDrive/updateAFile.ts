@@ -44,6 +44,7 @@ export const updateAFile = async (file: any) => {
 
 		return res.data as any;
 	} catch (error) {
+		console.log(`updateAFile Error for ${file.name}`);
 		console.log(error);
 		removeConnectedProvider('Google Drive');
 	}

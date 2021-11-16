@@ -122,9 +122,9 @@ export const initializeGoogleDrive = () => {
 																				.paths
 																		)
 																	);
-																console.log(
-																	parentItem
-																);
+																// console.log(
+																// 	parentItem
+																// );
 																change.content.parentIds =
 																	parentItem.ids;
 															}

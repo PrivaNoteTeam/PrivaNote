@@ -28,6 +28,7 @@ export const createAFolder = async (folder: any, parentId: string = '') => {
 
 		return res.data as any;
 	} catch (error) {
+		console.log(`createAFolder for ${folder.name}`);
 		console.log(error);
 		removeConnectedProvider('Google Drive');
 	}

@@ -61,11 +61,18 @@ export const googleDriveUpstream = (action: string, content: any) => {
 			});
 			break;
 		case 'UPDATE':
-			updateAFile(content.item).then(() => {
-				getItemFromStructure(notebookStructureLocation).then((item) => {
-					updateAFile(item);
+			if (
+				content.item.mimeType != 'Folder' ||
+				content.item.mimeType != 'Notebook'
+			) {
+				updateAFile(content.item).then(() => {
+					getItemFromStructure(notebookStructureLocation).then(
+						(item) => {
+							updateAFile(item);
+						}
+					);
 				});
-			});
+			}
 			break;
 		default:
 			break;

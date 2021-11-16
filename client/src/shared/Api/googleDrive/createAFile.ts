@@ -13,6 +13,8 @@ type fileMetadata = {
 
 export const createAFile = async (file: any, parentId: string) => {
 	try {
+		console.log(file);
+		console.log(parentId);
 		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
 
 		let metadata: fileMetadata = {
@@ -33,6 +35,7 @@ export const createAFile = async (file: any, parentId: string) => {
 
 		return res.data as any;
 	} catch (error) {
+		console.log(`createFileError for ${file.name}`);
 		console.log(error);
 		removeConnectedProvider('Google Drive');
 	}
