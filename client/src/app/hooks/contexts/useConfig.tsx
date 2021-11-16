@@ -24,6 +24,11 @@ const actions = {
 	removeProvider: createAction('REMOVE_PROVIDER')<{
 		providerName: string;
 		path: string;
+	}>(),
+	setSetting: createAction('SET_SETTING')<{
+		configPath: string;
+		settingName: keyof PrivaNoteConfig;
+		value: any;
 	}>()
 };
 
@@ -99,6 +104,23 @@ const reducer = (
 			);
 
 			return removeProviderState as PrivaNoteConfig;
+		case getType(actions.setSetting):
+			if (!state) return;
+
+			const updatedSettingState = {
+				...state
+			};
+
+			(updatedSettingState[
+				action.payload.settingName
+			] as unknown as any) = action.payload.value;
+
+			fs.writeFileSync(
+				action.payload.configPath + '/.privanote/app.json',
+				JSON.stringify(updatedSettingState, null, 4)
+			);
+
+			return { ...updatedSettingState };
 		default:
 			return defaultGuard(state, action as never);
 	}

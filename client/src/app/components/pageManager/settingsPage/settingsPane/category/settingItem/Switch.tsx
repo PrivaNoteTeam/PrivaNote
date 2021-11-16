@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 
 interface Props {
 	initialValue?: boolean;
+	onClick?: (value: boolean) => void;
 }
 
-export function Switch({ initialValue = false }: Props) {
+export function Switch({ initialValue = false, onClick }: Props) {
 	const [value, setValue] = useState(initialValue);
 
 	const handleClick = () => {
 		setValue(!value);
+		onClick && onClick(!value);
 	};
 
 	return (

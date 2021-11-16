@@ -1,4 +1,5 @@
 import { Category } from '@types';
+import { supportedLanguages } from '@utils';
 
 const editorSettings: Category = {
 	title: 'Editor Settings',
@@ -22,7 +23,7 @@ const editorSettings: Category = {
 			description: 'Sets the language for the spell checker.',
 			type: 'string',
 			ui: 'dropdown',
-			options: ['English (CA)', 'Français (CA)'],
+			options: supportedLanguages,
 			mapsTo: 'editor.dictionaryLanguage'
 		},
 		{

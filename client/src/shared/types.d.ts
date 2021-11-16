@@ -50,6 +50,14 @@ type ConfigDispatch = Dispatch<
 			}
 	  >
 	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
+	| PayloadAction<
+			'SET_SETTING',
+			{
+				configPath: string;
+				settingName: keyof PrivaNoteConfig;
+				value: any;
+			}
+	  >
 >;
 
 // Reducer Types

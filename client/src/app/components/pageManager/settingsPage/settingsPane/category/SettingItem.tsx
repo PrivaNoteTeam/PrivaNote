@@ -3,6 +3,7 @@ import { Setting } from '@types';
 import { Switch } from './settingItem/Switch';
 import { NumberField } from './settingItem/NumberField';
 import { Dropdown } from './settingItem/Dropdown';
+import { useConfig, useStore } from '@hooks';
 
 type Props = Setting & { value: any };
 
@@ -14,8 +15,12 @@ export function SettingItem({
 	min,
 	maxLength,
 	options,
+	mapsTo,
 	value
 }: Props) {
+	const [{ notebook }] = useStore();
+	const [, configDispatch] = useConfig();
+
 	let field: JSX.Element | null = null;
 
 	switch (ui) {
@@ -36,7 +41,21 @@ export function SettingItem({
 			field = <Dropdown initialValue={value} items={options!} />;
 			break;
 		case 'switch':
-			field = <Switch initialValue={value} />;
+			field = (
+				<Switch
+					initialValue={value}
+					onClick={(value) => {
+						configDispatch({
+							type: 'SET_SETTING',
+							payload: {
+								configPath: notebook!,
+								settingName: mapsTo,
+								value
+							}
+						});
+					}}
+				/>
+			);
 			break;
 	}
 

@@ -3,7 +3,7 @@ import { PrivaNoteConfig } from '../types';
 export const defaultConfig: PrivaNoteConfig = {
 	'editor.autoSave': true,
 	'editor.spellCheck': true,
-	'editor.dictionaryLanguage': 'en-ca',
+	'editor.dictionaryLanguage': 'English (US)',
 	'editor.fontFamily': 'ui-sans-serif',
 	'editor.fontSize': 14,
 	'editor.tabWidth': 4,
