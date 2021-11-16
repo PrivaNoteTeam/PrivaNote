@@ -5,17 +5,21 @@ interface Props {
 	min?: number;
 	max?: number;
 	initialValue?: number;
+	onClick?: (value: number) => void;
 }
 
-export function NumberField({ initialValue = 0, ...inputProps }: Props) {
+export function NumberField({
+	initialValue = 0,
+	onClick,
+	...inputProps
+}: Props) {
 	const [value, setValue] = useState<number | undefined>(initialValue);
-
-	console.log(value);
 
 	const increment = () => {
 		// if value is blank, replace with default value on increment
 		if (value === undefined) {
 			setValue(initialValue);
+			onClick && onClick(initialValue);
 			return;
 		}
 
@@ -24,12 +28,14 @@ export function NumberField({ initialValue = 0, ...inputProps }: Props) {
 		}
 
 		setValue(value + 1);
+		onClick && onClick(value + 1);
 	};
 
 	const decrement = () => {
 		// if value is blank, replace with default value on increment
 		if (value === undefined) {
 			setValue(initialValue);
+			onClick && onClick(initialValue);
 			return;
 		}
 
@@ -38,6 +44,7 @@ export function NumberField({ initialValue = 0, ...inputProps }: Props) {
 		}
 
 		setValue(value - 1);
+		onClick && onClick(value - 1);
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

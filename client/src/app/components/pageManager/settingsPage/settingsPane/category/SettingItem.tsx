@@ -23,6 +23,17 @@ export function SettingItem({
 
 	let field: JSX.Element | null = null;
 
+	const handleSettingClick = (value: any) => {
+		configDispatch({
+			type: 'SET_SETTING',
+			payload: {
+				configPath: notebook!,
+				settingName: mapsTo,
+				value
+			}
+		});
+	};
+
 	switch (ui) {
 		case 'text':
 			field = <input className='pn-input'></input>;
@@ -34,27 +45,22 @@ export function SettingItem({
 					size={maxLength}
 					max={max}
 					min={min}
+					onClick={handleSettingClick}
 				/>
 			);
 			break;
 		case 'dropdown':
-			field = <Dropdown initialValue={value} items={options!} />;
+			field = (
+				<Dropdown
+					initialValue={value}
+					items={options!}
+					onClick={handleSettingClick}
+				/>
+			);
 			break;
 		case 'switch':
 			field = (
-				<Switch
-					initialValue={value}
-					onClick={(value) => {
-						configDispatch({
-							type: 'SET_SETTING',
-							payload: {
-								configPath: notebook!,
-								settingName: mapsTo,
-								value
-							}
-						});
-					}}
-				/>
+				<Switch initialValue={value} onClick={handleSettingClick} />
 			);
 			break;
 	}

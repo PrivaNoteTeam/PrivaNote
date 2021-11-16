@@ -4,9 +4,10 @@ import ChevronDownIcon from '@assets/icons/chevron-down.svg';
 interface Props {
 	items: string[];
 	initialValue?: string;
+	onClick?: (value: string) => void;
 }
 
-export function Dropdown({ items, initialValue }: Props) {
+export function Dropdown({ items, initialValue, onClick }: Props) {
 	if (!initialValue) initialValue = items[0];
 
 	const [opened, setOpened] = useState(false);
@@ -21,6 +22,7 @@ export function Dropdown({ items, initialValue }: Props) {
 
 		if (selectedItem && value !== selectedItem) {
 			setValue(selectedItem);
+			onClick && onClick(selectedItem);
 		}
 
 		setOpened(false);
