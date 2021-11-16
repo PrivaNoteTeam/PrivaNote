@@ -5,6 +5,7 @@ const template: MenuItemConstructorOptions[] = [
 		label: 'Rename',
 		click(_, window) {
 			if (!window) return;
+			console.log('renamed clicked and sending event');
 			window.webContents.send('renameExplorerItem');
 		}
 	},

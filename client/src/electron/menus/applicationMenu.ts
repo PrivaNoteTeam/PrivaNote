@@ -113,6 +113,13 @@ const template: MenuItemConstructorOptions[] = [
 					if (!window) return;
 					window.webContents.send('toggleFileExplorer');
 				}
+			},
+			{
+				label: 'Toggle Preview',
+				click: (_, window) => {
+					if (!window) return;
+					window.webContents.send('toggleLivePreviewVisabilty');
+				}
 			}
 		]
 	}

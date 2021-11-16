@@ -2,8 +2,13 @@ import React from 'react';
 import { useEditor } from './editor/useEditor';
 import { UIEditor } from './editor/UIEditor';
 
-export function Editor() {
-	const { unsaved, text, handleChange } = useEditor();
+interface Props {
+	text: string;
+	setText: React.Dispatch<string>;
+}
+
+export function Editor({ text, setText }: Props) {
+	const { unsaved, handleChange } = useEditor({ text, setText });
 
 	return (
 		<UIEditor unsaved={unsaved} text={text} handleChange={handleChange} />

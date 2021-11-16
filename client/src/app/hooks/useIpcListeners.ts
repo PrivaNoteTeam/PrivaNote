@@ -11,7 +11,7 @@ const createListener = (channel: string, callback: (...args: any) => void) => {
 };
 
 export function useIpcListeners() {
-	const [{ currentNote, notebook }, dispatch] = useStore();
+	const [{ currentFile, notebook }, dispatch] = useStore();
 	const [, configDispatch] = useConfig();
 	let history = useHistory();
 
@@ -33,7 +33,7 @@ export function useIpcListeners() {
 
 				dispatch({
 					type: 'openNote',
-					currentNote: undefined
+					currentFile: undefined
 				});
 
 				dispatch({
@@ -49,7 +49,7 @@ export function useIpcListeners() {
 		);
 
 		createListener('exportNote', () => {
-			ipcRenderer.send('currentFileToExport', currentNote);
+			ipcRenderer.send('currentFileToExport', currentFile);
 		});
 
 		createListener(
@@ -94,5 +94,5 @@ export function useIpcListeners() {
 					console.error(err);
 				});
 		});
-	}, [currentNote, notebook]);
+	}, [currentFile, notebook]);
 }

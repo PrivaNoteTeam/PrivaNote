@@ -8,21 +8,22 @@ import { PageManager } from '@components/PageManager';
 import { SideMenu } from '@components/SideMenu';
 import { getUser } from '@shared/Api/getUser';
 import { useIpcListeners } from './hooks/useIpcListeners';
-// import { useGoogleDrive } from './hooks/useGoogleDrive';
+import { FileExplorer } from './components/FileExplorer';
+import { Placeholder } from './components/Placeholder';
+import { NotificationArea } from './components/NotificationArea';
+import { SplitPane } from 'react-collapse-pane';
 
 export const editorReducer = (state: EditorState, action: EditorAction) => {
 	switch (action.type) {
 		case 'primarySelect':
-			return { ...state, primarySelection: action.primarySelection };
+			return { ...state, primarySelection: action.primarySelection! };
 		case 'secondarySelect':
-			return { ...state, secondarySelection: action.secondarySelection };
-		case 'rename':
-			return { ...state, isRenaming: action.isRenaming };
+			return { ...state, secondarySelection: action.secondarySelection! };
 	}
 };
 
 export function App() {
-	const [{ currentNote, notebook }] = useStore();
+	const [{ currentFile, notebook }] = useStore();
 	const [, userDispatch] = useUserStore();
 
 	useIpcListeners();
@@ -32,17 +33,34 @@ export function App() {
 		getUser().then(({ user }) => {
 			if (user) userDispatch({ type: 'login', user });
 		});
-	}, [currentNote, notebook]);
+	}, [currentFile, notebook]);
 
 	return (
 		<>
-			<div className='bg-gray-800 w-screen h-screen flex'>
+			<div className='bg-gray-800 w-screen h-screen flex relative'>
 				<SideMenu />
-				<EditorProvider
-					initialState={{ isRenaming: false }}
-					reducer={editorReducer}
-				>
-					<EditorPanel />
+				<EditorProvider initialState={{}} reducer={editorReducer}>
+					{notebook ? (
+						<div className='relative flex-grow z-auto'>
+							<SplitPane
+								split='vertical'
+								initialSizes={[1, 5]}
+								resizerOptions={{
+									hoverCss: {
+										backgroundColor: 'rgb(59, 130, 246)'
+									}
+								}}
+							>
+								<FileExplorer />
+								<EditorPanel />
+							</SplitPane>
+						</div>
+					) : (
+						<div className='relative flex-grow flex flex-col'>
+							<NotificationArea />
+							<Placeholder text='Open a notebook to continue' />
+						</div>
+					)}
 				</EditorProvider>
 				<PageManager />
 				<ModalManager />
