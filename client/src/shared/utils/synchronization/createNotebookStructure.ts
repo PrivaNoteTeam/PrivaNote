@@ -1,55 +1,44 @@
 import fs from 'fs';
 import p from 'path';
+import { nanoid } from 'nanoid';
 import mime from 'mime-types';
+import { NotebookItem, NotebookStructure } from '@types';
 
-type structure = {
-	ids: {};
-	name: string;
-	mimeType: string;
-	paths: string;
-	size: number;
-	dateCreated: Date;
-	lastModified: Date;
-	subFolder?: any[];
-}[];
+let notebookName: string;
+let notebookStructure: NotebookStructure;
 
-let notebookName: any;
-
-const getSubNotebookStructure = (path: string) => {
-	let notebookStructure: structure = [];
+const getNotebookItems = (path: string) => {
+	let notebookStructure: NotebookStructure = [];
 
 	if (path) {
 		try {
 			const files = fs.readdirSync(path);
-			files.forEach((file) => {
-				let absolutePath = `${path}${p.sep}${file}`;
+			files.forEach((fileName) => {
+				let absolutePath = `${path}${p.sep}${fileName}`;
 				let stats = fs.statSync(absolutePath);
 
-				let paths: any =
-					absolutePath.slice(-1) === p.sep
-						? absolutePath.substr(0, absolutePath.length - 1)
-						: absolutePath;
-				paths = paths.split(p.sep);
+				let paths: string[] = absolutePath.split(p.sep);
 				paths = paths.slice(paths.indexOf(notebookName));
 
 				let item: any = {
-					ids: {},
-					name: file,
+					id: nanoid(),
+					cloudIds: [],
+					name: fileName,
 					paths: paths,
-					size: stats.size,
 					dateCreated: stats.birthtime,
-					lastModified: stats.mtime,
-					statusModified: stats.ctime
+					lastModified: stats.mtime
 				};
 				if (stats.isDirectory()) {
 					item.mimeType = 'Folder';
-					item.subFolder = getSubNotebookStructure(absolutePath);
-					notebookStructure.push(item);
+					notebookStructure.push(
+						item as NotebookItem,
+						...getNotebookItems(absolutePath)
+					);
 				} else {
-					let mimeType = mime.lookup(file);
+					let mimeType = mime.lookup(fileName);
 					if (mimeType) {
 						item.mimeType = mimeType;
-						notebookStructure.push(item);
+						notebookStructure.push(item as NotebookItem);
 					}
 				}
 			});
@@ -61,28 +50,30 @@ const getSubNotebookStructure = (path: string) => {
 	return notebookStructure;
 };
 
+/** Creates and returns a notebook structure.
+ * 	@param path The absolute path of the notebook
+ */
 export const createNotebookStructure = (path: string) => {
-	let notebookStructure;
-
 	if (path) {
+		notebookStructure = [];
 		path =
 			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
 		notebookName = path.split(p.sep).pop()!;
-		console.log(path);
+
 		let stats = fs.statSync(path);
 
-		notebookStructure = {
-			ids: {},
+		notebookStructure.push({
+			id: nanoid(),
+			cloudIds: [],
 			name: notebookName,
 			mimeType: 'Notebook',
 			paths: [notebookName],
-			size: stats.size,
 			dateCreated: stats.birthtime,
-			lastModified: stats.mtime,
-			statusModified: stats.ctime,
-			subFolder: getSubNotebookStructure(path)
-		};
+			lastModified: stats.ctime
+		} as NotebookItem);
+
+		notebookStructure.push(...getNotebookItems(path));
 	}
 
-	return notebookStructure;
+	return notebookStructure as NotebookStructure;
 };

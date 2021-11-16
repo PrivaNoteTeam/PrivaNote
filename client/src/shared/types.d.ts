@@ -11,6 +11,18 @@ export interface FileSystemItem {
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
 
+export type NotebookItem = {
+	id: string;
+	cloudIds: string[];
+	name: string;
+	mimeType: string;
+	paths: string[];
+	dateCreated: Date;
+	lastModified: Date | string;
+	content?: any;
+};
+export type NotebookStructure = NotebookItem[];
+
 export interface PrivaNoteConfig {
 	autoSave: boolean;
 	spellCheck: boolean;

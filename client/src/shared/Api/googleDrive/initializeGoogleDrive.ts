@@ -14,7 +14,7 @@ import {
 	getItemFromStructureSync
 } from '@shared/utils/synchronization/getItemFromStructure';
 import { downloadAFile } from './downloadAFile';
-import { updateFileStats } from '@shared/utils/synchronization/updateFileStats';
+// import { updateFileStats } from '@shared/utils/synchronization/updateFileStats';
 import { updateAFile } from './updateAFile';
 import { detectStructureChanges } from '@shared/utils/synchronization/detectStructureChanges';
 import { googleDriveDownstream } from './googleDriveDownstream';
@@ -31,7 +31,7 @@ const uploadNewNotebook = async (structure: any, parentId: string) => {
 	// rewrite updated structure that contains new google ids
 	fs.writeFileSync(structureLocation, JSON.stringify(structure, null, 4));
 
-	updateFileStats(structureLocation);
+	// updateFileStats(structureLocation);
 	getItemFromStructure(structureLocation).then((item) => {
 		updateAFile(item);
 	});
