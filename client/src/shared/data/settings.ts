@@ -37,6 +37,23 @@ const editorSettings: Category = {
 			mapsTo: 'editor.fontSize'
 		},
 		{
+			title: 'Font Family',
+			description: 'Sets the font family.',
+			type: 'string',
+			ui: 'dropdown',
+			options: [
+				'Times New Roman',
+				'Monaco',
+				'Verdana',
+				'Arial',
+				'Helvetica',
+				'Tahoma',
+				'Georgia',
+				'Courier New'
+			].sort(),
+			mapsTo: 'editor.fontFamily'
+		},
+		{
 			title: 'Tab Width',
 			description: 'Controls the width of tabs.',
 			type: 'number',
