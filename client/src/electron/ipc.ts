@@ -7,7 +7,7 @@ import { User } from '@types';
 import { setNotebook } from '@shared/notebook';
 import { addItemToStructure } from '@shared/utils/synchronization/addItemToStructure';
 import { deleteItemFromStructure } from '@shared/utils/synchronization/deleteItemFromStructure';
-// import { renameItemInStructure } from '@shared/utils/synchronization/renameItemInStructure';
+import { renameItemInStructure } from '@shared/utils/synchronization/renameItemInStructure';
 // import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStructure';
 // import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
 import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
@@ -75,11 +75,11 @@ export function registerIpcHandlers() {
 		});
 	});
 
-	// ipcMain.on('renameExplorerItem', (_, path, newName) => {
-	// 	renameItemInStructure(path, newName).then((res: any) => {
-	// 		syncUpstream(res.action, res.content);
-	// 	});
-	// });
+	ipcMain.on('renameExplorerItem', (_, path, newName) => {
+		renameItemInStructure(path, newName).then(() => {
+			// syncUpstream(res.action, res.content);
+		});
+	});
 
 	// ipcMain.on('saveFile', (_, path) => {
 	// 	saveItemToStructure(path).then((res: any) => {

@@ -1,124 +1,37 @@
-import {
-	getNotebookLocation,
-	getNotebookName,
-	getNotebookParentLocation
-} from '@shared/notebook';
-import fs from 'fs';
+import { getNotebookName } from '@shared/notebook';
 import p from 'path';
-import mime from 'mime-types';
 import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
 
-let folderChain: Array<string>;
-let notebookPath: string;
-let notebookName: string;
-let itemPath: string;
-let itemName: string;
-let newItemName: string;
-let newItemPath: string;
-let level: number;
-let renamedItem: {};
-
-const setupItemVariables = (item: string, newName: string) => {
-	notebookPath = getNotebookLocation();
-	notebookName = getNotebookName();
-
-	itemPath =
-		item.slice(-1) === p.sep ? item.substr(0, item.length - 1) : item;
-	folderChain = itemPath.split(p.sep);
-	folderChain = folderChain.slice(folderChain.indexOf(notebookName));
-
-	itemName = folderChain.pop()!;
-
-	newItemName = newName;
-	newItemPath =
-		itemPath.substring(0, itemPath.lastIndexOf(p.sep)) +
-		p.sep +
-		newItemName;
-
-	level = 0;
-};
-
-const renameSubFolderPaths = (structure: any) => {
-	if (!structure) return;
-	let parentPaths = newItemPath
-		.substr(newItemPath.indexOf(notebookName))
-		.split(p.sep);
-
-	if (structure.mimeType === 'Folder') {
-		for (let folder of structure.subFolder) {
-			folder.paths = parentPaths.concat(
-				folder.paths.slice(parentPaths.length)
-			);
-			if (folder.mimeType === 'Folder') {
-				renameSubFolderPaths(folder);
-			}
-		}
-	}
-};
-
-const renameInStructure = (structure: any) => {
-	if (!structure) return;
-	level++;
-
-	let absolutePath = p.join(getNotebookParentLocation(), ...structure.paths);
-	let parentStats = fs.statSync(absolutePath);
-	structure.size = parentStats.size;
-	structure.lastModified = parentStats.mtime;
-	structure.statusModified = parentStats.ctime;
-
-	if (level < folderChain.length) {
-		for (let folder of structure.subFolder) {
-			if (
-				folder.name === folderChain[level] &&
-				(folder.mimeType === 'Folder' || folder.mimeType === 'Notebook')
-			) {
-				renameInStructure(folder);
-			}
-		}
-	} else if (level === folderChain.length) {
-		if (
-			structure.mimeType === 'Notebook' ||
-			structure.mimeType === 'Folder'
-		) {
-			let stats = fs.statSync(newItemPath);
-			let itemIndex = structure.subFolder.findIndex((item: any) => {
-				return (
-					item.name === itemName &&
-					itemPath.substr(itemPath.indexOf(notebookName)) ===
-						p.join(...item.paths)
-				);
-			});
-			structure.subFolder[itemIndex].name = newItemName;
-			structure.subFolder[itemIndex].paths = newItemPath
-				.substr(newItemPath.indexOf(notebookName))
-				.split(p.sep);
-			structure.subFolder[itemIndex].mimeType = stats.isDirectory()
-				? 'Folder'
-				: mime.lookup(newItemName);
-			structure.subFolder[itemIndex].size = stats.size;
-			structure.subFolder[itemIndex].statusModified = stats.ctime;
-			renamedItem = structure.subFolder[itemIndex];
-
-			if (stats.isDirectory()) {
-				renameSubFolderPaths(structure.subFolder[itemIndex]);
-			}
-		}
-	}
-};
-
-export const renameItemInStructure = (item: string, newName: string) => {
-	return new Promise<{}>((resolve, _) => {
+/** Rename a notebook item and update its path along with all its children.
+ * 	@param path The absolute path of the notebook item location.
+ * 	@param newName The new name of the notebook item.
+ */
+export const renameItemInStructure = (path: string, newName: string) => {
+	return new Promise<{}>((_, __) => {
 		try {
-			setupItemVariables(item, newName);
-			let notebookStructure = getNotebookStructure(notebookPath);
-			renameInStructure(notebookStructure);
+			let notebookStructure = getNotebookStructure();
+
+			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
+			path = path.slice(path.indexOf(getNotebookName()));
+			let pathLength = path.split(p.sep).length;
+
+			notebookStructure = notebookStructure.map((notebookItem) => {
+				let itemPath = p.join(...notebookItem.paths);
+				if (itemPath.indexOf(path) === 0) {
+					if (itemPath.length === path.length) {
+						notebookItem.name = newName;
+					}
+					notebookItem.paths[pathLength - 1] = newName;
+					return notebookItem;
+				}
+				return notebookItem;
+			});
+
 			exportNotebookStructure(notebookStructure);
-			resolve({ action: 'RENAME', content: { item: renamedItem } });
+			// resolve({ action: 'RENAME', content: { item: renamedItem } });
 		} catch (err) {
 			console.log(err);
 		}
-		// console.log(notebookStructure);
-		// syncUpstream('RENAME', 'NEW ITEM OR FOLDER ITEMS', notebookPath);
 	});
 };
