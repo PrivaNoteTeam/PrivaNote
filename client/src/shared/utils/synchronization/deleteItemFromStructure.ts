@@ -3,7 +3,7 @@ import { exportNotebookStructure } from './exportNotebookStructure';
 import { getNotebookStructure } from './getNotebookStructure';
 import p from 'path';
 
-/** Createsa Notebook item
+/** Delete notebook item from the notebook strucure.
  * 	@param path The absolute path of the notebook item location.
  */
 export const deleteItemFromStructure = (path: string) => {
