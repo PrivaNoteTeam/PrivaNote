@@ -19,6 +19,7 @@ export interface PrivaNoteConfig {
 	'editor.fontSize': number;
 	'editor.tabWidth': number;
 	'editor.columns': number;
+	'editor.lineNumbers': boolean;
 
 	'preview.fontSize': number;
 

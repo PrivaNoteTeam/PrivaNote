@@ -102,9 +102,11 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 									? 'wordWrapColumn'
 									: 'off',
 								wordWrapColumn: config!['editor.columns'],
+								lineNumbers: config!['editor.lineNumbers']
+									? 'on'
+									: 'off',
 
 								padding: { top: 16 },
-								lineNumbers: 'off',
 								smoothScrolling: true,
 								contextmenu: false,
 								minimap: { enabled: false },

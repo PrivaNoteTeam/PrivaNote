@@ -8,6 +8,7 @@ export const defaultConfig: PrivaNoteConfig = {
 	'editor.fontSize': 14,
 	'editor.tabWidth': 4,
 	'editor.columns': 72,
+	'editor.lineNumbers': false,
 	'preview.fontSize': 14,
 	'cloud.connectedProviders': []
 };

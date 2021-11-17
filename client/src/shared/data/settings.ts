@@ -72,6 +72,13 @@ const editorSettings: Category = {
 			min: 1,
 			max: 200,
 			mapsTo: 'editor.columns'
+		},
+		{
+			title: 'Line Numbers',
+			description: 'Toggle line numbers.',
+			type: 'boolean',
+			ui: 'switch',
+			mapsTo: 'editor.lineNumbers'
 		}
 	]
 };
