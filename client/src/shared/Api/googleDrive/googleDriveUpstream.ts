@@ -1,7 +1,7 @@
 import p from 'path';
 import { getNotebookLocation } from '@shared/notebook';
 import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
-import { UpdateItemIDInStructure } from '@shared/utils/synchronization/UpdateItemIDInStructure';
+import { UpdateItemInStructure } from '@shared/utils/synchronization/UpdateItemInStructure';
 import { createAFile } from './createAFile';
 import { createAFolder } from './createAFolder';
 import { deleteAFile } from './deleteAFile';
@@ -20,7 +20,7 @@ export const googleDriveUpstream = (action: string, content: any) => {
 				createAFolder(content.item, content.parentIds.googleDrive).then(
 					(res: any) => {
 						content.item.ids.googleDrive = res.id;
-						UpdateItemIDInStructure(content.item).then((res) => {
+						UpdateItemInStructure(content.item).then((res) => {
 							if (!res) return;
 							getItemFromStructure(
 								notebookStructureLocation
@@ -34,7 +34,7 @@ export const googleDriveUpstream = (action: string, content: any) => {
 				createAFile(content.item, content.parentIds.googleDrive).then(
 					(res: any) => {
 						content.item.ids.googleDrive = res.id;
-						UpdateItemIDInStructure(content.item).then((res) => {
+						UpdateItemInStructure(content.item).then((res) => {
 							if (!res) return;
 							getItemFromStructure(
 								notebookStructureLocation
