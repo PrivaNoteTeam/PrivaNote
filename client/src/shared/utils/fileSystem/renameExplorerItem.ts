@@ -8,7 +8,9 @@ export const renameExplorerItem = async (path: string, newName: string) => {
 	return new Promise<FileSystemItem | undefined>((resolve, reject) => {
 		try {
 			path =
-				path.slice(-1) === '/' ? path.substr(0, path.length - 1) : path;
+				path.slice(-1) === '/'
+					? path.substring(0, path.length - 1)
+					: path;
 			const newPath =
 				path.substring(0, path.lastIndexOf('/')) + '/' + newName;
 

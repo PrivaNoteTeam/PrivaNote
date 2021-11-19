@@ -42,7 +42,9 @@ export const createNotebookStructure = (path: string) => {
 	if (path) {
 		notebookStructure = [];
 		path =
-			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
+			path.slice(-1) === p.sep
+				? path.substring(0, path.length - 1)
+				: path;
 		notebookName = path.split(p.sep).pop()!;
 
 		let stats = fs.statSync(path);

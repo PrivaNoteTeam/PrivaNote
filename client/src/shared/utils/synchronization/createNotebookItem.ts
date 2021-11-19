@@ -11,7 +11,7 @@ import { NotebookItem } from '@types';
 export const createNotebookItem = (path: string) => {
 	let stats = fs.statSync(path);
 
-	path = path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
+	path = path.slice(-1) === p.sep ? path.substring(0, path.length - 1) : path;
 	let paths: string[] = path.split(p.sep);
 	paths = paths.slice(paths.indexOf(getNotebookName()));
 	let fileName = paths.slice(-1)[0];

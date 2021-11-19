@@ -12,7 +12,9 @@ export const renameItemInStructure = (path: string, newName: string) => {
 		try {
 			let notebookStructure = getNotebookStructure();
 
-			path.slice(-1) === p.sep ? path.substr(0, path.length - 1) : path;
+			path.slice(-1) === p.sep
+				? path.substring(0, path.length - 1)
+				: path;
 			path = path.slice(path.indexOf(getNotebookName()));
 			let pathLength = path.split(p.sep).length;
 
