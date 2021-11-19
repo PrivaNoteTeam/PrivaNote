@@ -1,24 +1,27 @@
-import { exportNotebookStructure } from './exportNotebookStructure';
-import { getNotebookStructure } from './getNotebookStructure';
-import { createNotebookItem } from './createNotebookItem';
+import {
+	exportNotebookStructure,
+	getNotebookStructure,
+	createNotebookItem
+} from '@synchronization';
+import { SyncAction } from '@types';
 
 /** Adds a notebook item to the notebook structure
  * 	@param path The absolute path of the notebook item.
  */
 export const addItemToStructure = (path: string) => {
-	return new Promise<{}>((_, __) => {
+	return new Promise<SyncAction>((resolve, _) => {
 		try {
 			let notebookStructure = getNotebookStructure();
 
-			let item = createNotebookItem(path);
+			let newItem = createNotebookItem(path);
 
-			notebookStructure.push(item);
+			notebookStructure.push(newItem);
 
 			exportNotebookStructure(notebookStructure);
-			// resolve({
-			// 	action: 'ADD',
-			// 	content: { parentIds: parentIds, item: newItem }
-			// });
+			resolve({
+				action: 'ADD',
+				content: { item: newItem }
+			});
 		} catch (err) {
 			console.log(err);
 		}

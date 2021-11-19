@@ -11,9 +11,15 @@ export interface FileSystemItem {
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
 
+export type cloudIds = {
+	privaNote?: string;
+	googleDrive?: string;
+	oneDrive?: string;
+};
+
 export type NotebookItem = {
 	id: string;
-	cloudIds: string[];
+	cloudIds: cloudIds;
 	name: string;
 	mimeType: string;
 	paths: string[];
@@ -22,6 +28,16 @@ export type NotebookItem = {
 	content?: any;
 };
 export type NotebookStructure = NotebookItem[];
+
+export type SyncType = 'ADD' | 'DELETE' | 'RENAME' | 'UPDATE';
+export type SyncContent = {
+	item: NotebookItem;
+};
+
+export type SyncAction = {
+	action: SyncType;
+	content: SyncContent;
+};
 
 export interface PrivaNoteConfig {
 	autoSave: boolean;

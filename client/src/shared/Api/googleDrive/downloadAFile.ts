@@ -1,13 +1,17 @@
 import fs from 'fs';
-import { getDrive } from './setup';
+import { getDrive } from '@googleDrive';
+import { NotebookItem } from '@types';
 
-export const downloadAFile = async (file: any, destination: string = '') => {
+export const downloadAFile = async (
+	file: NotebookItem,
+	destination: string = ''
+) => {
 	try {
 		if (destination) {
 			let dest = fs.createWriteStream(destination);
 			const res = await getDrive().files.get(
 				{
-					fileId: file.ids.googleDrive,
+					fileId: file.cloudIds.googleDrive,
 					alt: 'media'
 				},
 				{ responseType: 'stream' }
@@ -22,7 +26,7 @@ export const downloadAFile = async (file: any, destination: string = '') => {
 				.pipe(dest);
 		} else {
 			const res = await getDrive().files.get({
-				fileId: file.ids.googleDrive,
+				fileId: file.cloudIds.googleDrive,
 				alt: 'media'
 			});
 

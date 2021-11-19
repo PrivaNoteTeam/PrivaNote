@@ -1,13 +1,16 @@
 import { getNotebookName } from '@shared/notebook';
-import { exportNotebookStructure } from './exportNotebookStructure';
-import { getNotebookStructure } from './getNotebookStructure';
+import {
+	exportNotebookStructure,
+	getNotebookStructure
+} from '@synchronization';
+import { SyncAction } from '@types';
 import p from 'path';
 
-/** Delete notebook item from the notebook strucure.
+/** Delete notebook item from the notebook structure.
  * 	@param path The absolute path of the notebook item location.
  */
 export const deleteItemFromStructure = (path: string) => {
-	return new Promise<{}>((_, __) => {
+	return new Promise<SyncAction>((resolve, _) => {
 		try {
 			let notebookStructure = getNotebookStructure();
 
@@ -17,6 +20,13 @@ export const deleteItemFromStructure = (path: string) => {
 			path = path.slice(path.indexOf(getNotebookName()));
 			let pathLength = path.split(p.sep).length;
 
+			const deletedItem = notebookStructure.find(
+				(notebookItem) => p.join(...notebookItem.paths) === path
+			);
+
+			if (!deletedItem)
+				throw Error('Item to delete not found in notebook structure');
+
 			notebookStructure = notebookStructure.filter((notebookItem) => {
 				return (
 					p.join(...notebookItem.paths.slice(0, pathLength)) !== path
@@ -24,10 +34,10 @@ export const deleteItemFromStructure = (path: string) => {
 			});
 
 			exportNotebookStructure(notebookStructure);
-			// resolve({
-			// 	action: 'DELETE',
-			// 	content: { item: deletedItem }
-			// });
+			resolve({
+				action: 'DELETE',
+				content: { item: deletedItem }
+			});
 		} catch (err) {
 			console.log(err);
 		}

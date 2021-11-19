@@ -1,14 +1,17 @@
 import { getNotebookName } from '@shared/notebook';
 import p from 'path';
-import { exportNotebookStructure } from './exportNotebookStructure';
-import { getNotebookStructure } from './getNotebookStructure';
+import {
+	exportNotebookStructure,
+	getNotebookStructure
+} from '@synchronization';
+import { SyncAction } from '@types';
 
 /** Rename a notebook item and update its path along with all its children.
  * 	@param path The absolute path of the notebook item location.
  * 	@param newName The new name of the notebook item.
  */
 export const renameItemInStructure = (path: string, newName: string) => {
-	return new Promise<{}>((_, __) => {
+	return new Promise<SyncAction>((resolve, _) => {
 		try {
 			let notebookStructure = getNotebookStructure();
 
@@ -30,8 +33,13 @@ export const renameItemInStructure = (path: string, newName: string) => {
 				return notebookItem;
 			});
 
+			const renamedItem = notebookStructure.find(
+				(notebookItem) => notebookItem.name === newName
+			);
+			if (!renamedItem) throw Error("Item hasn't been renamed");
+
 			exportNotebookStructure(notebookStructure);
-			// resolve({ action: 'RENAME', content: { item: renamedItem } });
+			resolve({ action: 'RENAME', content: { item: renamedItem } });
 		} catch (err) {
 			console.log(err);
 		}

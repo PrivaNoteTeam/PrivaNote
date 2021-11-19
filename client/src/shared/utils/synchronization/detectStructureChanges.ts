@@ -1,4 +1,4 @@
-import { getNotebookStructure } from './getNotebookStructure';
+import { getNotebookStructure } from '@synchronization';
 import p from 'path';
 
 let changes: any;

@@ -1,24 +1,21 @@
-import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
+import { removeConnectedProvider } from '@synchronization';
 import fs from 'fs';
 import p from 'path';
 import { getNotebookParentLocation } from '@shared/notebook';
-import { getDrive } from './setup';
+import { getDrive } from '@googleDrive';
+import { NotebookItem } from '@types';
 
-type fileMetadata = {
-	id?: string;
-	name: string;
-	mimeType: string;
-	parents?: [string];
-};
-
-export const createAFile = async (file: any, parentId: string) => {
+export const createAFile = async (
+	file: NotebookItem,
+	parentFolder: NotebookItem
+) => {
 	try {
 		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
 
-		let metadata: fileMetadata = {
+		let metadata: any = {
 			name: file.name,
 			mimeType: file.mimeType,
-			parents: [parentId]
+			parents: [parentFolder.cloudIds.googleDrive]
 		};
 		let media = {
 			mimeType: file.mimeType,

@@ -1,26 +1,33 @@
 import p from 'path';
 import { getNotebookLocation } from '@shared/notebook';
-import { getItemFromStructure } from '@shared/utils/synchronization/getItemFromStructure';
-import { UpdateItemInStructure } from '@shared/utils/synchronization/UpdateItemInStructure';
-import { createAFile } from './createAFile';
-import { createAFolder } from './createAFolder';
-import { deleteAFile } from './deleteAFile';
-import { updateAFile } from './updateAFile';
+import {
+	getItemFromStructure,
+	getParentFromStructure,
+	updateItemInStructure
+} from '@synchronization';
+import {
+	createAFile,
+	createAFolder,
+	deleteAFile,
+	updateAFile
+} from '@googleDrive';
+import { SyncContent, SyncType } from '@types';
 
 let notebookLocation: string;
 let notebookStructureLocation: string;
 
-export const googleDriveUpstream = (action: string, content: any) => {
+export const googleDriveUpstream = (action: SyncType, content: SyncContent) => {
 	notebookLocation = getNotebookLocation();
 	notebookStructureLocation = `${notebookLocation}${p.sep}.privanote${p.sep}notebookStructure.json`;
 
 	switch (action) {
 		case 'ADD':
-			if (content.item.mimeType === 'Folder') {
-				createAFolder(content.item, content.parentIds.googleDrive).then(
-					(res: any) => {
-						content.item.ids.googleDrive = res.id;
-						UpdateItemInStructure(content.item).then((res) => {
+			try {
+				const parentItem = getParentFromStructure(content.item);
+				if (content.item.mimeType === 'Folder') {
+					createAFolder(content.item, parentItem).then((res: any) => {
+						content.item.cloudIds.googleDrive = res.id;
+						updateItemInStructure(content.item).then((res) => {
 							if (!res) return;
 							getItemFromStructure(
 								notebookStructureLocation
@@ -28,13 +35,11 @@ export const googleDriveUpstream = (action: string, content: any) => {
 								updateAFile(item);
 							});
 						});
-					}
-				);
-			} else {
-				createAFile(content.item, content.parentIds.googleDrive).then(
-					(res: any) => {
-						content.item.ids.googleDrive = res.id;
-						UpdateItemInStructure(content.item).then((res) => {
+					});
+				} else {
+					createAFile(content.item, parentItem).then((res: any) => {
+						content.item.cloudIds.googleDrive = res.id;
+						updateItemInStructure(content.item).then((res) => {
 							if (!res) return;
 							getItemFromStructure(
 								notebookStructureLocation
@@ -42,8 +47,10 @@ export const googleDriveUpstream = (action: string, content: any) => {
 								updateAFile(item);
 							});
 						});
-					}
-				);
+					});
+				}
+			} catch (err) {
+				console.log(err);
 			}
 			break;
 		case 'DELETE':

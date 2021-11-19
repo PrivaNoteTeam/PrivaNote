@@ -1,6 +1,6 @@
 import p from 'path';
 import { getNotebookName } from '@shared/notebook';
-import { getNotebookStructure } from './getNotebookStructure';
+import { getNotebookStructure } from '@synchronization';
 import { NotebookItem, NotebookStructure } from '@types';
 
 const findItem = (path: string, notebookStructure: NotebookStructure) => {

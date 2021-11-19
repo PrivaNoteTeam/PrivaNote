@@ -1,7 +1,7 @@
 import p from 'path';
 import fs from 'fs';
 import { getNotebookParentLocation } from '@shared/notebook';
-import { downloadAFile } from './downloadAFile';
+import { downloadAFile } from '@googleDrive';
 
 let notebookParentLocation: string;
 

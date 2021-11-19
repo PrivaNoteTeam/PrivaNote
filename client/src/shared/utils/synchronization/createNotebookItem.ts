@@ -18,7 +18,7 @@ export const createNotebookItem = (path: string) => {
 
 	let item: any = {
 		id: nanoid(),
-		cloudIds: [],
+		cloudIds: {},
 		name: fileName,
 		paths: paths,
 		dateCreated: stats.birthtime,

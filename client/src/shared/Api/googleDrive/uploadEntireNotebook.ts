@@ -1,31 +1,61 @@
-import { createAFolder } from './createAFolder';
-import { createAFile } from './createAFile';
+import p from 'path';
+import { createAFolder, createAFile, updateAFile } from '@googleDrive';
+import { getNotebookLocation } from '@shared/notebook';
+import {
+	getItemFromStructure,
+	getParentFromStructure,
+	updateItemInStructure
+} from '@synchronization';
+import { NotebookItem, NotebookStructure } from '@types';
+
+const createNotebookRootFolder = async (
+	notebookRoot: NotebookItem,
+	driveRoot: NotebookItem
+) => {
+	await createAFolder(notebookRoot, driveRoot).then((res: any) => {
+		notebookRoot.cloudIds.googleDrive = res.id;
+		updateItemInStructure(notebookRoot);
+	});
+};
+
+const uploadNotebookItem = async (notebookItem: NotebookItem) => {
+	const parentItem = getParentFromStructure(notebookItem);
+	if (notebookItem.mimeType === 'Folder') {
+		await createAFolder(notebookItem, parentItem).then((res: any) => {
+			notebookItem.cloudIds.googleDrive = res.id;
+			updateItemInStructure(notebookItem);
+		});
+	} else {
+		await createAFile(notebookItem, parentItem).then((res: any) => {
+			notebookItem.cloudIds.googleDrive = res.id;
+			updateItemInStructure(notebookItem);
+		});
+	}
+};
 
 export const uploadEntireNotebook = async (
-	notebookItems: any,
-	parentId: string
+	notebookStructure: NotebookStructure,
+	ROOT_DRIVE_FOLDER_ID: string
 ) => {
-	if (
-		notebookItems.mimeType === 'Notebook' ||
-		notebookItems.mimeType === 'Folder'
-	) {
-		await createAFolder(notebookItems, parentId)
-			.then(async (res) => {
-				notebookItems.ids.googleDrive = res.id;
-				for (let item of notebookItems.subFolder) {
-					item = await uploadEntireNotebook(
-						item,
-						notebookItems.ids.googleDrive
-					);
-				}
-			})
-			.catch((err) => console.log(err));
-	} else if (notebookItems.mimeType) {
-		await createAFile(notebookItems, parentId)
-			.then((res) => {
-				notebookItems.ids.googleDrive = res.id;
-			})
-			.catch((err) => console.log(err));
+	const privaNoteDriveFolder = {
+		cloudIds: {
+			googleDrive: ROOT_DRIVE_FOLDER_ID
+		}
+	};
+	for (let notebookItem of notebookStructure) {
+		if (notebookItem.mimeType === 'Notebook') {
+			await createNotebookRootFolder(
+				notebookItem,
+				privaNoteDriveFolder as NotebookItem
+			);
+		} else {
+			await uploadNotebookItem(notebookItem);
+		}
 	}
-	return notebookItems;
+
+	getItemFromStructure(
+		p.join(getNotebookLocation(), '.privanote', 'notebookStructure.json')
+	).then((item) => {
+		updateAFile(item);
+	});
 };

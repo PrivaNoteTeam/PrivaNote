@@ -3,13 +3,13 @@ import { getMainWindow } from './windows';
 import { selectDirectory } from './handlers/selectDirectory';
 import { explorerItemContextMenu, userContextMenuTemplate } from './menus';
 import { exportNote } from './handlers/exportNote';
-import { User } from '@types';
+import { SyncAction, User } from '@types';
 import { setNotebook } from '@shared/notebook';
 import { addItemToStructure } from '@shared/utils/synchronization/addItemToStructure';
 import { deleteItemFromStructure } from '@shared/utils/synchronization/deleteItemFromStructure';
 import { renameItemInStructure } from '@shared/utils/synchronization/renameItemInStructure';
 import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStructure';
-// import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
+import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
 import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
 
 export function registerIpcHandlers() {
@@ -58,32 +58,32 @@ export function registerIpcHandlers() {
 	});
 
 	ipcMain.on('createDirectory', (_, path) => {
-		addItemToStructure(path).then(() => {
-			// syncUpstream(res.action, res.content);
+		addItemToStructure(path).then((res: SyncAction) => {
+			syncUpstream(res.action, res.content);
 		});
 	});
 
 	ipcMain.on('createFile', (_, path) => {
-		addItemToStructure(path).then(() => {
-			// syncUpstream(res.action, res.content);
+		addItemToStructure(path).then((res: SyncAction) => {
+			syncUpstream(res.action, res.content);
 		});
 	});
 
 	ipcMain.on('deleteExplorerItem', (_, path) => {
-		deleteItemFromStructure(path).then(() => {
-			// syncUpstream(res.action, res.content);
+		deleteItemFromStructure(path).then((res: SyncAction) => {
+			syncUpstream(res.action, res.content);
 		});
 	});
 
 	ipcMain.on('renameExplorerItem', (_, path, newName) => {
-		renameItemInStructure(path, newName).then(() => {
-			// syncUpstream(res.action, res.content);
+		renameItemInStructure(path, newName).then((res: SyncAction) => {
+			syncUpstream(res.action, res.content);
 		});
 	});
 
 	ipcMain.on('saveFile', (_, path) => {
-		saveItemToStructure(path).then(() => {
-			// syncUpstream(res.action, res.content);
+		saveItemToStructure(path).then((res: SyncAction) => {
+			syncUpstream(res.action, res.content);
 		});
 	});
 }

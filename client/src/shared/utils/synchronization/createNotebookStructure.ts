@@ -1,7 +1,7 @@
 import fs from 'fs';
 import p from 'path';
 import { nanoid } from 'nanoid';
-import { createNotebookItem } from './createNotebookItem';
+import { createNotebookItem } from '@synchronization';
 import { NotebookItem, NotebookStructure } from '@types';
 
 let notebookName: string;
@@ -51,7 +51,7 @@ export const createNotebookStructure = (path: string) => {
 
 		notebookStructure.push({
 			id: nanoid(),
-			cloudIds: [],
+			cloudIds: {},
 			name: notebookName,
 			mimeType: 'Notebook',
 			paths: [notebookName],

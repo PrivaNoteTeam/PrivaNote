@@ -1,8 +1,7 @@
 import fs from 'fs';
 import p from 'path';
-import { createNotebookStructure } from './createNotebookStructure';
+import { createNotebookStructure, updateLastModified } from '@synchronization';
 import { getNotebookName, getNotebookLocation } from '@shared/notebook';
-import { updateLastModified } from './updateLastModified';
 import { NotebookStructure } from '@types';
 
 /** Exports the notebook structure that is received or creates a new one with

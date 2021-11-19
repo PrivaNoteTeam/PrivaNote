@@ -1,5 +1,7 @@
-import { exportNotebookStructure } from './exportNotebookStructure';
-import { getNotebookStructure } from './getNotebookStructure';
+import {
+	exportNotebookStructure,
+	getNotebookStructure
+} from '@synchronization';
 import { NotebookItem, NotebookStructure } from '@types';
 
 const findAndReplace = (
@@ -21,7 +23,7 @@ const findAndReplace = (
  * item in the structure with a new updated item.
  * @param {NotebookItem} item An updated item for the notebook structure
  */
-export const UpdateItemInStructure = (item: NotebookItem) => {
+export const updateItemInStructure = (item: NotebookItem) => {
 	return new Promise<Boolean>((resolve, _) => {
 		try {
 			let notebookStructure = getNotebookStructure();
