@@ -12,10 +12,15 @@ const findItem = (path: string, notebookStructure: NotebookStructure) => {
  * Returns the parent notebook item of a notebook item in the notebook structure
  * @param {NotebookItem} item A notebook item in the notebook structure
  */
-export const getParentFromStructure = (item: NotebookItem) => {
+export const getParentFromStructure = (
+	item: NotebookItem,
+	structure?: NotebookStructure
+) => {
 	try {
 		if (item.paths.length > 1 && item.mimeType != 'Notebook') {
-			const notebookStructure = getNotebookStructure();
+			const notebookStructure = structure
+				? structure
+				: getNotebookStructure();
 
 			const parentPath = p.join(
 				...item.paths.slice(0, item.paths.length - 1)

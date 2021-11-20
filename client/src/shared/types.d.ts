@@ -31,12 +31,19 @@ export type NotebookStructure = NotebookItem[];
 
 export type SyncType = 'ADD' | 'DELETE' | 'RENAME' | 'UPDATE';
 export type SyncContent = {
+	parent?: NotebookItem;
+	renamedTarget?: NotebookItem;
 	item: NotebookItem;
 };
 
 export type SyncAction = {
 	action: SyncType;
 	content: SyncContent;
+};
+
+export type SyncResponse = {
+	type: 'LOCAL' | 'CLOUD';
+	changes: SyncAction[];
 };
 
 export interface PrivaNoteConfig {

@@ -1,136 +1,121 @@
-import { getNotebookStructure } from '@synchronization';
+import { getNotebookName } from '@shared/notebook';
+import { getNotebookStructure, getParentFromStructure } from '@synchronization';
+import {
+	NotebookItem,
+	NotebookStructure,
+	SyncAction,
+	SyncResponse
+} from '@types';
 import p from 'path';
 
-let changes: any;
-let cloudFiles: any;
-let localFiles: any;
-let respond: any;
+let changes: SyncAction[];
+// let cloudFiles: any;
+// let localFiles: any;
+let respond: SyncResponse;
 
-const retrieveStructureLastModifiedDate = (structure: any) => {
-	if (structure.mimeType === 'Notebook') {
-		for (let folder of structure.subFolder) {
-			if (folder.name === '.privanote') {
-				for (let file of folder.subFolder) {
-					if (file.name === 'notebookStructure.json') {
-						return file.lastModified;
-					}
-				}
+const retrieveLastModified = (structure: NotebookStructure) => {
+	try {
+		for (let notebookItem of structure) {
+			if (
+				notebookItem.name === 'notebookStructure.json' &&
+				p.join(...notebookItem.paths) ===
+					p.join(
+						getNotebookName(),
+						'.privanote',
+						'notebookStructure.json'
+					)
+			) {
+				return notebookItem.lastModified;
 			}
 		}
+		throw Error('Item not found in structure');
+	} catch (err) {
+		console.log(err);
+		return;
 	}
 };
 
-const structureSpread = (structure: any, spread: [{}]) => {
-	let item = {
-		ids: structure.ids,
-		name: structure.name,
-		mimeType: structure.mimeType,
-		paths: structure.paths,
-		size: structure.size,
-		dateCreated: structure.dateCreated,
-		lastModified: structure.lastModified,
-		statusModified: structure.statusModified
-	};
-	spread.push(item);
-	if (structure.mimeType === 'Folder' || structure.mimeType === 'Notebook') {
-		for (let folder of structure.subFolder) {
-			structureSpread(folder, spread);
-		}
-	}
-};
-
-const getItemInFiles = (itemPath: any, fileList: any) => {
-	for (let item of fileList) {
-		if (p.join(...item.paths) === itemPath) {
-			return item;
-		}
-	}
-};
-
-const findAdd = (latestFiles: any, oldFiles: any) => {
+const findAdd = (
+	latestFiles: NotebookStructure,
+	oldFiles: NotebookStructure
+) => {
 	for (let item1 of latestFiles) {
 		let itemFound = false;
-		let addedItem: any = {};
+		let addedItem: NotebookItem;
 		for (let item2 of oldFiles) {
-			// if (item1.ids.googleDrive === item2.ids.googleDrive) {
-			if (p.join(...item1.paths) === p.join(...item2.paths)) {
-				itemFound = true;
-			}
-			if (item1.ids.googleDrive === item2.ids.googleDrive) {
+			if (item1.id === item2.id) {
 				itemFound = true;
 			}
 		}
-		// console.log('---\nADD: ', itemFound, ':\n', item1, '---\n');
 		addedItem = item1;
 		if (!itemFound) {
-			// console.log('ADD: ', item1);
-			let parentItem = getItemInFiles(
-				p.join(...addedItem.paths.slice(0, addedItem.paths.length - 1)),
-				latestFiles
-			);
+			let parentItem = getParentFromStructure(addedItem, latestFiles);
 			changes.push({
 				action: 'ADD',
-				content: { parentIds: parentItem.ids, item: addedItem }
+				content: { parent: parentItem, item: addedItem }
 			});
 		}
 	}
 };
 
-const findDelete = (latestFiles: any, oldFiles: any) => {
+const findDelete = (
+	latestFiles: NotebookStructure,
+	oldFiles: NotebookStructure
+) => {
 	for (let item1 of oldFiles) {
 		let itemFound = false;
-		let deletedItem: any = {};
+		let deletedItem: NotebookItem;
 		for (let item2 of latestFiles) {
-			if (item1.ids.googleDrive === item2.ids.googleDrive) {
+			if (item1.id === item2.id) {
 				itemFound = true;
 			}
 		}
 		deletedItem = item1;
 		if (!itemFound) {
-			// console.log('DELETE: ', item1);
 			changes.push({ action: 'DELETE', content: { item: deletedItem } });
 		}
 	}
 };
 
-const findRename = (latestFiles: any, oldFiles: any) => {
+const findRename = (
+	latestFiles: NotebookStructure,
+	oldFiles: NotebookStructure
+) => {
 	for (let item1 of oldFiles) {
 		let renameFound = false;
 		let renamedItem;
 		for (let item2 of latestFiles) {
-			if (
-				item1.ids.googleDrive === item2.ids.googleDrive &&
-				item1.name != item2.name
-			) {
+			if (item1.id === item2.id && item1.name != item2.name) {
 				renameFound = true;
 				renamedItem = item2;
 			}
 		}
-		if (renameFound) {
-			// console.log(`RENAME to ${newName}: `, item1);
+		if (renameFound && renamedItem) {
 			changes.push({
 				action: 'RENAME',
-				content: { target: item1, item: renamedItem }
+				content: { renamedTarget: item1, item: renamedItem }
 			});
 		}
 	}
 };
 
-const findUpdate = (latestFiles: any, oldFiles: any) => {
+const findUpdate = (
+	latestFiles: NotebookStructure,
+	oldFiles: NotebookStructure
+) => {
 	for (let item1 of oldFiles) {
 		let updateFound = false;
 		let updatedItem;
 		for (let item2 of latestFiles) {
 			if (
-				item1.ids.googleDrive === item2.ids.googleDrive &&
+				item1.id === item2.id &&
 				item1.lastModified != item2.lastModified
 			) {
 				updateFound = true;
 				updatedItem = item1;
 			}
 		}
-		if (updateFound) {
-			// console.log(`UPDATE: `, item1);
+		if (updateFound && updatedItem) {
 			changes.push({ action: 'UPDATE', content: { item: updatedItem } });
 		}
 	}
@@ -143,28 +128,26 @@ const comparator = (latestFiles: any, oldFiles: any) => {
 	findUpdate(latestFiles, oldFiles);
 };
 
-const scanAndCompare = (localStructure: any, cloudStructure: any) => {
-	let currentDate = new Date(
-		retrieveStructureLastModifiedDate(localStructure)
-	);
-	let cloudDate = new Date(retrieveStructureLastModifiedDate(cloudStructure));
+const scanAndCompare = (
+	localStructure: NotebookStructure,
+	cloudStructure: NotebookStructure
+) => {
+	let currentDate = new Date(retrieveLastModified(localStructure)!);
+	let cloudDate = new Date(retrieveLastModified(cloudStructure)!);
 	console.log('localStructure: ', currentDate);
 	console.log('cloudStructure: ', cloudDate);
 
-	structureSpread(localStructure, localFiles);
-	structureSpread(cloudStructure, cloudFiles);
-
 	if (currentDate > cloudDate) {
 		console.log('CURRENT Structure is more recent');
-		comparator(localFiles, cloudFiles);
-		respond = {
-			type: 'CLOUD',
-			changes: changes
-		};
+		// comparator(localStructure, cloudStructure);
+		// respond = {
+		// 	type: 'CLOUD',
+		// 	changes: changes
+		// };
 		// upstream
 	} else if (cloudDate > currentDate) {
 		console.log('CLOUD Structure is more recent');
-		comparator(cloudFiles, localFiles);
+		comparator(cloudStructure, localStructure);
 		// downstream
 		respond = {
 			type: 'LOCAL',
@@ -173,11 +156,9 @@ const scanAndCompare = (localStructure: any, cloudStructure: any) => {
 	}
 };
 
-export const detectStructureChanges = (cloudStructure: any) => {
+export const detectStructureChanges = (cloudStructure: NotebookStructure) => {
 	let localStructure = getNotebookStructure();
 	changes = [];
-	cloudFiles = [];
-	localFiles = [];
 
 	scanAndCompare(localStructure, cloudStructure);
 

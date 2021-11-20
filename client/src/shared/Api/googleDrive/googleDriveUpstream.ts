@@ -23,7 +23,9 @@ export const googleDriveUpstream = (action: SyncType, content: SyncContent) => {
 	switch (action) {
 		case 'ADD':
 			try {
-				const parentItem = getParentFromStructure(content.item);
+				const parentItem = content.parent
+					? content.parent
+					: getParentFromStructure(content.item);
 				if (content.item.mimeType === 'Folder') {
 					createAFolder(content.item, parentItem).then((res: any) => {
 						content.item.cloudIds.googleDrive = res.id;

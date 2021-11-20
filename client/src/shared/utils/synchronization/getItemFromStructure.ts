@@ -13,17 +13,23 @@ const findItem = (path: string, notebookStructure: NotebookStructure) => {
  * Locates item in structure by absolute or relative path and returns it
  * @param {string} path The path of an item
  */
-export const getItemFromStructure = (path: string) => {
+export const getItemFromStructure = (
+	path: string,
+	notebookStructure?: NotebookStructure
+) => {
 	return new Promise<NotebookItem>((resolve, _) => {
 		try {
 			path.slice(-1) === p.sep
 				? path.substring(0, path.length - 1)
 				: path;
 			path = path.slice(path.indexOf(getNotebookName()));
-			const notebookStructure = getNotebookStructure();
 
-			const item = findItem(path, notebookStructure);
-			if (!item) return;
+			const structure = notebookStructure
+				? notebookStructure
+				: getNotebookStructure();
+
+			const item = findItem(path, structure);
+			if (!item) throw Error('Item not found in structure');
 			resolve(item);
 		} catch (err) {
 			console.log(err);

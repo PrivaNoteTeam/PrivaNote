@@ -29,7 +29,7 @@ export const googleDriveDownstream = async (action: string, content: any) => {
 			break;
 		case 'RENAME':
 			fs.renameSync(
-				p.join(notebookParentLocation, ...content.target.paths),
+				p.join(notebookParentLocation, ...content.renamedTarget.paths),
 				p.join(notebookParentLocation, ...content.item.paths)
 			);
 			break;
