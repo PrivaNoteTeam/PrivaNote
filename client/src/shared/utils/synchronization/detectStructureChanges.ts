@@ -1,5 +1,5 @@
 import { getNotebookName } from '@shared/notebook';
-import { getNotebookStructure, getParentFromStructure } from '@synchronization';
+import { getNotebookStructure } from '@synchronization';
 import {
 	NotebookItem,
 	NotebookStructure,
@@ -9,8 +9,6 @@ import {
 import p from 'path';
 
 let changes: SyncAction[];
-// let cloudFiles: any;
-// let localFiles: any;
 let respond: SyncResponse;
 
 const retrieveLastModified = (structure: NotebookStructure) => {
@@ -49,10 +47,9 @@ const findAdd = (
 		}
 		addedItem = item1;
 		if (!itemFound) {
-			let parentItem = getParentFromStructure(addedItem, latestFiles);
 			changes.push({
 				action: 'ADD',
-				content: { parent: parentItem, item: addedItem }
+				content: { item: addedItem }
 			});
 		}
 	}
@@ -139,16 +136,14 @@ const scanAndCompare = (
 
 	if (currentDate > cloudDate) {
 		console.log('CURRENT Structure is more recent');
-		// comparator(localStructure, cloudStructure);
-		// respond = {
-		// 	type: 'CLOUD',
-		// 	changes: changes
-		// };
-		// upstream
+		comparator(localStructure, cloudStructure);
+		respond = {
+			type: 'CLOUD',
+			changes: changes
+		};
 	} else if (cloudDate > currentDate) {
 		console.log('CLOUD Structure is more recent');
 		comparator(cloudStructure, localStructure);
-		// downstream
 		respond = {
 			type: 'LOCAL',
 			changes: changes

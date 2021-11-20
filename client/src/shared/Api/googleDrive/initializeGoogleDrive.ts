@@ -5,7 +5,8 @@ import {
 	uploadEntireNotebook,
 	createAFolder,
 	downloadAFile,
-	googleDriveDownstream
+	googleDriveDownstream,
+	googleDriveUpstream
 	// updateAFile,
 	// googleDriveDownstream,
 	// googleDriveUpstream
@@ -85,15 +86,22 @@ export const initializeGoogleDrive = async () => {
 						const response =
 							detectStructureChanges(cloudStructureItem);
 
-						console.log(response);
-
 						if (response.type === 'LOCAL') {
-							response.changes.forEach(async (change) => {
+							for (let change of response.changes) {
 								await googleDriveDownstream(
 									change.action,
 									change.content
 								);
-							});
+							}
+						}
+
+						if (response.type === 'CLOUD') {
+							for (let change of response.changes) {
+								await googleDriveUpstream(
+									change.action,
+									change.content
+								);
+							}
 						}
 
 						return;
