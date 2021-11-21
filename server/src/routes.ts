@@ -18,8 +18,6 @@ router.post('/forgot-password', userController.forgotPassword);
 
 router.post('/reset-password', userController.resetPassword);
 
-// router.get('/google-drive/get-auth-url', providerController.googleGetAuthUrl);
-
 router.get('/google-drive/get-token', providerController.googleGetAuthCode);
 
 export { router };

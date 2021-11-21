@@ -5,18 +5,11 @@ import { getDrive } from '@googleDrive';
 import { getNotebookParentLocation } from '@shared/notebook';
 import { NotebookItem } from '@types';
 
-type fileMetadata = {
-	id?: string;
-	name: string;
-	mimeType: string;
-	parents?: [string];
-};
-
 export const updateAFile = async (file: NotebookItem) => {
 	try {
 		let res: any;
 
-		let metadata: fileMetadata = {
+		let metadata = {
 			name: file.name,
 			mimeType: file.mimeType
 		};

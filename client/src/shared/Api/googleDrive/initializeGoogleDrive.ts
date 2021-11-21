@@ -1,4 +1,3 @@
-// import fs from 'fs';
 import p from 'path';
 import {
 	searchForFolder,
@@ -7,19 +6,11 @@ import {
 	downloadAFile,
 	googleDriveDownstream,
 	googleDriveUpstream
-	// updateAFile,
-	// googleDriveDownstream,
-	// googleDriveUpstream
 } from '@googleDrive';
-import {
-	getNotebookLocation,
-	getNotebookName
-	// 	// getNotebookParentLocation
-} from '@shared/notebook';
+import { getNotebookLocation, getNotebookName } from '@shared/notebook';
 import {
 	getItemFromStructure,
 	getNotebookStructure,
-	// getItemFromStructure,
 	detectStructureChanges
 } from '@synchronization';
 import { NotebookItem, NotebookStructure } from '@types';
@@ -30,11 +21,7 @@ let notebookName: string;
 let notebookLocation: string;
 let notebookStructure: NotebookStructure;
 
-export const initializeGoogleDrive = async () => {
-	notebookName = getNotebookName();
-	notebookLocation = getNotebookLocation();
-	notebookStructure = getNotebookStructure();
-
+const initialSync = async () => {
 	const driveRootFolder = await searchForFolder(ROOT_DRIVE_FOLDER_NAME);
 	if (!driveRootFolder || !driveRootFolder.length) {
 		// Folder doesn't exist, creating a new one
@@ -86,7 +73,13 @@ export const initializeGoogleDrive = async () => {
 						const response =
 							detectStructureChanges(cloudStructureItem);
 
-						if (response.type === 'LOCAL') {
+						if (!response) {
+							console.log(
+								'No Changes detected, cloud and local match'
+							);
+						}
+						if (response && response.type === 'LOCAL') {
+							console.log('Changing local to match cloud');
 							for (let change of response.changes) {
 								await googleDriveDownstream(
 									change.action,
@@ -95,7 +88,8 @@ export const initializeGoogleDrive = async () => {
 							}
 						}
 
-						if (response.type === 'CLOUD') {
+						if (response && response.type === 'CLOUD') {
+							console.log('Changing cloud to match local');
 							for (let change of response.changes) {
 								await googleDriveUpstream(
 									change.action,
@@ -111,125 +105,14 @@ export const initializeGoogleDrive = async () => {
 				uploadEntireNotebook(notebookStructure, ROOT_DRIVE_FOLDER_ID);
 			}
 		}
-
-		// ROOT_DRIVE_FOLDER_ID = folders[0].id!;
-		// searchForFolder(notebookName, ROOT_DRIVE_FOLDER_ID)
-		// 	.then(async (folders) => {
-		// 		console.log(folders);
-		// 		if (!folders || !folders.length) {
-		// 			await uploadNewNotebook(
-		// 				notebookStructure,
-		// 				ROOT_DRIVE_FOLDER_ID
-		// 			);
-		// 		} else {
-		// 			// check if structure was not previously connected already
-		// 			if (!notebookStructure.ids.googleDrive) {
-		// 				await uploadNewNotebook(
-		// 					notebookStructure,
-		// 					ROOT_DRIVE_FOLDER_ID
-		// 				);
-		// 				return;
-		// 			} else {
-		// 				// check if matches notebook id, if not create new
-		// 				for (let folder of folders) {
-		// 					if (
-		// 						folder.id ===
-		// 							notebookStructure.ids.googleDrive &&
-		// 						folder.name === notebookStructure.name
-		// 					) {
-		// 						// sync with recent modified files
-		// 						let item = await getItemFromStructure(
-		// 							`${notebookLocation}${p.sep}.privanote${p.sep}notebookStructure.json`
-		// 						);
-		// 						await downloadAFile(item).then(
-		// 							(cloudStructure) => {
-		// 								// merge drive items and local items
-		// 								let respond =
-		// 									detectStructureChanges(
-		// 										cloudStructure
-		// 									);
-		// 								// console.log('INIT', changes);
-		// 								if (respond.type === 'LOCAL') {
-		// 									respond.changes.forEach(
-		// 										(change: any) => {
-		// 											googleDriveDownstream(
-		// 												change.action,
-		// 												change.content
-		// 											);
-		// 										}
-		// 									);
-		// 								} else if (
-		// 									respond.type === 'CLOUD'
-		// 								) {
-		// 									respond.changes.forEach(
-		// 										(change: any) => {
-		// 											if (
-		// 												change.action ===
-		// 												'ADD'
-		// 											) {
-		// 												if (
-		// 													!change.content
-		// 														.parentIds
-		// 														.googleDrive
-		// 												) {
-		// 													let parentItem: any =
-		// 														getItemFromStructure(
-		// 															p.join(
-		// 																getNotebookParentLocation(),
-		// 																...change
-		// 																	.content
-		// 																	.item
-		// 																	.paths
-		// 															)
-		// 														);
-		// 													console.log(
-		// 														parentItem
-		// 													);
-		// 													change.content.parentIds =
-		// 														parentItem.ids;
-		// 												}
-		// 											}
-		// 											console.log(
-		// 												'---\nACTION: ',
-		// 												change.action,
-		// 												'\n',
-		// 												change.content.item
-		// 											);
-		// 											if (
-		// 												change.action ===
-		// 												'ADD'
-		// 											) {
-		// 												console.log(
-		// 													change.content
-		// 														.parentIds
-		// 												);
-		// 											}
-		// 											console.log('---');
-		// 											googleDriveUpstream(
-		// 												change.action,
-		// 												change.content
-		// 											);
-		// 										}
-		// 									);
-		// 								}
-		// 							}
-		// 						);
-		// 						console.log(
-		// 							'sync with recent modified files'
-		// 						);
-		// 						return;
-		// 					}
-		// 				}
-		// 				// if current notebook opened is not found in drive, upload new notebook
-		// 				await uploadNewNotebook(
-		// 					notebookStructure,
-		// 					ROOT_DRIVE_FOLDER_ID
-		// 				);
-		// 			}
-		// 		}
-		// 	})
-		// 	.catch((err) => console.log(err));
 	}
-	// });
-	// subscribe to structure changes in the drive with google drive api watch
+};
+
+export const initializeGoogleDrive = async () => {
+	notebookName = getNotebookName();
+	notebookLocation = getNotebookLocation();
+	notebookStructure = getNotebookStructure();
+
+	await initialSync();
+	// subscribe to notebookstructure changes in the drive with google drive api watch
 };

@@ -151,6 +151,10 @@ const scanAndCompare = (
 	}
 };
 
+/** Detect changes between the local notebook structure and a notebook structure
+ * from the cloud.
+ * 	@param cloudStructure a notebook structure that is stored in the cloud
+ */
 export const detectStructureChanges = (cloudStructure: NotebookStructure) => {
 	let localStructure = getNotebookStructure();
 	changes = [];

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { getDrive } from '@googleDrive';
 import { NotebookItem } from '@types';
+import { removeConnectedProvider } from '@shared/utils/synchronization';
 
 export const downloadAFile = async (
 	file: NotebookItem,
@@ -34,6 +35,6 @@ export const downloadAFile = async (
 		}
 	} catch (error) {
 		console.log(error);
-		// removeConnectedProvider('Google Drive');
+		removeConnectedProvider('Google Drive');
 	}
 };
