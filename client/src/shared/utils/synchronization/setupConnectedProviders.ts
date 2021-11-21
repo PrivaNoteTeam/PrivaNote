@@ -1,7 +1,7 @@
 import { getConfig } from '../getConfig';
 import { getNotebookLocation } from '@shared/notebook';
 import { isConnected, setGoogleAuth } from '@shared/Api/googleDrive/setup';
-import { removeConnectedProvider } from './removeConnectedProvider';
+import { removeConnectedProvider } from '@synchronization';
 import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
 
 export const setupConnectedProviders = async () => {

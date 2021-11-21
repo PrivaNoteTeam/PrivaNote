@@ -1,90 +1,35 @@
 import p from 'path';
 import { getNotebookName } from '@shared/notebook';
-import { getNotebookStructure } from './getNotebookStructure';
+import { getNotebookStructure } from '@synchronization';
+import { NotebookItem, NotebookStructure } from '@types';
 
-let folderChain: Array<string>;
-let notebookName: string;
-let itemName: string;
-let itemPath: string;
-let level: number;
-let item: {};
-
-const findItem = (structure: any) => {
-	if (!structure) return;
-	level++;
-	if (level < folderChain.length) {
-		for (let folder of structure.subFolder) {
-			if (
-				folder.name === folderChain[level] &&
-				(folder.mimeType === 'Folder' || folder.mimeType === 'Notebook')
-			) {
-				findItem(folder);
-			}
-		}
-	} else if (level === folderChain.length) {
-		if (
-			structure.mimeType === 'Notebook' ||
-			structure.mimeType === 'Folder'
-		) {
-			let itemIndex = structure.subFolder.findIndex((item: any) => {
-				return (
-					item.name === itemName &&
-					p.join(...item.paths) ===
-						itemPath.substr(itemPath.indexOf(notebookName))
-				);
-			});
-			if (itemIndex != -1) {
-				item = structure.subFolder[itemIndex];
-			} else {
-				throw Error('Item not found');
-			}
-		}
-	}
-};
-
-export const getItemFromStructureSync = (path: any) => {
-	try {
-		notebookName = getNotebookName();
-		itemPath = path.slice(-1) === p.sep ? path.substr(0, path - 1) : path;
-		folderChain = itemPath.split(p.sep);
-		folderChain = folderChain.slice(folderChain.indexOf(notebookName));
-		itemName = folderChain.pop()!;
-		level = 0;
-
-		let notebookStructure = getNotebookStructure();
-
-		findItem(notebookStructure);
-
-		return item;
-	} catch (err) {
-		console.log(err);
-		return;
-	}
+const findItem = (path: string, notebookStructure: NotebookStructure) => {
+	return notebookStructure.find(
+		(notebookItem) => p.join(...notebookItem.paths) === path
+	);
 };
 
 /**
- * Locates item in structure by name and absolutePath and returns it
- * @param {any} path The path of an item
+ * Locates item in structure by absolute or relative path and returns it
+ * @param {string} path The path of an item
  */
-export const getItemFromStructure = (path: any, structure: any = undefined) => {
-	return new Promise<{}>((resolve, _) => {
+export const getItemFromStructure = (
+	path: string,
+	notebookStructure?: NotebookStructure
+) => {
+	return new Promise<NotebookItem>((resolve, _) => {
 		try {
-			notebookName = getNotebookName();
-			itemPath =
-				path.slice(-1) === p.sep ? path.substr(0, path - 1) : path;
-			folderChain = itemPath.split(p.sep);
-			folderChain = folderChain.slice(folderChain.indexOf(notebookName));
-			itemName = folderChain.pop()!;
-			level = 0;
+			path.slice(-1) === p.sep
+				? path.substring(0, path.length - 1)
+				: path;
+			path = path.slice(path.indexOf(getNotebookName()));
 
-			let notebookStructure: any;
-			if (structure) {
-				notebookStructure = structure;
-			} else {
-				notebookStructure = getNotebookStructure();
-			}
-			findItem(notebookStructure);
+			const structure = notebookStructure
+				? notebookStructure
+				: getNotebookStructure();
 
+			const item = findItem(path, structure);
+			if (!item) throw Error('Item not found in structure');
 			resolve(item);
 		} catch (err) {
 			console.log(err);

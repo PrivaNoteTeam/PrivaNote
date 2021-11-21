@@ -27,7 +27,6 @@ export function App() {
 	const [, userDispatch] = useUserStore();
 
 	useIpcListeners();
-	// useGoogleDrive();
 
 	useEffect(() => {
 		getUser().then(({ user }) => {

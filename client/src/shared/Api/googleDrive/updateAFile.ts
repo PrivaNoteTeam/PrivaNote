@@ -1,21 +1,15 @@
 import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
 import fs from 'fs';
 import p from 'path';
-import { getDrive } from './setup';
+import { getDrive } from '@googleDrive';
 import { getNotebookParentLocation } from '@shared/notebook';
+import { NotebookItem } from '@types';
 
-type fileMetadata = {
-	id?: string;
-	name: string;
-	mimeType: string;
-	parents?: [string];
-};
-
-export const updateAFile = async (file: any) => {
+export const updateAFile = async (file: NotebookItem) => {
 	try {
 		let res: any;
 
-		let metadata: fileMetadata = {
+		let metadata = {
 			name: file.name,
 			mimeType: file.mimeType
 		};
@@ -29,14 +23,14 @@ export const updateAFile = async (file: any) => {
 			};
 
 			res = await getDrive().files.update({
-				fileId: file.ids.googleDrive,
+				fileId: file.cloudIds.googleDrive,
 				requestBody: metadata,
 				media: media,
 				fields: 'id'
 			});
 		} else {
 			res = await getDrive().files.update({
-				fileId: file.ids.googleDrive,
+				fileId: file.cloudIds.googleDrive,
 				requestBody: metadata,
 				fields: 'id'
 			});

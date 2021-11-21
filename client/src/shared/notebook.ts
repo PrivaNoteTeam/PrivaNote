@@ -7,7 +7,7 @@ let notebookLocation = '';
 export const setNotebook = (location: string) => {
 	let path =
 		location.slice(-1) === p.sep
-			? location.substr(0, location.length - 1)
+			? location.substring(0, location.length - 1)
 			: location;
 	let name = path.split(p.sep).pop()!;
 
@@ -24,7 +24,7 @@ export const getNotebookLocation = () => {
 };
 
 export const getNotebookParentLocation = () => {
-	return notebookLocation.substr(
+	return notebookLocation.substring(
 		0,
 		notebookLocation.indexOf(p.sep + notebookName)
 	);
