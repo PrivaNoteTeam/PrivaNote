@@ -2,6 +2,7 @@ import React from 'react';
 import { CloudProviderPage } from './pageManager/cloudProviderPage';
 import { SelectCloudProviderPage } from './pageManager/selectCloudProviderPage';
 import { Route } from 'react-router';
+import { SettingsPage } from './pageManager/SettingsPage';
 
 export function PageManager() {
 	return (
@@ -11,6 +12,7 @@ export function PageManager() {
 				path='/cloudprovider/select'
 				children={<SelectCloudProviderPage />}
 			/>
+			<Route path='/settings' children={<SettingsPage />} />
 		</>
 	);
 }

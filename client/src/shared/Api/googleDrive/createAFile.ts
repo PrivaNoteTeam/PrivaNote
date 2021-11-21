@@ -10,6 +10,8 @@ export const createAFile = async (
 	parentFolder: NotebookItem
 ) => {
 	try {
+		console.log(file);
+		console.log(parentId);
 		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
 
 		let metadata: any = {
@@ -30,6 +32,7 @@ export const createAFile = async (
 
 		return res.data as any;
 	} catch (error) {
+		console.log(`createFileError for ${file.name}`);
 		console.log(error);
 		removeConnectedProvider('Google Drive');
 	}
