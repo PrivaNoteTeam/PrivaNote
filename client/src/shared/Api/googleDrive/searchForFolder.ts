@@ -1,4 +1,4 @@
-import { getDrive } from './setup';
+import { getDrive } from '@googleDrive';
 
 export const searchForFolder = async (name: string, parentID: string = '') => {
 	try {

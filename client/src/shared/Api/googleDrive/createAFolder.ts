@@ -1,24 +1,19 @@
-import { removeConnectedProvider } from '@shared/utils/synchronization/removeConnectedProvider';
-import { getDrive } from './setup';
+import { removeConnectedProvider } from '@synchronization';
+import { getDrive } from '@googleDrive';
+import { NotebookItem } from '@types';
 
-type fileMetadata = {
-	id?: string;
-	name: string;
-	mimeType: string;
-	parents?: [string];
-};
-
-export const createAFolder = async (folder: any, parentId: string = '') => {
+export const createAFolder = async (
+	folder: NotebookItem,
+	parentFolder?: NotebookItem
+) => {
 	try {
-		let metadata: fileMetadata;
-
-		metadata = {
+		let metadata: any = {
 			name: folder.name,
 			mimeType: 'application/vnd.google-apps.folder'
 		};
 
-		if (parentId) {
-			metadata.parents = [parentId];
+		if (parentFolder && parentFolder.cloudIds.googleDrive) {
+			metadata.parents = [parentFolder.cloudIds.googleDrive];
 		}
 
 		const res = await getDrive().files.create({
@@ -28,6 +23,7 @@ export const createAFolder = async (folder: any, parentId: string = '') => {
 
 		return res.data as any;
 	} catch (error) {
+		console.log(`createAFolder for ${folder.name}`);
 		console.log(error);
 		removeConnectedProvider('Google Drive');
 	}

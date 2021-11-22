@@ -5,8 +5,6 @@ import credentials from '../../../googleCredentials.json';
 const clientId = credentials.web.client_id;
 const clientSecret = credentials.web.client_secret;
 const redirect_uris = credentials.web.redirect_uris;
-// const ROOT_DRIVE_FOLDER_NAME = 'privanote';
-// let ROOT_DRIVE_FOLDER_ID = '';
 
 const oAuth2Client = new google.auth.OAuth2(
 	clientId,
@@ -41,8 +39,6 @@ export const getToken = async (code: string) => {
 		return {};
 	}
 };
-
-//need to try authenticating upon opening notebook
 
 export const setGoogleAuth = (tokens: any) => {
 	oAuth2Client.setCredentials(tokens);

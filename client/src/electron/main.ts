@@ -5,9 +5,9 @@ import { URL } from 'url';
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
-import { getToken, setGoogleAuth } from '@shared/Api/googleDrive/setup';
-import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
+import { getToken, setGoogleAuth, initializeGoogleDrive } from '@googleDrive';
 import path from 'path';
+require('dotenv').config();
 
 const handleReady = () => {
 	registerIpcHandlers();

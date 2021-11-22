@@ -1,8 +1,9 @@
 import { googleDriveUpstream } from '@shared/Api/googleDrive/googleDriveUpstream';
 import { getNotebookLocation } from '@shared/notebook';
+import { SyncContent, SyncType } from '@types';
 import { getConfig } from '../getConfig';
 
-export const syncUpstream = (action: string, content: any) => {
+export const syncUpstream = (action: SyncType, content: SyncContent) => {
 	const config = getConfig(getNotebookLocation());
 
 	if (config) {
