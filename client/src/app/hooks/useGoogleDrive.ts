@@ -21,7 +21,8 @@ export function useGoogleDrive() {
 	);
 
 	useEffect(() => {
-		const provider = config?.connectedProviders.find(
+		if (!config) return;
+		const provider = config!['cloud.connectedProviders'].find(
 			(p) => p.name === 'Google Drive'
 		);
 

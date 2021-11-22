@@ -10,7 +10,7 @@ export const setupConnectedProviders = async () => {
 		// PRIVANOTE VAULT
 
 		// GOOGLE DRIVE
-		const googleConfig = config.connectedProviders.find((p) => {
+		const googleConfig = config['cloud.connectedProviders'].find((p) => {
 			return p.name === 'Google Drive';
 		});
 		if (googleConfig) {

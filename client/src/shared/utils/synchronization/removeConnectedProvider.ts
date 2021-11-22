@@ -10,9 +10,9 @@ export const removeConnectedProvider = (name: string) => {
 	const notebookLocation = getNotebookLocation();
 	let config = getConfig(notebookLocation);
 	if (config) {
-		config.connectedProviders = config.connectedProviders.filter(
-			(p) => p.name !== name
-		);
+		config['cloud.connectedProviders'] = config[
+			'cloud.connectedProviders'
+		].filter((p) => p.name !== name);
 
 		fs.writeFileSync(
 			path.join(notebookLocation, '.privanote', 'app.json'),

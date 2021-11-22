@@ -24,6 +24,11 @@ const actions = {
 	removeProvider: createAction('REMOVE_PROVIDER')<{
 		providerName: string;
 		path: string;
+	}>(),
+	setSetting: createAction('SET_SETTING')<{
+		configPath: string;
+		settingName: keyof PrivaNoteConfig;
+		value: any;
 	}>()
 };
 
@@ -49,7 +54,7 @@ const reducer = (
 			return getConfig(action.payload) as PrivaNoteConfig;
 		case getType(actions.addProvider):
 			if (
-				state!.connectedProviders.find((p) => {
+				state!['cloud.connectedProviders'].find((p) => {
 					return p.name === action.payload.providerName;
 				})
 			) {
@@ -59,7 +64,7 @@ const reducer = (
 			const addProviderState = {
 				...state,
 				connectedProviders: [
-					...state!.connectedProviders,
+					...state!['cloud.connectedProviders'],
 					{
 						name: action.payload.providerName,
 						accessToken: action.payload.accessToken,
@@ -77,9 +82,9 @@ const reducer = (
 			return addProviderState as PrivaNoteConfig;
 		case getType(actions.removeProvider):
 			console.log('STATE:', state);
-			if (!state || !state.connectedProviders) return;
+			if (!state || !state['cloud.connectedProviders']) return;
 			if (
-				!state!.connectedProviders.find((p) => {
+				!state!['cloud.connectedProviders'].find((p) => {
 					return p.name === action.payload.providerName;
 				})
 			) {
@@ -88,7 +93,7 @@ const reducer = (
 
 			const removeProviderState = {
 				...state,
-				connectedProviders: state!.connectedProviders.filter(
+				connectedProviders: state!['cloud.connectedProviders'].filter(
 					(p) => p.name !== action.payload.providerName
 				)
 			};
@@ -99,6 +104,23 @@ const reducer = (
 			);
 
 			return removeProviderState as PrivaNoteConfig;
+		case getType(actions.setSetting):
+			if (!state) return;
+
+			const updatedSettingState = {
+				...state
+			};
+
+			(updatedSettingState[
+				action.payload.settingName
+			] as unknown as any) = action.payload.value;
+
+			fs.writeFileSync(
+				action.payload.configPath + '/.privanote/app.json',
+				JSON.stringify(updatedSettingState, null, 4)
+			);
+
+			return { ...updatedSettingState };
 		default:
 			return defaultGuard(state, action as never);
 	}

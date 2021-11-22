@@ -3,8 +3,9 @@ import { Setting } from '@types';
 import { Switch } from './settingItem/Switch';
 import { NumberField } from './settingItem/NumberField';
 import { Dropdown } from './settingItem/Dropdown';
+import { useConfig, useStore } from '@hooks';
 
-type Props = Setting;
+type Props = Setting & { value: any };
 
 export function SettingItem({
 	title,
@@ -13,22 +14,54 @@ export function SettingItem({
 	max,
 	min,
 	maxLength,
-	options
+	options,
+	mapsTo,
+	value
 }: Props) {
+	const [{ notebook }] = useStore();
+	const [, configDispatch] = useConfig();
+
 	let field: JSX.Element | null = null;
+
+	const handleSettingClick = (value: any) => {
+		configDispatch({
+			type: 'SET_SETTING',
+			payload: {
+				configPath: notebook!,
+				settingName: mapsTo,
+				value
+			}
+		});
+	};
 
 	switch (ui) {
 		case 'text':
 			field = <input className='pn-input'></input>;
 			break;
 		case 'number':
-			field = <NumberField size={maxLength} max={max} min={min} />;
+			field = (
+				<NumberField
+					initialValue={value}
+					size={maxLength}
+					max={max}
+					min={min}
+					onClick={handleSettingClick}
+				/>
+			);
 			break;
 		case 'dropdown':
-			field = <Dropdown items={options!} />;
+			field = (
+				<Dropdown
+					initialValue={value}
+					items={options!}
+					onClick={handleSettingClick}
+				/>
+			);
 			break;
 		case 'switch':
-			field = <Switch />;
+			field = (
+				<Switch initialValue={value} onClick={handleSettingClick} />
+			);
 			break;
 	}
 
