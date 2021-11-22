@@ -29,7 +29,4 @@ router.post('/vault/add-folder', vaultController.addFolder);
 router.post('/vault/update-folder', vaultController.updateFolder);
 router.post('/vault/delete-folder', vaultController.deleteFolder);
 
-router.post('/vault/add-attachment', vaultController.addAttachment);
-router.post('/vault/delete-attachment', vaultController.deleteAttachment);
-
 export { router };

@@ -24,8 +24,8 @@ export interface NotebookItem {
 	name: string;
 	mimeType: string;
 	paths: string[];
-	dateCreated: Date;
-	lastModified: Date | string;
+	dateCreated: string;
+	lastModified: string;
 	content?: string;
 }
 
