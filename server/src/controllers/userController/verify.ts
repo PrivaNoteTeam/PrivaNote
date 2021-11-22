@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { verifyUserValidation } from '../../Validation/verifyUserValidation';
+import { verifyUserValidation } from '../../validation/verifyUserValidation';
 import {
 	retrieveVerificationCode,
 	verifyUser
