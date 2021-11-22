@@ -10,8 +10,6 @@ export const createAFile = async (
 	parentFolder: NotebookItem
 ) => {
 	try {
-		console.log(file);
-		console.log(parentId);
 		let absolutePath = p.join(getNotebookParentLocation(), ...file.paths);
 
 		let metadata: any = {

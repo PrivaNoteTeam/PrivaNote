@@ -4,7 +4,7 @@
 	"description": "The client for PrivaNote.",
 	"main": "index.js",
 	"scripts": {
-		"build": "webpack --config ./webpack.config.js",
+		"build": "export NODE_OPTIONS='--max-old-space-size=4096' && webpack --config ./webpack.config.js",
 		"start": "npm run build && electron ./dist/electron.js",
 		"test": "jest",
 		"prepare": "cd .. && husky install client/.husky",
