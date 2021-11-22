@@ -23,8 +23,8 @@ export type NotebookItem = {
 	name: string;
 	mimeType: string;
 	paths: string[];
-	dateCreated: Date;
-	lastModified: Date | string;
+	dateCreated: string;
+	lastModified: string;
 	content?: any;
 };
 export type NotebookStructure = NotebookItem[];

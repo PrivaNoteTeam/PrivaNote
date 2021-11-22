@@ -55,8 +55,8 @@ export const createNotebookStructure = (path: string) => {
 			name: notebookName,
 			mimeType: 'Notebook',
 			paths: [notebookName],
-			dateCreated: stats.birthtime,
-			lastModified: stats.ctime
+			dateCreated: stats.birthtime.toISOString(),
+			lastModified: stats.ctime.toISOString()
 		} as NotebookItem);
 
 		notebookStructure.push(...getNotebookItems(path));

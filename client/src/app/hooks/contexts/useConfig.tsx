@@ -63,7 +63,7 @@ const reducer = (
 
 			const addProviderState = {
 				...state,
-				connectedProviders: [
+				['cloud.connectedProviders']: [
 					...state!['cloud.connectedProviders'],
 					{
 						name: action.payload.providerName,
@@ -93,9 +93,9 @@ const reducer = (
 
 			const removeProviderState = {
 				...state,
-				connectedProviders: state!['cloud.connectedProviders'].filter(
-					(p) => p.name !== action.payload.providerName
-				)
+				['cloud.connectedProviders']: state![
+					'cloud.connectedProviders'
+				].filter((p) => p.name !== action.payload.providerName)
 			};
 
 			fs.writeFileSync(

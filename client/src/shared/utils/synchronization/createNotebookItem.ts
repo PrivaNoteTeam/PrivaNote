@@ -21,8 +21,8 @@ export const createNotebookItem = (path: string) => {
 		cloudIds: {},
 		name: fileName,
 		paths: paths,
-		dateCreated: stats.birthtime,
-		lastModified: stats.mtime
+		dateCreated: stats.birthtime.toISOString(),
+		lastModified: stats.mtime.toISOString()
 	};
 	if (stats.isDirectory()) {
 		item.mimeType = 'Folder';

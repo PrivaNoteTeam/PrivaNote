@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { useStore } from '@hooks';
 import { useRef } from 'react';
+import { ipcRenderer } from 'electron';
 
 type CallbackFunction = (
 	path: string,
@@ -21,7 +22,14 @@ export function useEditorDrop() {
 	const drop = (files: any[], cursorPosition: [x: number, y: number]) => {
 		files.forEach((file: File) => {
 			const copyPath = `${currentFileParentPath}/${file.name}`;
-			fs.copyFile(file.path, copyPath, () => {});
+
+			fs.copyFile(file.path, copyPath, (err) => {
+				if (err) {
+					console.log('Drop Error Found: ', err);
+				} else {
+					ipcRenderer.send('createFile', copyPath);
+				}
+			});
 
 			const copyPathRelative = copyPath.substring(
 				notebook!.lastIndexOf('/') + 1
