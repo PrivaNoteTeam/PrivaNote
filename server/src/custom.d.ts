@@ -7,6 +7,6 @@ declare module 'express-serve-static-core' {
 
 declare module 'express-session' {
 	export interface SessionData {
-		user: User | undefined;
+		user: User;
 	}
 }

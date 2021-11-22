@@ -1,9 +1,17 @@
 import { pbkdf2Sync, createCipheriv, createDecipheriv } from 'crypto';
 
-process.env.IV = 'c5846a3159f24227';
-
 export const generateEncryptionKey = (password: string) => {
-	return pbkdf2Sync(password, 'salt', 100000, 512, 'sha512').toString('hex');
+	if (process.env.ENCRYPTION_SALT) {
+		return pbkdf2Sync(
+			password,
+			process.env.ENCRYPTION_SALT,
+			100000,
+			512,
+			'sha512'
+		).toString('hex');
+	} else {
+		throw Error('Encryption Key variables have not been configured');
+	}
 };
 
 export const encrypt = (content: string) => {

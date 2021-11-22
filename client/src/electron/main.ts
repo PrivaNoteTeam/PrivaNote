@@ -7,6 +7,7 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import { getToken, setGoogleAuth, initializeGoogleDrive } from '@googleDrive';
 import path from 'path';
+require('dotenv').config();
 
 const handleReady = () => {
 	registerIpcHandlers();

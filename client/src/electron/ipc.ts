@@ -11,6 +11,7 @@ import { renameItemInStructure } from '@shared/utils/synchronization/renameItemI
 import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStructure';
 import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
 import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
+import { createANotebook } from '@shared/Api/vault/createANotebook';
 
 export function registerIpcHandlers() {
 	ipcMain.on('quit', () => app.quit());
@@ -58,6 +59,7 @@ export function registerIpcHandlers() {
 	});
 
 	ipcMain.on('createDirectory', (_, path) => {
+		createANotebook();
 		addItemToStructure(path).then((res: SyncAction) => {
 			syncUpstream(res.action, res.content);
 		});
@@ -85,5 +87,13 @@ export function registerIpcHandlers() {
 		saveItemToStructure(path).then((res: SyncAction) => {
 			syncUpstream(res.action, res.content);
 		});
+	});
+
+	ipcMain.on('setEncryptionKey', (_, key) => {
+		process.env.ENCRYPTION_KEY = key;
+	});
+
+	ipcMain.on('removeEncryptionKey', (_) => {
+		process.env.ENCRYPTION_KEY = '';
 	});
 }
