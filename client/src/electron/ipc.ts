@@ -12,6 +12,7 @@ import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStr
 import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
 import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
 import { createANotebook } from '@shared/Api/vault/createANotebook';
+import { initializeVault } from '@shared/Api/vault';
 
 export function registerIpcHandlers() {
 	ipcMain.on('quit', () => app.quit());
@@ -93,7 +94,7 @@ export function registerIpcHandlers() {
 		process.env.ENCRYPTION_KEY = key;
 	});
 
-	ipcMain.on('removeEncryptionKey', (_) => {
-		process.env.ENCRYPTION_KEY = '';
+	ipcMain.on('connectToVault', (_) => {
+		initializeVault();
 	});
 }

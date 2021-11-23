@@ -6,6 +6,7 @@ import { ConfigDispatch, User } from '@types';
 // import { getGoogleAuth } from '@shared/api/getGoogleAuth';
 import { getGoogleAuth } from '@shared/Api/googleDrive/setup';
 import { useHistory } from 'react-router-dom';
+import { ipcRenderer } from 'electron';
 
 type SupportedProvider = 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 
@@ -76,6 +77,16 @@ function getHandlers(
 					switch (providerName as SupportedProvider) {
 						case 'Google Drive':
 							getGoogleAuth();
+							break;
+						case 'PrivaNote Vault':
+							configDispatch({
+								type: 'ADD_PROVIDER',
+								payload: {
+									providerName,
+									path: notebook
+								}
+							});
+							ipcRenderer.send('connectToVault');
 							break;
 						default:
 							configDispatch({

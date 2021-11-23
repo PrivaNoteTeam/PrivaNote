@@ -11,8 +11,17 @@ const template: MenuItemConstructorOptions[] = [
 		label: 'Sign Out',
 		click: async (_, window) => {
 			if (!window) return;
-			await logoutUser();
-			window.webContents.send('logout');
+			try {
+				await logoutUser();
+				process.env.ENCRYPTION_KEY = '';
+				window.webContents.send(
+					'removeCloudProvider',
+					'PrivaNote Vault'
+				);
+				window.webContents.send('logout');
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	}
 ];

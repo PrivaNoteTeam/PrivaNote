@@ -1,13 +1,27 @@
 import { getConfig } from '../getConfig';
 import { getNotebookLocation } from '@shared/notebook';
-import { isConnected, setGoogleAuth } from '@shared/Api/googleDrive/setup';
+import { isConnected as isVaultUserConnected, initializeVault } from '@vault';
+import {
+	isConnected,
+	setGoogleAuth,
+	initializeGoogleDrive
+} from '@googleDrive';
 import { removeConnectedProvider } from '@synchronization';
-import { initializeGoogleDrive } from '@shared/Api/googleDrive/initializeGoogleDrive';
 
 export const setupConnectedProviders = async () => {
 	const config = getConfig(getNotebookLocation());
 	if (config) {
 		// PRIVANOTE VAULT
+		const vaultConfig = config['cloud.connectedProviders'].find((p) => {
+			return p.name === 'PrivaNote Vault';
+		});
+		if (vaultConfig) {
+			if (await isVaultUserConnected()) {
+				initializeVault();
+			} else {
+				removeConnectedProvider('PrivaNote Vault');
+			}
+		}
 
 		// GOOGLE DRIVE
 		const googleConfig = config['cloud.connectedProviders'].find((p) => {

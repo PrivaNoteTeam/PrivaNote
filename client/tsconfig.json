@@ -31,6 +31,7 @@
 			"@shared/*": ["./src/shared/*"],
 			"@utils": ["./src/shared/utils/index.ts"],
 			"@synchronization": ["./src/shared/utils/synchronization/index.ts"],
+			"@vault": ["./src/shared/Api/vault/index.ts"],
 			"@googleDrive": ["./src/shared/Api/googleDrive/index.ts"],
 			"@electron/*": ["./src/electron/*"]
 		},

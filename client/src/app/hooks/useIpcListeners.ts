@@ -20,6 +20,10 @@ export function useIpcListeners() {
 			history.push('/notebook/create');
 		});
 
+		createListener('logout', (_) => {
+			console.log('IMPLEMENT LOGOUT FOR UI');
+		});
+
 		createListener(
 			'openNotebook',
 			(_, location: string, valid: boolean) => {
