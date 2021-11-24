@@ -8,9 +8,6 @@ import { deleteFile } from './deleteFile';
 import { updateFile } from './updateFile';
 import { addFile } from './addFile';
 
-import { addAttachment } from './addAttachment';
-import { deleteAttachment } from './deleteAttachment';
-
 export const vaultController = {
 	createNotebook,
 
@@ -21,7 +18,4 @@ export const vaultController = {
 	addFile,
 	updateFile,
 	deleteFile,
-
-	addAttachment,
-	deleteAttachment
 };

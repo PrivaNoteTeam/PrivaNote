@@ -16,6 +16,10 @@ const mapFileToModel = (file: NotebookItem, parentId: string): Page => {
 }
 
 export const addFile = async (req: Request, res: Response) => {
+    if (!req.session.user) {
+        return res.status(400).send(`Not authenticated to Vault.`);
+    }
+
     const file: NotebookItem = req.body.file;
     const parentId = req.body.parentId;
 
