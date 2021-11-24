@@ -24,8 +24,8 @@ export const updateAFile = async (
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
 	try {
-		await axios.post('http://localhost:8080/api/vault/update-file', {
-			file: fileMeta,
+		await axios.post('http://localhost:8080/api/vault/update', {
+			item: fileMeta,
 			notebookStructure: structureMeta
 		});
 		return;

@@ -29,7 +29,7 @@ export const addAFile = async (
 
 	try {
 		await axios.post('http://localhost:8080/api/vault/add', {
-			file: fileMeta,
+			item: fileMeta,
 			notebookStructure: structureMeta
 		});
 		return;

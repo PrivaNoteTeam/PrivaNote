@@ -9,10 +9,12 @@ export const downloadAFile = async (
 	destination?: string
 ) => {
 	try {
-		const res: any = await axios.post(
-			'http://localhost:8080/api/vault/download-file',
+		const res: any = await axios.get(
+			'http://localhost:8080/api/vault/download',
 			{
-				fileId: file.id
+				params: {
+					itemId: file.id
+				}
 			}
 		);
 

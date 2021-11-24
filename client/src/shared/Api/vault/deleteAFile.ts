@@ -24,8 +24,8 @@ export const deleteAFile = async (
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
 	try {
-		await axios.post('http://localhost:8080/api/vault/add-file', {
-			fileId: file.id,
+		await axios.post('http://localhost:8080/api/vault/delete', {
+			itemId: file.id,
 			notebookStructure: structureMeta
 		});
 		return;

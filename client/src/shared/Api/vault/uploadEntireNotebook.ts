@@ -10,13 +10,14 @@ let notebookParentLocation: string;
 
 const createMeta = (notebookStructure: NotebookStructure) => {
 	const meta = notebookStructure.filter((notebookItem) => {
-		if (notebookItem.mimeType === 'Notebook') {
-			// return notebookItem;
-			return {
-				id: notebookItem.id,
-				content: ''
-			};
-		} else if (
+		// if (notebookItem.mimeType === 'Notebook') {
+		// 	// return notebookItem;
+		// 	return {
+		// 		id: notebookItem.id,
+		// 		content: ''
+		// 	};
+		// }	else {
+		if (
 			notebookItem.mimeType != 'Notebook' &&
 			notebookItem.mimeType != 'Folder'
 		) {
