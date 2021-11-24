@@ -18,15 +18,9 @@ export interface CreateUserData {
 export type RegisterData = CreateUserData;
 export type LoginData = CreateUserData; // need to refactor
 
-export interface NotebookItem {
-	id: string;
-	cloudIds: cloudIds;
-	name: string;
-	mimeType: string;
-	paths: string[];
-	dateCreated: string;
-	lastModified: string;
-	content?: string;
+export interface Item {
+    id: string;
+    content: string;
 }
 
 export type NotebookStructure = NotebookItem[];

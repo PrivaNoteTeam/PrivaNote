@@ -1,21 +1,14 @@
 import { createNotebook } from './createNotebook';
 
-import { addFolder } from './addFolder';
-import { updateFolder } from './updateFolder';
-import { deleteFolder } from './deleteFolder';
-
-import { deleteFile } from './deleteFile';
-import { updateFile } from './updateFile';
-import { addFile } from './addFile';
-
+import { deleteItem } from './deleteItem';
+import { updateItem } from './updateItem';
+import { addItem } from './addItem';
+import { downloadItem } from './downloadItem';
 export const vaultController = {
 	createNotebook,
 
-	addFolder,
-	updateFolder,
-	deleteFolder,
-
-	addFile,
-	updateFile,
-	deleteFile,
+	addItem,
+	updateItem,
+	deleteItem,
+	downloadItem
 };

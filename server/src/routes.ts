@@ -20,13 +20,9 @@ router.get('/google-drive/get-token', providerController.googleGetAuthCode);
 
 // Vault
 router.post('/vault/create-notebook', vaultController.createNotebook);
-
-router.post('/vault/add-file', vaultController.addFile);
-router.post('/vault/update-file', vaultController.updateFile);
-router.post('/vault/delete-file', vaultController.deleteFile);
-
-router.post('/vault/add-folder', vaultController.addFolder);
-router.post('/vault/update-folder', vaultController.updateFolder);
-router.post('/vault/delete-folder', vaultController.deleteFolder);
+router.post('/vault/add', vaultController.addItem);
+router.post('/vault/update', vaultController.updateItem);
+router.post('/vault/delete', vaultController.deleteItem);
+router.get('/vault/download', vaultController.downloadItem)
 
 export { router };

@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 
 export const user = async (req: Request, res: Response) => {
-	if (req.session.user) {
+	if (!req.session.user) {
 		res.json({ message: 'no authenticated user' });
 
 		return;
