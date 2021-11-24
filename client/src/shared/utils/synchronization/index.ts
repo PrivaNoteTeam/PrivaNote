@@ -11,5 +11,5 @@ export { renameItemInStructure } from './renameItemInStructure';
 export { saveItemToStructure } from './saveItemToStructure';
 export { setupConnectedProviders } from './setupConnectedProviders';
 export { syncUpstream } from './syncUpstream';
-export { updateItemInStructure } from './UpdateItemInStructure';
+export { updateItemInStructure } from './updateItemInStructure';
 export { updateLastModified } from './updateLastModified';
