@@ -28,7 +28,7 @@ export const addAFile = async (
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
 	try {
-		await axios.post('http://localhost:8080/api/vault/add-file', {
+		await axios.post('http://localhost:8080/api/vault/add', {
 			file: fileMeta,
 			notebookStructure: structureMeta
 		});

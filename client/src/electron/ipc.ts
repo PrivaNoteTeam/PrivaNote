@@ -11,7 +11,6 @@ import { renameItemInStructure } from '@shared/utils/synchronization/renameItemI
 import { saveItemToStructure } from '@shared/utils/synchronization/saveItemToStructure';
 import { syncUpstream } from '@shared/utils/synchronization/syncUpstream';
 import { exportNotebookStructure } from '@shared/utils/synchronization/exportNotebookStructure';
-import { createANotebook } from '@shared/Api/vault/createANotebook';
 import { initializeVault } from '@shared/Api/vault';
 
 export function registerIpcHandlers() {
@@ -60,7 +59,6 @@ export function registerIpcHandlers() {
 	});
 
 	ipcMain.on('createDirectory', (_, path) => {
-		createANotebook();
 		addItemToStructure(path).then((res: SyncAction) => {
 			syncUpstream(res.action, res.content);
 		});
