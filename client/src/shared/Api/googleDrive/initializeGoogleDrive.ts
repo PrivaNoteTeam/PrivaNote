@@ -113,6 +113,8 @@ export const initializeGoogleDrive = async () => {
 	notebookLocation = getNotebookLocation();
 	notebookStructure = getNotebookStructure();
 
+	console.log('START SYNC UI LOADER');
 	await initialSync();
+	console.log('STOP SYNC UI LOADER');
 	// subscribe to notebookstructure changes in the drive with google drive api watch
 };

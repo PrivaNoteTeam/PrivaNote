@@ -24,7 +24,8 @@ export const vaultUpstream = async (action: SyncType, content: SyncContent) => {
 			await updateAFile(content.item, notebookStructureItem);
 			break;
 		case 'UPDATE':
-			await updateAFile(content.item, notebookStructureItem);
+			if (content.item.id != notebookStructureItem.id)
+				await updateAFile(content.item, notebookStructureItem);
 			break;
 		default:
 			break;

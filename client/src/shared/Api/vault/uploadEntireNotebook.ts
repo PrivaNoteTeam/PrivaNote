@@ -9,14 +9,9 @@ import { removeConnectedProvider } from '@synchronization';
 let notebookParentLocation: string;
 
 const createMeta = (notebookStructure: NotebookStructure) => {
-	const meta = notebookStructure.filter((notebookItem) => {
-		// if (notebookItem.mimeType === 'Notebook') {
-		// 	// return notebookItem;
-		// 	return {
-		// 		id: notebookItem.id,
-		// 		content: ''
-		// 	};
-		// }	else {
+	let meta: any = [];
+
+	for (let notebookItem of notebookStructure) {
 		if (
 			notebookItem.mimeType != 'Notebook' &&
 			notebookItem.mimeType != 'Folder'
@@ -25,16 +20,12 @@ const createMeta = (notebookStructure: NotebookStructure) => {
 				notebookParentLocation,
 				...notebookItem.paths
 			);
-
-			// notebookItem.content = encryptFile(fs.readFileSync(absolutePath));
-			// return notebookItem;
-			return {
+			meta.push({
 				id: notebookItem.id,
 				content: encryptFile(fs.readFileSync(absolutePath))
-			};
+			});
 		}
-		return false;
-	});
+	}
 
 	return meta;
 };
@@ -45,6 +36,8 @@ export const uploadEntireNotebook = async (
 	notebookParentLocation = getNotebookParentLocation();
 
 	const metadata = createMeta(notebookStructure);
+
+	console.log(metadata);
 	try {
 		const res: any = await axios.post(
 			'http://localhost:8080/api/vault/create-notebook',

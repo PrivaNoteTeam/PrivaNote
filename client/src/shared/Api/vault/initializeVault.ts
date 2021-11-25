@@ -23,6 +23,7 @@ const initialSync = async () => {
 	const res = await downloadAFile(notebookStructureItem);
 
 	const cloudStructureItem: NotebookStructure = res ? JSON.parse(res) : '';
+	console.log('cloudStructure: ', cloudStructureItem);
 
 	if (cloudStructureItem) {
 		// start syncing
@@ -38,6 +39,8 @@ const initialSync = async () => {
 				await vaultDownstream(change.action, change.content);
 			}
 		}
+
+		console.log(response.changes);
 
 		if (response && response.type === 'CLOUD') {
 			console.log('Changing cloud to match local');
@@ -62,5 +65,7 @@ export const initializeVault = async () => {
 	notebookLocation = getNotebookLocation();
 	notebookStructure = getNotebookStructure();
 
+	console.log('START SYNC UI LOADER');
 	await initialSync();
+	console.log('STOP SYNC UI LOADER');
 };

@@ -8,6 +8,7 @@ export const syncUpstream = (action: SyncType, content: SyncContent) => {
 	const config = getConfig(getNotebookLocation());
 
 	if (config) {
+		console.log('START SYNC UI LOADER');
 		// PRIVANOTE VAULT
 		const vaultConfig = config!['cloud.connectedProviders'].find((p) => {
 			return p.name === 'PrivaNote Vault';
@@ -25,5 +26,6 @@ export const syncUpstream = (action: SyncType, content: SyncContent) => {
 		}
 
 		// ONE DRIVE
+		console.log('STOP SYNC UI LOADER');
 	}
 };

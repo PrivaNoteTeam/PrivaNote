@@ -5,6 +5,7 @@ export const isConnected = async () => {
 		const userResponse = await getUser();
 
 		if (userResponse && userResponse.message === 'no authenticated user') {
+			console.log(userResponse.message);
 			return false;
 		}
 		return true;

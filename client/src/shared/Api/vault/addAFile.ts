@@ -1,5 +1,6 @@
 import { encryptFile } from '@shared/data/encryption';
-import { getNotebookLocation } from '@shared/notebook';
+import { getNotebookParentLocation } from '@shared/notebook';
+import { removeConnectedProvider } from '@shared/utils/synchronization';
 import { NotebookItem } from '@types';
 import axios from 'axios';
 import fs from 'fs';
@@ -19,7 +20,7 @@ export const addAFile = async (
 	file: NotebookItem,
 	notebookStructureItem: NotebookItem
 ) => {
-	notebookParentLocation = getNotebookLocation();
+	notebookParentLocation = getNotebookParentLocation();
 
 	let fileMeta =
 		file.mimeType != 'Folder' && file.mimeType != 'Notebook'
@@ -34,6 +35,17 @@ export const addAFile = async (
 		});
 		return;
 	} catch (err) {
-		console.log(err);
+		if (
+			err.response.status === 400 &&
+			err.response.data === 'Not authenticated to Vault.'
+		) {
+			console.log(err.response.data);
+			removeConnectedProvider('PrivaNote Vault');
+		} else if (err.response.status === 400) {
+			console.log(err.response.data);
+		} else {
+			console.log(err);
+			removeConnectedProvider('PrivaNote Vault');
+		}
 	}
 };

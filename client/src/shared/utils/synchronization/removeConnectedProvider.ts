@@ -5,7 +5,9 @@ import { getConfig } from '../getConfig';
 import { dialog } from 'electron';
 import { getMainWindow } from '@electron/windows';
 
-export const removeConnectedProvider = (name: string) => {
+type acceptedProviders = 'Google Drive' | 'PrivaNote Vault' | 'One Drive';
+
+export const removeConnectedProvider = (name: acceptedProviders) => {
 	let mainWindow = getMainWindow();
 	const notebookLocation = getNotebookLocation();
 	let config = getConfig(notebookLocation);

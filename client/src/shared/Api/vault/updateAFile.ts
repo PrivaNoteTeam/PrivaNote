@@ -1,5 +1,5 @@
 import { encryptFile } from '@shared/data/encryption';
-import { getNotebookLocation } from '@shared/notebook';
+import { getNotebookParentLocation } from '@shared/notebook';
 import { NotebookItem } from '@types';
 import axios from 'axios';
 import fs from 'fs';
@@ -19,7 +19,7 @@ export const updateAFile = async (
 	file: NotebookItem,
 	notebookStructureItem: NotebookItem
 ) => {
-	notebookParentLocation = getNotebookLocation();
+	notebookParentLocation = getNotebookParentLocation();
 	let fileMeta = prepareMetadata(file);
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
