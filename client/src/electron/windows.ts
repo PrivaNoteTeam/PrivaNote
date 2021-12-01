@@ -1,5 +1,6 @@
 import { BrowserWindow, Menu } from 'electron';
 import { applicationMenu } from './menus';
+import path from 'path';
 
 let mainWindow: BrowserWindow;
 
@@ -18,6 +19,6 @@ export function createMainWindow() {
 		}
 	});
 
-	mainWindow.loadFile('index.html');
+	mainWindow.loadFile(path.join(__dirname, 'index.html'));
 	Menu.setApplicationMenu(applicationMenu);
 }

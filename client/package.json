@@ -2,14 +2,30 @@
 	"name": "privanote-client",
 	"version": "1.0.0",
 	"description": "The client for PrivaNote.",
-	"main": "index.js",
+	"main": "dist/electron.js",
+	"build": {
+		"appId": "com.privanote.PrivaNote",
+		"extends": null,
+		"files": [
+			"dist/**/*",
+			"package.json",
+			"node_modules"
+		],
+		"productName": "PrivaNote",
+		"directories": {
+			"output": "build"
+		}
+	},
 	"scripts": {
 		"build": "export NODE_OPTIONS='--max-old-space-size=4096' && webpack --config ./webpack.config.js",
 		"start": "npm run build && electron ./dist/electron.js",
 		"test": "jest",
 		"prepare": "cd .. && husky install client/.husky",
 		"prettier-check": "prettier --check .",
-		"prettier-write": "prettier --write ."
+		"prettier-write": "prettier --write .",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder",
+		"postinstall": "electron-builder install-app-deps"
 	},
 	"author": "PrivaNote Team",
 	"license": "ISC",
@@ -35,6 +51,7 @@
 		"babel-jest": "^27.2.5",
 		"css-loader": "^6.3.0",
 		"electron": "^14.0.1",
+		"electron-builder": "^22.14.5",
 		"electron-devtools-installer": "^3.2.0",
 		"file-loader": "^6.2.0",
 		"html-webpack-inline-svg-plugin": "^2.1.1",
@@ -71,8 +88,8 @@
 		"babel-preset-react": "^6.24.1",
 		"chokidar": "^3.5.2",
 		"country-flag-icons": "^1.4.14",
-		"google-auth-library": "^7.10.1",
 		"dotenv": "^10.0.0",
+		"google-auth-library": "^7.10.1",
 		"googleapis": "^89.0.0",
 		"highlight.js": "^11.3.1",
 		"html-react-parser": "^1.4.0",
