@@ -7,35 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Attachment {
-  attachmentID    Int               @id @default(autoincrement())
-  createdAt       DateTime          @db.Timestamp(0)
-  fileName        String            @unique(map: "fileName") @db.VarChar(255)
-  mimeType        String            @db.VarChar(255)
-  blobValue       String
-  NotebookbookID  Int
-  Notebook        Notebook          @relation(fields: [NotebookbookID], references: [bookID], onDelete: Cascade, onUpdate: NoAction, map: "attached")
-  Attachment_Page Attachment_Page[]
-
-  @@index([NotebookbookID], map: "attached")
-}
-
-model Attachment_Page {
-  AttachmentattachmentID Int   
-  PagepageID             Int
-  Attachment             Attachment @relation(fields: [AttachmentattachmentID], references: [attachmentID], onDelete: Cascade, onUpdate: NoAction, map: "related to page")
-  Page                   Page       @relation(fields: [PagepageID], references: [pageID], onDelete: Cascade, onUpdate: NoAction, map: "may involve")
-
-  @@id([AttachmentattachmentID, PagepageID])
-  @@index([PagepageID], map: "may involve")
-}
-
-model CloudStorage {
-  storageID     Int             @id @default(autoincrement())
-  name          String          @db.VarChar(255)
-  description   String
-}
-
 model EditorSettings {
   editorID           Int      @id @default(autoincrement())
   spellCheck         Boolean  @db.Boolean
@@ -50,35 +21,6 @@ model EditorSettings {
   @@index([SettingssettingsID], map: "covers 1")
 }
 
-model Folder {
-  folderID       Int      @id @default(autoincrement())
-  name           String   @db.VarChar(255)
-  createdAt      DateTime @db.Timestamp(0)
-  updatedAt      DateTime @db.Timestamp(0)
-  NotebookbookID Int
-  ParentfolderID Int?
-  Notebook       Notebook @relation(fields: [NotebookbookID], references: [bookID], onDelete: Cascade, onUpdate: NoAction, map: "contains")
-  Folder         Folder?  @relation("FolderToFolder_ParentfolderID", fields: [ParentfolderID], references: [folderID], onDelete: Cascade, onUpdate: NoAction, map: "includes")
-  other_Folder   Folder[] @relation("FolderToFolder_ParentfolderID")
-  Page           Page[]
-
-  @@index([NotebookbookID], map: "contains")
-  @@index([ParentfolderID], map: "includes")
-}
-
-model Notebook {
-  bookID     Int          @id @default(autoincrement())
-  createdAt  DateTime     @db.Timestamp(0)
-  updatedAt  DateTime     @db.Timestamp(0)
-  name       String       @unique(map: "name") @db.VarChar(255)
-  UseruserID Int
-  User       User         @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "writes in")
-  Attachment Attachment[]
-  Folder     Folder[]
-
-  @@index([UseruserID], map: "writes in")
-}
-
 model OneTimeVerificationCode {
   codeID     Int      @id @default(autoincrement())
   code       String   @db.Char(6)
@@ -87,19 +29,6 @@ model OneTimeVerificationCode {
   User       User     @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "completes")
 
   @@index([UseruserID], map: "completes")
-}
-
-model Page {
-  pageID          Int               @id @default(autoincrement())
-  name            String            @db.VarChar(255)
-  createdAt       DateTime          @db.Timestamp(0)
-  updatedAt       DateTime          @db.Timestamp(0)
-  content         String
-  FolderfolderID  Int
-  Folder          Folder            @relation(fields: [FolderfolderID], references: [folderID], onDelete: Cascade, onUpdate: NoAction, map: "consists of")
-  Attachment_Page Attachment_Page[]
-
-  @@index([FolderfolderID], map: "consists of")
 }
 
 model Settings {
@@ -128,7 +57,6 @@ model User {
   email                   String                    @unique(map: "email") @db.VarChar(255)
   password                String                    @db.VarChar(255)
   verified                Boolean
-  Notebook                Notebook[]
   OneTimeVerificationCode OneTimeVerificationCode[]
   Settings                Settings[]
   VaultSubscription       VaultSubscription[]
@@ -145,6 +73,11 @@ model VaultSubscription {
 
   @@index([SubscriptionPlanplanID], map: "accommodates")
   @@index([UseruserID], map: "has")
+}
+
+model NotebookItem {
+  id      String  @unique @id
+  content String  @db.Text
 }
 
 model session {

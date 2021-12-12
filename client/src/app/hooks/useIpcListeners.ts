@@ -20,6 +20,10 @@ export function useIpcListeners() {
 			history.push('/notebook/create');
 		});
 
+		createListener('logout', (_) => {
+			console.log('IMPLEMENT LOGOUT FOR UI');
+		});
+
 		createListener(
 			'openNotebook',
 			(_, location: string, valid: boolean) => {
@@ -54,7 +58,7 @@ export function useIpcListeners() {
 
 		createListener(
 			'googleDriveAuth',
-			(_, accessToken: string, idToken: string) => {
+			(_, accessToken: string, refreshToken: string, idToken: string) => {
 				if (!notebook) return;
 
 				configDispatch({
@@ -63,11 +67,20 @@ export function useIpcListeners() {
 						providerName: 'Google Drive',
 						path: notebook,
 						accessToken,
+						refreshToken,
 						idToken
 					}
 				});
 			}
 		);
+
+		createListener('removeCloudProvider', (_, providerName: string) => {
+			console.log(providerName);
+			configDispatch({
+				type: 'REMOVE_PROVIDER',
+				payload: { providerName: providerName, path: notebook! }
+			});
+		});
 
 		createListener('url-privanote', (_, url) => {
 			// parse code out of url

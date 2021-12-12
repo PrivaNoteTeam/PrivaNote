@@ -3,7 +3,7 @@ import { mockDeep } from 'jest-mock-extended';
 import { PrismaClient } from '@prisma/client';
 
 export const createMockContext = () => {
-    return {
-        prisma: mockDeep<PrismaClient>()
-    } as MockContext
-}
+	return {
+		prisma: mockDeep<PrismaClient>()
+	} as MockContext;
+};

@@ -2,48 +2,100 @@ import { app } from 'electron';
 import { registerIpcHandlers } from './ipc';
 import { createMainWindow, getMainWindow } from './windows';
 import { URL } from 'url';
+import installExtension, {
+	REACT_DEVELOPER_TOOLS
+} from 'electron-devtools-installer';
+import { getToken, setGoogleAuth, initializeGoogleDrive } from '@googleDrive';
+import path from 'path';
+require('dotenv').config();
 
 const handleReady = () => {
 	registerIpcHandlers();
 	createMainWindow();
+	process.env.IV = 'c5846a3159f24227';
+	process.env.ENCRYPTION_SALT = '3IdG3N5dv2kCLa0h7cXE';
 };
 
-app.requestSingleInstanceLock();
+const gotTheLock = app.requestSingleInstanceLock();
 
 app.on('ready', handleReady);
 
+app.whenReady().then(() => {
+	installExtension(REACT_DEVELOPER_TOOLS, {
+		loadExtensionOptions: { allowFileAccess: true }
+	})
+		.then((name) => console.log(`Added Extension: ${name}`))
+		.catch((err) => console.log(`An error occured: ${err}`));
+});
+
 let deepLinkingUrl: any;
 
-if (process.platform === 'win32') {
-	deepLinkingUrl = process.argv.slice(1);
-}
-
-if (!app.isDefaultProtocolClient('privanote')) {
+if (process.defaultApp) {
+	if (process.argv.length >= 2) {
+		app.setAsDefaultProtocolClient('privanote', process.execPath, [
+			path.resolve(process.argv[1])
+		]);
+	}
+} else {
 	app.setAsDefaultProtocolClient('privanote');
 }
 
-app.on('will-finish-launching', () => {
-	app.on('open-url', (event, url) => {
-		event.preventDefault();
+const handleOpenURL = async (url: string) => {
+	const urlObject = new URL(url);
+	const mainWindow = getMainWindow();
 
-		const urlObject = new URL(url);
-		const mainWindow = getMainWindow();
+	if (url.startsWith('privanote://reset-password')) {
+		mainWindow.webContents.send('url-privanote', url);
+	} else if (url.startsWith('privanote://google-drive/auth')) {
+		const authorizationCode =
+			urlObject.searchParams.get('authorizationCode');
 
-		if (url.startsWith('privanote://reset-password')) {
-			mainWindow.webContents.send('url-privanote', url);
-		} else if (url.startsWith('privanote://google-drive/auth')) {
-			const accessToken = urlObject.searchParams.get('accessToken');
-			const idToken = urlObject.searchParams.get('idToken');
-			console.log(idToken);
+		const tokens = await getToken(authorizationCode!);
+		setGoogleAuth(tokens);
+		initializeGoogleDrive();
 
-			mainWindow.webContents.send(
-				'googleDriveAuth',
-				accessToken,
-				idToken
-			);
+		const {
+			access_token: accessToken,
+			id_token: idToken,
+			refresh_token: refreshToken
+		} = tokens;
+
+		// Refresh token is only received when google account first
+		// authorizes PrivaNote so remove access here:
+		// https://myaccount.google.com/permissions
+		mainWindow.webContents.send(
+			'googleDriveAuth',
+			accessToken,
+			refreshToken,
+			idToken
+		);
+	}
+};
+
+if (!gotTheLock) {
+	app.quit();
+} else {
+	app.on('second-instance', (_, commandLine, ___) => {
+		let mainWindow = getMainWindow();
+		if (mainWindow) {
+			if (mainWindow.isMinimized()) mainWindow.restore();
+			mainWindow.focus();
+			console.log('hi');
 		}
+		if (process.platform === 'win32') {
+			console.log(commandLine);
+			deepLinkingUrl = commandLine.slice(-1)[0];
+		}
+		console.log(deepLinkingUrl);
+		handleOpenURL(deepLinkingUrl);
+	});
+}
 
+app.on('will-finish-launching', () => {
+	app.on('open-url', async (event, url) => {
+		event.preventDefault();
 		deepLinkingUrl = url;
+		handleOpenURL(deepLinkingUrl);
 	});
 });
 

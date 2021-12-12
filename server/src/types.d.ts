@@ -8,8 +8,8 @@ export interface Context {
 	prisma: PrismaClient;
 }
 export type MockContext = {
-	prisma: DeepMockProxy<PrismaClient>
-}
+	prisma: DeepMockProxy<PrismaClient>;
+};
 // Form Data
 export interface CreateUserData {
 	email: string;
@@ -17,3 +17,10 @@ export interface CreateUserData {
 }
 export type RegisterData = CreateUserData;
 export type LoginData = CreateUserData; // need to refactor
+
+export interface Item {
+    id: string;
+    content: string;
+}
+
+export type NotebookStructure = NotebookItem[];

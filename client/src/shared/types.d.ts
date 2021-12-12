@@ -11,15 +11,54 @@ export interface FileSystemItem {
 
 export type FileItem = Omit<FileSystemItem, 'type'>;
 
+export type cloudIds = {
+	privaNote?: string;
+	googleDrive?: string;
+	oneDrive?: string;
+};
+
+export type NotebookItem = {
+	id: string;
+	cloudIds: cloudIds;
+	name: string;
+	mimeType: string;
+	paths: string[];
+	dateCreated: string;
+	lastModified: string;
+	content?: any;
+};
+export type NotebookStructure = NotebookItem[];
+
+export type SyncType = 'ADD' | 'DELETE' | 'RENAME' | 'UPDATE';
+export type SyncContent = {
+	parent?: NotebookItem;
+	renamedTarget?: NotebookItem;
+	item: NotebookItem;
+};
+
+export type SyncAction = {
+	action: SyncType;
+	content: SyncContent;
+};
+
+export type SyncResponse = {
+	type: 'LOCAL' | 'CLOUD';
+	changes: SyncAction[];
+};
+
 export interface PrivaNoteConfig {
-	autoSave: boolean;
-	spellCheck: boolean;
-	dictionaryLanguage: string;
-	fontFamily: string;
-	fontSize: number;
-	tabWidth: number;
-	columns: number;
-	connectedProviders: Provider[];
+	'editor.autoSave': boolean;
+	'editor.spellCheck': boolean;
+	'editor.dictionaryLanguage': string;
+	'editor.fontFamily': string;
+	'editor.fontSize': number;
+	'editor.tabWidth': number;
+	'editor.columns': number;
+	'editor.lineNumbers': boolean;
+
+	'preview.fontSize': number;
+
+	'cloud.connectedProviders': Provider[];
 }
 
 export type Provider = {
@@ -42,10 +81,19 @@ type ConfigDispatch = Dispatch<
 				providerName: string;
 				path: string;
 				accessToken?: string;
+				refreshToken?: string;
 				idToken?: string;
 			}
 	  >
 	| PayloadAction<'REMOVE_PROVIDER', { providerName: string; path: string }>
+	| PayloadAction<
+			'SET_SETTING',
+			{
+				configPath: string;
+				settingName: keyof PrivaNoteConfig;
+				value: any;
+			}
+	  >
 >;
 
 // Reducer Types
@@ -124,3 +172,20 @@ export interface Notification {
 }
 
 export type NotificationState = Notification[];
+
+export interface Setting {
+	mapsTo: keyof PrivaNoteConfig;
+	title: string;
+	description: string;
+	ui: 'text' | 'number' | 'dropdown' | 'switch';
+	type: 'boolean' | 'number' | 'string';
+	maxLength?: number;
+	min?: number;
+	max?: number;
+	options?: string[];
+}
+
+export interface Category {
+	title: string;
+	settings: Setting[];
+}

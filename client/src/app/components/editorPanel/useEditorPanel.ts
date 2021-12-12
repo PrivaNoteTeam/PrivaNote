@@ -68,6 +68,13 @@ export function useEditorPanel() {
 					});
 				}
 
+				if (primarySelection!.path === secondarySelection!.path) {
+					editorDispatch({
+						type: 'primarySelect',
+						primarySelection: undefined
+					});
+				}
+
 				editorDispatch({
 					type: 'secondarySelect',
 					secondarySelection: undefined

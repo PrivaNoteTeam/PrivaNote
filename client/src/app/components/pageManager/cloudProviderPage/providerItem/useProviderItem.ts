@@ -1,10 +1,12 @@
-import { useConfig, useStore } from '@hooks';
+import { useConfig, useStore, useUserStore } from '@hooks';
 import GoogleDriveLogo from '@assets/images/google-drive.png';
 import OneDriveLogo from '@assets/images/onedrive.png';
 import VaultLogo from '@assets/images/vault.png';
-import { ConfigDispatch } from '@types';
-import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+import { ConfigDispatch, User } from '@types';
+// import { getGoogleAuth } from '@shared/api/getGoogleAuth';
+import { getGoogleAuth } from '@shared/Api/googleDrive/setup';
 import { useHistory } from 'react-router-dom';
+import { ipcRenderer } from 'electron';
 
 type SupportedProvider = 'Google Drive' | 'OneDrive' | 'PrivaNote Vault';
 
@@ -16,11 +18,19 @@ interface Args {
 export function useProviderItem({ active, provider }: Args) {
 	const [, configDispatch] = useConfig();
 	const [{ notebook }] = useStore();
+	const [{ user }] = useUserStore();
 	let history = useHistory();
 
 	return {
 		logo: getLogo(provider),
-		...getHandlers(history, configDispatch, active, provider, notebook!) // notebook could be null
+		...getHandlers(
+			history,
+			configDispatch,
+			active,
+			provider,
+			notebook!,
+			user
+		) // notebook could be null
 	};
 }
 
@@ -29,7 +39,8 @@ function getHandlers(
 	configDispatch: ConfigDispatch,
 	active: boolean,
 	providerName: string,
-	notebook: string
+	notebook: string,
+	user: User | undefined
 ) {
 	return active
 		? {
@@ -50,6 +61,13 @@ function getHandlers(
 		  }
 		: {
 				handleConnect: () => {
+					if (!user && providerName === 'PrivaNote Vault') {
+						alert(
+							'Please sign in or register to use ' + providerName
+						);
+						return;
+					}
+
 					let result = confirm(
 						'Are you sure you want to set up ' + providerName + '?'
 					);
@@ -59,6 +77,16 @@ function getHandlers(
 					switch (providerName as SupportedProvider) {
 						case 'Google Drive':
 							getGoogleAuth();
+							break;
+						case 'PrivaNote Vault':
+							configDispatch({
+								type: 'ADD_PROVIDER',
+								payload: {
+									providerName,
+									path: notebook
+								}
+							});
+							ipcRenderer.send('connectToVault');
 							break;
 						default:
 							configDispatch({

@@ -3,7 +3,7 @@ import { Breadcrumb } from './Breadcrumb';
 import MonicoEditor, { loader, OnChange, OnMount } from '@monaco-editor/react';
 import path from 'path';
 import { Dropzone } from './Dropzone';
-import { useEditorDrop } from '@hooks';
+import { useConfig, useEditorDrop } from '@hooks';
 
 interface Props {
 	unsaved: boolean;
@@ -22,6 +22,7 @@ function uriFromPath(_path: string) {
 
 export function UIEditor({ unsaved, text, handleChange }: Props) {
 	const { drop: handleDrop, init } = useEditorDrop();
+	const [config] = useConfig();
 
 	loader.config({
 		paths: {
@@ -94,13 +95,21 @@ export function UIEditor({ unsaved, text, handleChange }: Props) {
 							value={text}
 							onChange={handleChange}
 							options={{
+								fontSize: config!['editor.fontSize'],
+								tabSize: config!['editor.tabWidth'],
+								fontFamily: config!['editor.fontFamily'],
+								wordWrap: config!['editor.columns']
+									? 'wordWrapColumn'
+									: 'off',
+								wordWrapColumn: config!['editor.columns'],
+								lineNumbers: config!['editor.lineNumbers']
+									? 'on'
+									: 'off',
+
 								padding: { top: 16 },
-								lineNumbers: 'off',
-								fontSize: 14,
 								smoothScrolling: true,
 								contextmenu: false,
 								minimap: { enabled: false },
-								wordWrap: 'off',
 								selectionHighlight: false,
 								quickSuggestions: false,
 								renderLineHighlight: 'none',

@@ -1,5 +1,5 @@
 import { Dispatch, useEffect, useState } from 'react';
-import { useStore } from '@hooks';
+import { useConfig, useStore } from '@hooks';
 import { ipcRenderer } from 'electron';
 import { saveFile } from '@utils';
 import { OnChange } from '@monaco-editor/react';
@@ -13,26 +13,18 @@ interface Args {
 export function useEditor({ text, setText }: Args) {
 	const [{ currentFile }] = useStore();
 	const [unsaved, setUnsaved] = useState(false);
-	const [manualSave, setManualSave] = useState(false);
-
-	const autoSave = true; // ADD TO SETTINGS
+	const [config] = useConfig();
 
 	const handleChange: OnChange = (value, _) => {
 		if (!value) return;
 
 		setText(value);
-		if (autoSave) {
+		if (config!['editor.autoSave']) {
 			saveFile(currentFile!, value);
 		} else {
 			setUnsaved(true);
 		}
 	};
-
-	if (manualSave) {
-		saveFile(currentFile!, text);
-		setUnsaved(false);
-		setManualSave(false);
-	}
 
 	useEffect(() => {
 		let buffer = fs.readFileSync(currentFile!.path);
@@ -40,7 +32,10 @@ export function useEditor({ text, setText }: Args) {
 		setText(buffer.toString());
 
 		ipcRenderer.on('saveNote', () => {
-			setManualSave(true);
+			if (config!['editor.autoSave']) {
+				saveFile(currentFile!, text);
+				setUnsaved(false);
+			}
 		});
 	}, [currentFile]);
 

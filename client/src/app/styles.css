@@ -2,22 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-.pn-label {
-	@apply text-gray-500 text-xs uppercase font-semibold;
+@layer utilities {
+	.pn-drop-shadow {
+		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	}
 }
 
-.pn-input {
-	@apply bg-gray-900 rounded-md text-gray-300 px-4 py-1 border border-gray-700 outline-none;
+@layer components {
+	.pn-label {
+		@apply text-gray-500 text-xs uppercase font-semibold;
+	}
+
+	.pn-input {
+		@apply bg-gray-900 rounded-md text-gray-300 px-4 py-1 border border-gray-700 outline-none;
+	}
+	.pn-button {
+		@apply rounded-md text-white px-4 py-1 align-middle border cursor-pointer select-none;
+	}
+
+	.pn-dark-button {
+		@apply bg-gray-900 border-gray-700 hover:border-blue-500;
+	}
+
+	.pn-number-input {
+		@apply pn-input border-l-0 border-r-0 rounded-none w-min;
+	}
+
+	.pn-number-button {
+		@apply bg-gray-900 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 w-10 cursor-pointer select-none;
+	}
+
+	.pn-number-increment {
+		@apply pn-number-button rounded-r-md;
+	}
+
+	.pn-number-decrement {
+		@apply pn-number-button rounded-l-md;
+	}
+
+	.pn-dropdown-active {
+		@apply pn-input flex justify-between pr-1 w-60 cursor-pointer;
+	}
+
+	.pn-dropdown-list {
+		@apply bg-gray-900 border border-gray-700 rounded-md;
+	}
+
+	.pn-dropdown-item {
+		@apply px-2 py-1 text-gray-300 hover:bg-blue-600 cursor-pointer select-none;
+	}
+
+	.pn-switch {
+		@apply h-6 w-10 p-1 border rounded-full cursor-pointer;
+	}
+
+	.pn-switch-off {
+		@apply bg-gray-900 border-gray-700;
+	}
+
+	.pn-switch-on {
+		@apply bg-blue-500 border-blue-700;
+	}
+
+	.pn-switch-thumb {
+		@apply w-6 h-6 -my-1 rounded-full bg-gray-200 shadow-xl;
+	}
+
+	.pn-switch-thumb-off {
+		@apply -ml-1;
+	}
+
+	.pn-switch-thumb-on {
+		@apply ml-auto -mr-1;
+	}
 }
 
-.pn-button {
-	@apply rounded-md text-white px-4 py-1 align-middle border cursor-pointer select-none;
-}
-
-.pn-dark-button {
-	@apply bg-gray-900 border-gray-700 hover:border-blue-500;
-}
-
-.pn-drop-shadow {
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+/* Hide increment buttons on number inputs */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }

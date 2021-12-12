@@ -1,6 +1,4 @@
-import { googleGetAuthUrl } from './googleGetAuthUrl';
-import { googleGetToken } from './googleGetToken';
+import { googleGetAuthCode } from './googleGetAuthCode';
 export const providerController = {
-    googleGetAuthUrl,
-    googleGetToken
-}
+	googleGetAuthCode
+};

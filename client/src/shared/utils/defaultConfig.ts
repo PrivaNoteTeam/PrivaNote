@@ -1,12 +1,14 @@
 import { PrivaNoteConfig } from '../types';
 
 export const defaultConfig: PrivaNoteConfig = {
-	autoSave: true,
-	spellCheck: true,
-	dictionaryLanguage: 'en-ca',
-	fontFamily: 'ui-sans-serif',
-	fontSize: 14,
-	tabWidth: 4,
-	columns: 72,
-	connectedProviders: []
+	'editor.autoSave': true,
+	'editor.spellCheck': true,
+	'editor.dictionaryLanguage': 'English (US)',
+	'editor.fontFamily': 'ui-sans-serif',
+	'editor.fontSize': 14,
+	'editor.tabWidth': 4,
+	'editor.columns': 72,
+	'editor.lineNumbers': false,
+	'preview.fontSize': 14,
+	'cloud.connectedProviders': []
 };

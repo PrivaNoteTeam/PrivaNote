@@ -1,5 +1,7 @@
+import { generateEncryptionKey } from '@shared/data/encryption';
 import { LoginFormValues, FormError, FieldError } from '@types';
 import axios from 'axios';
+import { ipcRenderer } from 'electron';
 
 interface LoginResponse {
 	success?: boolean;
@@ -15,6 +17,12 @@ export async function loginUser({ email, password }: LoginFormValues) {
 				password
 			})
 			.then((response) => {
+				try {
+					const key = generateEncryptionKey(password);
+					ipcRenderer.send('setEncryptionKey', key);
+				} catch (err) {
+					console.log(err);
+				}
 				resolve(response.data as LoginResponse);
 			})
 			.catch((err) => {

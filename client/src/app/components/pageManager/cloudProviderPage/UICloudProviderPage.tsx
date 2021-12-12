@@ -35,7 +35,7 @@ export function UICloudProviderPage({ handleClose }: Props) {
 		</div>
 	);
 
-	const providers = config?.connectedProviders || [];
+	const providers = config!['cloud.connectedProviders'] || [];
 
 	const renderProviders = providers?.map((p) => {
 		return (

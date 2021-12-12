@@ -5,37 +5,37 @@ import { createUser } from '../../database/createUser';
 import { sendVerificationEmail } from '../../services/sendVerificationEmail';
 
 export const register = async (req: Request, res: Response) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const hashedPassword = await argon2.hash(password);
+	const email = req.body.email;
+	const password = req.body.password;
+	const hashedPassword = await argon2.hash(password);
 
-    const error = await registerValidation(req.ctx!, {
-        email,
-        password: hashedPassword
-    });
-    // fielderror
-    if (error) {
-        res.json({ fieldError: error });
-        return;
-    }
+	const error = await registerValidation(req.ctx!, {
+		email,
+		password: hashedPassword
+	});
+	// fielderror
+	if (error) {
+		res.json({ fieldError: error });
+		return;
+	}
 
-    const user = await createUser(req.ctx!, {
-        email,
-        password: hashedPassword
-    });
-    // formerror
-    if (!user) {
-        res.json({
-            formError: {
-                message: 'user could not be created'
-            }
-        });
+	const user = await createUser(req.ctx!, {
+		email,
+		password: hashedPassword
+	});
+	// formerror
+	if (!user) {
+		res.json({
+			formError: {
+				message: 'user could not be created'
+			}
+		});
 
-        return;
-    }
+		return;
+	}
 
-    sendVerificationEmail(req.ctx!, user);
+	sendVerificationEmail(req.ctx!, user);
 
-    // user
-    res.status(200).json({ success: true });
-}
+	// user
+	res.status(200).json({ success: true });
+};
