@@ -4,8 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"tsc": "./node_modules/typescript/bin/tsc",
 		"build": "tsc",
 		"start": "npm run build && node dist/index.js",
+		"postinstall": "npm run build",
 		"test": "jest",
 		"prepare": "cd .. && husky install server/.husky",
 		"prettier-check": "prettier --check .",
@@ -26,9 +28,7 @@
 		"nanoid": "^3.1.30",
 		"nodemailer": "^6.7.0",
 		"pg": "^8.7.1",
-		"uuid": "^8.3.2"
-	},
-	"devDependencies": {
+		"uuid": "^8.3.2",
 		"@babel/core": "^7.15.8",
 		"@babel/preset-env": "^7.15.8",
 		"@babel/preset-typescript": "^7.15.0",
