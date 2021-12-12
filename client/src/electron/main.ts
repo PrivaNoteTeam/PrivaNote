@@ -12,6 +12,8 @@ require('dotenv').config();
 const handleReady = () => {
 	registerIpcHandlers();
 	createMainWindow();
+	process.env.IV = 'c5846a3159f24227';
+	process.env.ENCRYPTION_SALT = '3IdG3N5dv2kCLa0h7cXE';
 };
 
 const gotTheLock = app.requestSingleInstanceLock();
