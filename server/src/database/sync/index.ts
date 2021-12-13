@@ -5,9 +5,9 @@ import { downloadItem } from './downloadItem';
 import { updateNotebookStructure } from './updateNotebookStructure';
 
 export const db = {
-    addItem,
-    deleteItem,
-    updateItem,
-    downloadItem,
-    updateNotebookStructure
-};  
+	addItem,
+	deleteItem,
+	updateItem,
+	downloadItem,
+	updateNotebookStructure
+};

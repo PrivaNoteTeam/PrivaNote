@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import argon2 from 'argon2';
-import { registerValidation } from '../../validation/registerUserValidation';
+import { registerValidation } from '../../Validation/registerUserValidation';
 import { createUser } from '../../database/createUser';
 import { sendVerificationEmail } from '../../services/sendVerificationEmail';
 

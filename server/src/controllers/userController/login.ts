@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import {
 	loginFieldValidation,
 	loginAccountValidation
-} from '../../validation/loginUserValidation';
+} from '../../Validation/loginUserValidation';
 import {
 	hasValidAuthCode,
 	deleteAuthCode

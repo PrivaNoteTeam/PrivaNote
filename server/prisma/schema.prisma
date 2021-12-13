@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  sslaccept="accept_invalid_certs"
 }
 
 model EditorSettings {
@@ -16,7 +17,7 @@ model EditorSettings {
   fontSize           Int
   fontFamily         String   @db.VarChar(255)
   SettingssettingsID Int
-  Settings           Settings @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction, map: "covers 1")
+  Settings           Settings @relation(fields: [SettingssettingsID], references: [settingsID], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([SettingssettingsID], map: "covers 1")
 }
@@ -26,7 +27,7 @@ model OneTimeVerificationCode {
   code       String   @db.Char(6)
   expiresAt  DateTime @db.Timestamp(0)
   UseruserID Int
-  User       User     @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "completes")
+  User       User     @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([UseruserID], map: "completes")
 }
@@ -34,7 +35,7 @@ model OneTimeVerificationCode {
 model Settings {
   settingsID     Int              @id @default(autoincrement())
   UseruserID     Int
-  User           User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "changes")
+  User           User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
   // CloudSettings  CloudSettings[]
   EditorSettings EditorSettings[]
 
@@ -68,8 +69,8 @@ model VaultSubscription {
   recurring              Boolean
   SubscriptionPlanplanID Int
   UseruserID             Int
-  SubscriptionPlan       SubscriptionPlan @relation(fields: [SubscriptionPlanplanID], references: [planID], onDelete: NoAction, onUpdate: NoAction, map: "accommodates")
-  User                   User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction, map: "has")
+  SubscriptionPlan       SubscriptionPlan @relation(fields: [SubscriptionPlanplanID], references: [planID], onDelete: NoAction, onUpdate: NoAction)
+  User                   User             @relation(fields: [UseruserID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([SubscriptionPlanplanID], map: "accommodates")
   @@index([UseruserID], map: "has")

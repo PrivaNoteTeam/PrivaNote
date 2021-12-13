@@ -6,8 +6,8 @@ export const createNotebook = async (req: Request, __: Response) => {
 	console.log(req.body.notebookStructure);
 
 	const notebookStructure: Item[] = req.body.notebookStructure;
-	
+
 	notebookStructure.forEach((item) => {
-		db.addItem(req.ctx!, item);	
+		db.addItem(req.ctx!, item);
 	});
 };

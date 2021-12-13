@@ -9,7 +9,7 @@ import { router } from './routes';
 
 const main = async () => {
 	const app = express();
-	const HTTP_PORT = 8080;
+	const HTTP_PORT = process.env.PORT || 8080;
 
 	app.use(setupContext({ prisma: new PrismaClient() }));
 	app.use(cors());
@@ -27,7 +27,7 @@ const main = async () => {
 	);
 
 	app.get('/', (_, res) => {
-		res.send(`<h1>Hello World</h1>`);
+		res.send(`<h1>Hello World. Welcome to PrivaNote!</h1>`);
 	});
 
 	app.post('/logout', (req, res) => {

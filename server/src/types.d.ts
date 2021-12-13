@@ -19,8 +19,8 @@ export type RegisterData = CreateUserData;
 export type LoginData = CreateUserData; // need to refactor
 
 export interface Item {
-    id: string;
-    content: string;
+	id: string;
+	content: string;
 }
 
 export type NotebookStructure = NotebookItem[];

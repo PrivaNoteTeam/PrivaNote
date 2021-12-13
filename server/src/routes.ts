@@ -23,6 +23,6 @@ router.post('/vault/create-notebook', vaultController.createNotebook);
 router.post('/vault/add', vaultController.addItem);
 router.post('/vault/update', vaultController.updateItem);
 router.post('/vault/delete', vaultController.deleteItem);
-router.get('/vault/download', vaultController.downloadItem)
+router.get('/vault/download', vaultController.downloadItem);
 
 export { router };
