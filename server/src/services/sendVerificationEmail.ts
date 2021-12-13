@@ -8,8 +8,6 @@ import { generateCode } from './generateCode';
 import { Context, User } from '../types';
 
 export async function sendVerificationEmail(ctx: Context, user: User) {
-	// const privaNoteTestAccount = await createTestAccount();
-
 	const transporter = createTransport(
 		smtpTransport({
 			service: 'gmail',
@@ -19,16 +17,6 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 			}
 		})
 	);
-
-	// const code = await generateCode(ctx, user);
-
-	// const info = await transporter.sendMail({
-	// 	from: '"PrivaNote 📕" <do.notreply@privanote.com>',
-	// 	to: user.email,
-	// 	subject: 'Verify your email',
-	// 	text: getEmailTextContent(code),
-	// 	html: getEmailHtmlContent(code)
-	// });
 
 	generateCode(ctx, user)
 		.then((code) => {
@@ -48,10 +36,6 @@ export async function sendVerificationEmail(ctx: Context, user: User) {
 				.catch((err) => console.log(err));
 		})
 		.catch((err) => console.log(err));
-
-	// // DO NOT REMOVE THESE CONSOLE LOGS
-	// console.log('Message sent: ' + info.messageId);
-	// console.log('Email link: ' + getTestMessageUrl(info));
 }
 
 const getEmailHtmlContent = (code: string) => `

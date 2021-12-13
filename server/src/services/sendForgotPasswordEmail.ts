@@ -1,23 +1,24 @@
 import {
-	createTestAccount,
+	// createTestAccount,
 	createTransport,
 	getTestMessageUrl
 } from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
 import { generateCode } from './generateCode';
 import { Context, User } from '../types';
 
 export async function sendForgotPasswordEmail(ctx: Context, user: User) {
-	const privaNoteTestAccount = await createTestAccount();
+	// const privaNoteTestAccount = await createTestAccount();
 
-	const transporter = createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		secure: false,
-		auth: {
-			user: privaNoteTestAccount.user,
-			pass: privaNoteTestAccount.pass
-		}
-	});
+	const transporter = createTransport(
+		smtpTransport({
+			service: 'gmail',
+			auth: {
+				user: process.env.PRIVANOTE_EMAIL,
+				pass: process.env.PRIVANOTE_PASS
+			}
+		})
+	);
 
 	const code = await generateCode(ctx, user);
 
