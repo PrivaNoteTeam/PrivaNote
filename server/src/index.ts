@@ -27,7 +27,7 @@ const main = async () => {
 	);
 
 	app.get('/', (_, res) => {
-		res.send(`<h1>Hello World. Welcome to PrivaNote!</h1>`);
+		res.send(`<h1>Hello World. Welcome to PrivaNote!!</h1>`);
 	});
 
 	app.post('/logout', (req, res) => {

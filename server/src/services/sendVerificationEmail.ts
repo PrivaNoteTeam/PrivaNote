@@ -1,37 +1,57 @@
 import {
-	createTestAccount,
+	// createTestAccount,
 	createTransport,
 	getTestMessageUrl
 } from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
 import { generateCode } from './generateCode';
 import { Context, User } from '../types';
 
 export async function sendVerificationEmail(ctx: Context, user: User) {
-	const privaNoteTestAccount = await createTestAccount();
+	// const privaNoteTestAccount = await createTestAccount();
 
-	const transporter = createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		secure: false,
-		auth: {
-			user: privaNoteTestAccount.user,
-			pass: privaNoteTestAccount.pass
-		}
-	});
+	const transporter = createTransport(
+		smtpTransport({
+			service: 'gmail',
+			auth: {
+				user: process.env.PRIVANOTE_EMAIL,
+				pass: process.env.PRIVANOTE_PASS
+			}
+		})
+	);
 
-	const code = await generateCode(ctx, user);
+	// const code = await generateCode(ctx, user);
 
-	const info = await transporter.sendMail({
-		from: '"PrivaNote 📕" <do.notreply@privanote.com>',
-		to: user.email,
-		subject: 'Verify your email',
-		text: getEmailTextContent(code),
-		html: getEmailHtmlContent(code)
-	});
+	// const info = await transporter.sendMail({
+	// 	from: '"PrivaNote 📕" <do.notreply@privanote.com>',
+	// 	to: user.email,
+	// 	subject: 'Verify your email',
+	// 	text: getEmailTextContent(code),
+	// 	html: getEmailHtmlContent(code)
+	// });
 
-	// DO NOT REMOVE THESE CONSOLE LOGS
-	console.log('Message sent: ' + info.messageId);
-	console.log('Email link: ' + getTestMessageUrl(info));
+	generateCode(ctx, user)
+		.then((code) => {
+			transporter
+				.sendMail({
+					from: '"PrivaNote 📕" <do.notreply@privanote.com>',
+					to: user.email,
+					subject: 'Verify your email',
+					text: getEmailTextContent(code),
+					html: getEmailHtmlContent(code)
+				})
+				.then((info) => {
+					// DO NOT REMOVE THESE CONSOLE LOGS
+					console.log('Message sent: ' + info.messageId);
+					console.log('Email link: ' + getTestMessageUrl(info));
+				})
+				.catch((err) => console.log(err));
+		})
+		.catch((err) => console.log(err));
+
+	// // DO NOT REMOVE THESE CONSOLE LOGS
+	// console.log('Message sent: ' + info.messageId);
+	// console.log('Email link: ' + getTestMessageUrl(info));
 }
 
 const getEmailHtmlContent = (code: string) => `
