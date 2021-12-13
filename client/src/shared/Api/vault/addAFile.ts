@@ -29,7 +29,7 @@ export const addAFile = async (
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
 	try {
-		await axios.post('http://localhost:8080/api/vault/add', {
+		await axios.post('https://privanote.herokuapp.com/api/vault/add', {
 			item: fileMeta,
 			notebookStructure: structureMeta
 		});

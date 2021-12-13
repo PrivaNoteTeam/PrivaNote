@@ -2,6 +2,7 @@ import { pbkdf2Sync, createCipheriv, createDecipheriv } from 'crypto';
 
 export const generateEncryptionKey = (password: string) => {
 	if (process.env.ENCRYPTION_SALT) {
+		// used to be process.env.salt thing
 		return pbkdf2Sync(
 			password,
 			process.env.ENCRYPTION_SALT,

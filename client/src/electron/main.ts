@@ -14,6 +14,7 @@ const handleReady = () => {
 	createMainWindow();
 	process.env.IV = 'c5846a3159f24227';
 	process.env.ENCRYPTION_SALT = '3IdG3N5dv2kCLa0h7cXE';
+	console.log(process.env.IV);
 };
 
 const gotTheLock = app.requestSingleInstanceLock();
