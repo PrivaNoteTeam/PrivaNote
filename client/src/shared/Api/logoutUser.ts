@@ -7,7 +7,7 @@ interface DefaultHTTPResponse {
 export async function logoutUser() {
 	return new Promise<DefaultHTTPResponse>((resolve, reject) => {
 		axios
-			.post('http://localhost:8080/api/logout')
+			.post('https://privanote.herokuapp.com/api/logout')
 			.then((response) => {
 				resolve(response.data as DefaultHTTPResponse);
 			})

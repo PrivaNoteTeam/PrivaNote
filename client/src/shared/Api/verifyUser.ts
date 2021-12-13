@@ -18,7 +18,7 @@ interface VerificationResponse {
 export async function verifyUser({ verificationCode }: VerificationFormValues) {
 	return new Promise<VerificationResponse>((resolve, reject) => {
 		axios
-			.post('http://localhost:8080/api/verify', {
+			.post('https://privanote.herokuapp.com/api/verify', {
 				verificationCode
 			})
 

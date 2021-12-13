@@ -12,7 +12,7 @@ interface LoginResponse {
 export async function loginUser({ email, password }: LoginFormValues) {
 	return new Promise<LoginResponse>((resolve, reject) => {
 		axios
-			.post('http://localhost:8080/api/login', {
+			.post('https://privanote.herokuapp.com/api/login', {
 				email,
 				password
 			})

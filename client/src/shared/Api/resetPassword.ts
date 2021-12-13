@@ -8,7 +8,9 @@ interface ResetPasswordResponse {
 export async function resetPassword({ password }: ResetPasswordFormValues) {
 	return new Promise<ResetPasswordResponse>((resolve, reject) => {
 		axios
-			.post('http://localhost:8080/api/reset-password', { password })
+			.post('https://privanote.herokuapp.com/api/reset-password', {
+				password
+			})
 			.then((response) => {
 				resolve(response.data as ResetPasswordResponse);
 			})

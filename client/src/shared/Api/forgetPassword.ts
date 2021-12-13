@@ -10,7 +10,9 @@ export async function forgetPassword({ email }: ForgotPasswordFormValues) {
 	return new Promise<forgetPasswordResponse>((resolve, reject) => {
 		axios
 
-			.post('http://localhost:8080/api/forgot-password', { email })
+			.post('https://privanote.herokuapp.com/api/forgot-password', {
+				email
+			})
 			.then((response) => {
 				resolve(response.data as forgetPasswordResponse);
 			})

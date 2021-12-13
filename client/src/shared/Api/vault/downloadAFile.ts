@@ -10,7 +10,7 @@ export const downloadAFile = async (
 ) => {
 	try {
 		const res: any = await axios.get(
-			'http://localhost:8080/api/vault/download',
+			'https://privanote.herokuapp.com/api/vault/download',
 			{
 				params: {
 					itemId: file.id

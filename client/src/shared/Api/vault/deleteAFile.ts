@@ -24,7 +24,7 @@ export const deleteAFile = async (
 	let structureMeta = prepareMetadata(notebookStructureItem);
 
 	try {
-		await axios.post('http://localhost:8080/api/vault/delete', {
+		await axios.post('https://privanote.herokuapp.com/api/vault/delete', {
 			itemId: file.id,
 			notebookStructure: structureMeta
 		});
