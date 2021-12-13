@@ -40,7 +40,7 @@ export const uploadEntireNotebook = async (
 	console.log(metadata);
 	try {
 		const res: any = await axios.post(
-			'http://localhost:8080/api/vault/create-notebook',
+			'https://privanote.herokuapp.com/api/vault/create-notebook',
 			{
 				notebookStructure: metadata
 			}

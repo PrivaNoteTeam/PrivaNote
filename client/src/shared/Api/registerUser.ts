@@ -9,7 +9,7 @@ interface RegisterResponse {
 export async function registerUser({ email, password }: RegisterFormValues) {
 	return new Promise<RegisterResponse>((resolve, reject) => {
 		axios
-			.post('http://localhost:8080/api/register', {
+			.post('https://privanote.herokuapp.com/api/register', {
 				email,
 				password
 			})
