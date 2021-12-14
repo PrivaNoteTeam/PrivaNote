@@ -28,3 +28,4 @@ PrivaNote’s primary focus is on ensuring that its user’s data are secure and
 * [Ehsan Hazari](https://github.com/EHSANHAZARI)
 * Paul Triet Nham
 
+**Update:** As of December 12, 2021 all development has halted. It is important to note that this was a school project.
